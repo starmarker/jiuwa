@@ -1,23 +1,34 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <!-- <img src="./assets/logo.png"> -->
     <router-view/>
+    <van-tabbar v-model="active">
+      <van-tabbar-item icon="wap-home">首页</van-tabbar-item>
+      <van-tabbar-item icon="like-o" dot>报名</van-tabbar-item>
+      <van-tabbar-item icon="records" >排行榜</van-tabbar-item>
+      <van-tabbar-item icon="contact">我的</van-tabbar-item>
+    </van-tabbar>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
-}
+  name: "App",
+  data() {
+    return {
+      active: ""
+    };
+  }
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-bottom: 60px;
 }
 </style>

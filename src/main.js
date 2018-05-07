@@ -12,6 +12,7 @@ Vue.use(Vant);
 Vue.config.productionTip = false;
 Vue.use(Zj, { api_lists, notices: notice });
 /* eslint-disable no-new */
+require("./libs/mock");
 const vm = new Vue({
   el: "#app",
   router,
