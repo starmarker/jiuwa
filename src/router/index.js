@@ -20,6 +20,11 @@ export default new Router({
       path: "/sign",
       name: "sign",
       component: resolve => require(["@/components/sign"], resolve)
+    },
+    {
+      path: "/my",
+      name: "myinfo",
+      component: resolve => require(["@/components/myinfo"], resolve)
     }
   ]
 });
