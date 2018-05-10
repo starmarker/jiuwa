@@ -8,6 +8,7 @@
               <van-col span="16">
                   <div class="user-info">
                       <p>姓名：{{user.user_nickname}}</p>
+                      <p>店铺:高新直营店</p>
                       <p>[ <router-link to="/sign">点击修改</router-link>]</p>
                   </div>
               </van-col>
@@ -20,13 +21,23 @@
           </van-row>
         </div>
         <van-panel title="当前排名" desc="" status="2" style="text-align:left;">
-            <div style="box-sizing:border-box;width:100%;padding:5px 15px;">距离上一名还差50分</div>
+            <div class="panel-content">距离上一名还差50分</div>
         </van-panel>
         <van-panel title="艾草地" desc="" status="" style="text-align:left;">
-            <div style="box-sizing:border-box;width:100%;padding:5px 15px;text-align:center">
+            <div class="panel-content" style="text-align:center">
                 <img :src="user.avatar_src" alt="" srcset="" @click="pick">
             </div>
-        </van-panel>    
+        </van-panel> 
+        <van-panel title="个人介绍" desc="" status="" style="text-align:left;">
+            <div class="panel-content">
+                <p>个人介绍内容</p>
+            </div>
+        </van-panel>   
+        <van-panel title="参赛照片" desc="" status="" style="text-align:left;">
+            <div class="panel-content" style="text-align:center">
+                <img :src="user.avatar_src" alt="" srcset="" @click="pick">
+            </div>
+        </van-panel> 
     </div>
 </template>
 <script>
@@ -62,7 +73,6 @@ export default {
       a {
         -webkit-margin-before: 0em;
         -webkit-margin-after: 0em;
-        line-height: 3em;
         flex-grow: 1;
         color: #fff;
       }
@@ -74,6 +84,11 @@ export default {
         font-size: 0.8em;
       }
     }
+  }
+  .panel-content {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 5px 15px;
   }
 }
 </style>

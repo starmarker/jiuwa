@@ -27,7 +27,16 @@ const rank = {
   "aicao|20": [Mock.Random.base()],
   "jiuwa|20": [Mock.Random.base()]
 };
+const info = {
+  pick_score: 40,
+  order_score: 900,
+  match_no: "@integer(1,999)",
+  total_score: 940,
+  current_rank: 2,
+  less_score: 1920
+};
 Mock.mock("/api/single", single);
 Mock.mock("/api/mutepuly", mutepuly);
 Mock.mock("/api/getuser", user);
 Mock.mock("/api/rank", rank);
+Mock.mock("/api/info", info);

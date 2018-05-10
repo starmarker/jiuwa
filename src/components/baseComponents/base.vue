@@ -7,9 +7,9 @@ export default {
     return {};
   },
   created() {
-    // if (!this.user) {
-    //   this.getuser();
-    // }
+    if (!this.user) {
+      this.getuser();
+    }
   },
   computed: {
     user() {
