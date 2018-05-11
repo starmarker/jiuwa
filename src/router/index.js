@@ -7,6 +7,11 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
+      path: "/login/:m_type",
+      name: "login",
+      component: resolve => require(["@/components/login"], resolve)
+    },
+    {
       path: "/",
       name: "HelloWorld",
       component: HelloWorld

@@ -21,7 +21,9 @@ const user = {
   "is_singed|0-1": true,
   "is_getpet|1-2": false,
   user_tel: /^1[385][1-9]\d{8}/,
-  avatar_src: "@dataImage('250x250','照片')"
+  avatar_src: "@dataImage('250x250','照片')",
+  shop_token: "@guid()",
+  shop_name: "@csentence(5,12)"
 };
 const rank = {
   "aicao|20": [Mock.Random.base()],

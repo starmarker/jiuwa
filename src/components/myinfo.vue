@@ -12,16 +12,13 @@
                       <p>[ <router-link to="/sign">点击修改</router-link>]</p>
                   </div>
               </van-col>
-          </van-row>
-          <van-row class="info-detail">
-              <van-col span="6"><p>编号<br><small>5</small></p></van-col>
-              <van-col span="6"><p>采摘成绩<br><small>5</small></p></van-col>
-              <van-col span="6"><p>下单成绩<br><small>5</small></p></van-col>
-              <van-col span="6"><p>总成绩<br><small>5</small></p></van-col>
+              <van-button size="small" type="primary">查看更多信息</van-button>
           </van-row>
         </div>
-        <van-panel title="当前排名" desc="" status="2" style="text-align:left;">
-            <div class="panel-content">距离上一名还差50分</div>
+        <van-panel title="我的队友" desc="" status="" style="text-align:left;">
+            <div class="panel-content">
+                <teamMember :members="teamWorker"/>
+            </div>
         </van-panel>
         <van-panel title="艾草地" desc="" status="" style="text-align:left;">
             <div class="panel-content" style="text-align:center">
@@ -42,13 +39,27 @@
 </template>
 <script>
 import Base from "./baseComponents/base";
+import teamMember from "./baseComponents/teamMember";
 export default {
   extends: Base,
+  components: {
+    teamMember
+  },
   data() {
-    return {};
+    return {
+      teamWorker: []
+    };
+  },
+  created() {
+    this.getTeamWorker();
   },
   methods: {
-    pick() {}
+    pick() {},
+    getTeamWorker() {
+      this.$http.post("/api/mutepuly", {}).then(res => {
+        this.teamWorker = res.data.lists;
+      });
+    }
   }
 };
 </script>
@@ -57,7 +68,8 @@ export default {
   .sign-header {
     width: 100%;
     box-sizing: border-box;
-    padding: 5vw 2vw;
+    padding: 2vw;
+    position: relative;
     background-image: linear-gradient(to right, orange, orangered);
     img {
       width: 80%;
@@ -76,6 +88,11 @@ export default {
         flex-grow: 1;
         color: #fff;
       }
+    }
+    .van-button {
+      position: absolute;
+      top: 10vw;
+      right: 1vw;
     }
     .info-detail {
       color: #fff;
