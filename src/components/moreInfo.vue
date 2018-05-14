@@ -12,7 +12,6 @@
                       <p>[ <router-link to="/sign">点击修改</router-link>]</p>
                   </div>
               </van-col>
-              <van-button size="small" type="primary" @click="isShowMore=true">查看更多信息</van-button>
           </van-row>
         </div>
         <van-panel title="我的队友" desc="" status="" style="text-align:left;">
@@ -20,50 +19,33 @@
                 <teamMember :members="teamWorker"/>
             </div>
         </van-panel>
-        <van-panel title="艾草地" desc="" status="" style="text-align:left;">
+        <van-panel title="个人介绍" desc="" status="" style="text-align:left;">
+            <div class="panel-content">
+                <p>个人介绍内容</p>
+            </div>
+        </van-panel>   
+        <van-panel title="参赛照片" desc="" status="" style="text-align:left;">
             <div class="panel-content" style="text-align:center">
-                <img :src="user.avatar_src" alt="" srcset="" @click="pick">
+                <img :src="user.avatar_src" alt="" srcset="">
             </div>
         </van-panel> 
-        <van-popup position="right" v-model="isShowMore" style="width:100vw;" :modal="false">
-          <more-info :user="user" :teamWorker="teamWorker"></more-info>
-        </van-popup>
         <myFooter />
-    </div>
+    </div>  
 </template>
 <script>
-import Base from "./baseComponents/base";
 import teamMember from "./baseComponents/teamMember";
-import MoreInfo from "./moreInfo";
 import myFooter from "./baseComponents/myFooter";
 export default {
-  extends: Base,
+  props: ["user", "teamWorker"],
   components: {
     teamMember,
-    MoreInfo,
     myFooter
-  },
-  data() {
-    return {
-      teamWorker: [],
-      isShowMore: false
-    };
-  },
-  created() {
-    this.getTeamWorker();
-  },
-  methods: {
-    pick() {},
-    getTeamWorker() {
-      this.$http.post("/api/rank", {}).then(res => {
-        this.teamWorker = res.data.aicao;
-      });
-    }
   }
 };
 </script>
 <style lang="less" scoped>
 .main {
+  height: 100vh;
   .sign-header {
     width: 100%;
     box-sizing: border-box;
@@ -76,7 +58,7 @@ export default {
     }
     .user-info {
       text-align: left;
-      font-size: 3.4vw;
+      font-size: 4vw;
       height: 26vw;
       display: flex;
       flex-direction: column;
@@ -108,5 +90,3 @@ export default {
   }
 }
 </style>
-
-

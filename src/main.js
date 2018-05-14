@@ -8,11 +8,13 @@ import api_lists from "./libs/api_config";
 import notice from "./libs/notice";
 import Vant from "vant";
 import "vant/lib/vant-css/index.css";
+import apis from "./libs/api_config";
 Vue.use(Vant);
 Vue.config.productionTip = false;
 Vue.use(Zj, { api_lists, notices: notice });
 /* eslint-disable no-new */
 require("./libs/mock");
+//Vue.prototype.$api_urls = Object.assign({}, Vue.prototype.$api_urls, apis);
 const vm = new Vue({
   el: "#app",
   router,

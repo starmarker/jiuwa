@@ -10,12 +10,14 @@
         <player-item :item="item" />
       </van-col>      
     </van-row>
+    <globalFooter></globalFooter>
   </div>
 </template>
 
 <script>
 import Base from "./baseComponents/base";
 import playerItem from "./baseComponents/listItem";
+import GlobalFooter from "./baseComponents/globalFooter";
 export default {
   name: "HelloWorld",
   extends: Base,
@@ -26,7 +28,7 @@ export default {
       all_ther: []
     };
   },
-  components: { playerItem },
+  components: { playerItem, GlobalFooter },
   mounted() {
     this.$http("/api/single", {}).then(res => {
       this.current_ther = res.data;

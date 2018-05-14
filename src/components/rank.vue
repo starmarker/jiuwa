@@ -47,12 +47,15 @@
                 </div>
             </van-tab>
         </van-tabs>
+        <GlobalFooter></GlobalFooter>
     </div>
 </template>
 <script>
 import Base from "./baseComponents/base";
+import GlobalFooter from "./baseComponents/globalFooter";
 export default {
   extends: Base,
+  components: { GlobalFooter },
   data() {
     return {
       active: 0,
