@@ -30,6 +30,17 @@ export default new Router({
       path: "/my",
       name: "myinfo",
       component: resolve => require(["@/components/myinfo"], resolve)
+    },
+    {
+      path: "/jiuwa",
+      name: "jiuwa",
+      component: resolve => require(["@/components/jiuwa"], resolve)
+    },
+    {
+      path: "/result/:type",
+      name: "result",
+      component: resolve => require(["@/components/result"], resolve),
+      props: true
     }
   ]
 });

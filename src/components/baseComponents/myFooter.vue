@@ -10,7 +10,7 @@
                 <p>订单</p>                
             </van-col>
         </van-row>
-        <div class=" picker ">
+        <div class=" picker " v-if="isShowPick">
             <div class="picker-content">
                 <img src="../../assets/hand.png" alt="">
                 <p>采集艾草</p>
@@ -19,7 +19,14 @@
     </div>
 </template>
 <script>
-export default {};
+export default {
+  props: {
+    isShowPick: {
+      type: Boolean,
+      default: true
+    }
+  }
+};
 </script>
 <style lang="less" scoped>
 .myfooter {

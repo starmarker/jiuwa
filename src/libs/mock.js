@@ -37,8 +37,19 @@ const info = {
   current_rank: 2,
   less_score: 1920
 };
+const jiujiu = {
+  aicao_number: "@integer(1,999)",
+  name: "@cword()",
+  status: "3",
+  cur_expre: "@integer(100,999)",
+  levelup_expre: 999,
+  cur_level: 2,
+  img_url: "@dataImage('120x240','照片')",
+  ill_name: "腹泻"
+};
 Mock.mock("/api/single", single);
 Mock.mock("/api/mutepuly", mutepuly);
 Mock.mock("/api/getuser", user);
 Mock.mock("/api/rank", rank);
 Mock.mock("/api/info", info);
+Mock.mock("/api/jiujiu", jiujiu);

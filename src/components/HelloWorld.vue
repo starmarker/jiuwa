@@ -30,6 +30,27 @@ export default {
   },
   components: { playerItem, GlobalFooter },
   mounted() {
+    let module_token = this.$api_urls["index"];
+    // this.getData("com_manage", { module_name }).then(res => {
+    //   console.log(res.data);
+    // });
+    // this.getData("com_manage", { module_name }).then(res => {
+    //   console.log("res :", res);
+    // });
+    console.log("module_token :", module_token);
+    this.$api({
+      name: "index",
+      params: {},
+      callback: res => {
+        console.log("rres :", res);
+      },
+      errorcallback: res => {
+        console.log("eres :", res);
+      },
+      catchcallback(res) {
+        console.log("cres :", res);
+      }
+    });
     this.$http("/api/single", {}).then(res => {
       this.current_ther = res.data;
       // console.log(res);
@@ -93,5 +114,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 </style>

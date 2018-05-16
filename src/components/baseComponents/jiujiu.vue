@@ -1,0 +1,75 @@
+<template>
+  <div class="jiu-info">
+      <p>你的艾草颗数:{{model.aicao_number}}</p>
+      <p>{{model.name}}</p>
+      <div class="progress">
+          小九九成长度<van-progress :pivot-text="process_txt" :percentage="percentage" />
+      </div>
+      <div class="jiu-img">
+         <img :src="model.img_url" alt="" srcset=""> 
+         {{showInfo}}
+         <van-button size="small" @click="dealInfo">{{buttonText}}</van-button>
+      </div>
+  </div>
+</template>
+<script>
+export default {
+  name: "jiuInfo",
+  props: {
+    model: {
+      type: Object,
+      default: () => {
+        return {};
+      }
+    }
+  },
+  computed: {
+    buttonText() {
+      let text = this.model.status !== 3 ? "采集艾草" : "邀请求助";
+      return text;
+    },
+    showInfo() {
+      let result;
+      if (this.model.status == 1) {
+        result = "给我采摘艾草\n我要快快长大";
+      } else if (this.model.status == 2) {
+        let now = new Date().getHours();
+        if (now < 11) {
+          result = "早上好";
+        } else if (now >= 11 && now < 13) {
+          result = "中午好";
+        } else if (now >= 13 && now < 17) {
+          result = "下午好";
+        } else {
+          result = "晚上好";
+        }
+      } else {
+        result = `我现在生病了，${this.model.ill_name} 找灸疗师救助我`;
+      }
+      return result;
+    },
+    process_txt() {
+      return this.model.cur_expre + "/" + this.model.levelup_expre;
+    },
+    percentage() {
+      let result =
+        Number(this.model.cur_expre / this.model.levelup_expre) * 100;
+
+      return ~~result;
+    }
+  },
+  methods: {
+    dealInfo() {
+      if (this.model.status == 3) {
+        this.$emit("rescue");
+      } else {
+        this.$go("/");
+      }
+    }
+  }
+};
+</script>
+<style lang="less" scoped>
+</style>
+
+
