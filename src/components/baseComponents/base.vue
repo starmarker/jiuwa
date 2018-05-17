@@ -4,12 +4,25 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      user_token: "",
+      is_teacher: true,
+      is_signed: false,
+      is_hasJiuwa: false
+    };
   },
-  created() {
+  async created() {
     if (!this.user) {
-      this.getuser();
+      await this.getuser();
     }
+    await this.isTeacher();
+    await this.isHasJiuwa();
+    await this.isSigned();
+  },
+  beforeRouteEnter: (to, from, next) => {
+    // ...
+    document.title = to.meta.title;
+    next();
   },
   computed: {
     user() {
@@ -58,11 +71,52 @@ export default {
     back() {
       this.$router.back();
     },
-    getuser() {
-      this.$http.post("/api/getuser", {}).then(res => {
-        // this.user = res.data;
-        this.$login_info(res.data);
+    test() {
+      return new Promise((resolve, reject) => {
+        this.$ckServiceLogin(res => {
+          resolve(res);
+        });
       });
+    },
+
+    isTeacher() {
+      let module_token = this.$api_urls["is_teacher"];
+      return new Promise((resolve, reject) => {
+        this.getData("com_manage", { module_token }).then(res => {
+          this.is_teacher = res.data;
+          resolve(res.data);
+        });
+      });
+    },
+    isHasJiuwa() {
+      let module_token = this.$api_urls["isHasJiuwa"];
+      return new Promise((resolve, reject) => {
+        this.getData("com_manage", { module_token }).then(res => {
+          this.is_hasJiuwa = res.data;
+          resolve(res.data);
+        });
+      });
+    },
+    isSigned() {
+      let module_token = this.$api_urls["is_signed"];
+      return new Promise((resolve, reject) => {
+        this.getData("com_manage", { module_token }).then(res => {
+          this.is_signed = res.data;
+          resolve(res.data);
+        });
+      });
+    },
+    async getuser() {
+      //let user_token;
+      this.user_token = await this.test();
+      //this.user_token = this.$login_info()["user_token"];
+      this.is_teacher = await this.isTeacher();
+      console.log("user_token :", this.user_token);
+    },
+    getStatus() {
+      this.isTeacher();
+      this.isHasJiuwa();
+      this.isSigned();
     }
   }
 };

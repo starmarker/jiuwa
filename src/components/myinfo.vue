@@ -28,7 +28,7 @@
         <van-popup position="right" v-model="isShowMore" style="width:100vw;" :modal="false">
           <more-info :user="user" :teamWorker="teamWorker"></more-info>
         </van-popup>
-        <myFooter />
+        <myFooter @pick="pick"/>
     </div>
 </template>
 <script>
@@ -49,14 +49,41 @@ export default {
       isShowMore: false
     };
   },
-  created() {
-    this.getTeamWorker();
+  async created() {
+    await this.isTeacher();
+    if (!this.is_teacher && !this.$route.params.token) {
+      this.$go("/jiuwa");
+    } else {
+      this.getInfo();
+    }
+    // this.getTeamWorker();
   },
   methods: {
-    pick() {},
+    pick() {
+      let module_token = this.$api_urls["pick"];
+      let moxibustion_token = this.$route.params.token;
+      let plucking_type = 0;
+      this.getData("com_manage", {
+        module_token,
+        moxibustion_token,
+        plucking_type
+      })
+        .then(res => {
+          this.$suc("采摘成功");
+        })
+        .catch(rej => {
+          this.$fail(rej.msg);
+        });
+    },
     getTeamWorker() {
       this.$http.post("/api/rank", {}).then(res => {
         this.teamWorker = res.data.aicao;
+      });
+    },
+    getInfo() {
+      let module_token = this.$api_urls["myinfo"];
+      this.getData("com_manage", { module_token }).then(res => {
+        console.log("res :", res.data);
       });
     }
   }

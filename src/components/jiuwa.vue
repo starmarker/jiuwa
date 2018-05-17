@@ -1,6 +1,20 @@
 <template>
   <div class="main">
-    <Jiuwa :model="model" @rescue="help"></Jiuwa>
+    <div class="sign-header">
+      <van-row>
+          <van-col span="8">
+              <img :src="model.userfeil.avatar_src" alt="">
+          </van-col>
+          <van-col span="16">
+              <div class="user-info">
+                  <p>姓名：{{model.userfeil.nickname}}</p> 
+                  <p>采摘成绩:{{model.aicao_num}}</p>                
+              </div>
+          </van-col>
+          
+      </van-row>
+    </div>
+    <Jiuwa :model="jiuwa" @rescue="help"></Jiuwa>
     <myFooter :isShowPick="false" />
       <van-popup v-model="showHelpList" position="right" :overlay="false" style="width:100%">
         <van-nav-bar title="附近的灸疗师" left-text="返回" left-arrow @click-left="showHelpList=false"/>
@@ -15,6 +29,7 @@ import myFooter from "./baseComponents/myFooter";
 import HelpList from "./baseComponents/helplist";
 export default {
   name: "jiuwa",
+  extends: Base,
   components: {
     Jiuwa,
     myFooter,
@@ -23,6 +38,7 @@ export default {
   data() {
     return {
       model: {},
+      jiuwa: {},
       finish: false,
       loading: false,
       showHelpList: false,
@@ -36,9 +52,11 @@ export default {
   },
   methods: {
     getInfo() {
-      this.$http.post("/api/jiujiu", {}).then(res => {
+      let module_token = this.$api_urls["myinfo"];
+      this.getData("com_manage", { module_token }).then(res => {
         console.log("object :", res.data);
         this.model = res.data;
+        this.jiuwa = res.data.xiaojiujiu;
       });
     },
     help() {
@@ -63,6 +81,41 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.sign-header {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 2vw;
+  position: relative;
+  background-image: linear-gradient(to right, orange, orangered);
+  img {
+    width: 80%;
+    border-radius: 50%;
+  }
+  .user-info {
+    text-align: left;
+    font-size: 3.4vw;
+    height: 26vw;
+    display: flex;
+    flex-direction: column;
+    p,
+    a {
+      flex-grow: 1;
+      color: #fff;
+    }
+  }
+  .van-button {
+    position: absolute;
+    top: 10vw;
+    right: 1vw;
+  }
+  .info-detail {
+    color: #fff;
+    font-size: 4.5vw;
+    small {
+      font-size: 0.8em;
+    }
+  }
+}
 </style>
 
 

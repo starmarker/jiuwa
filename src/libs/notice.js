@@ -32,16 +32,21 @@ const notice = {
     Dialog.alert({
       message: msg
     }).then(() => {
-      closeCallback();
+      if (closeCallback) closeCallback();
     });
   },
   $confirm_dlg(msg, callback_ok, callback_no) {
     Dialog.confirm({
       message: msg
     })
-      .then(function() {
-        callback_ok();
-      })
+      .then(
+        function() {
+          if (callback_ok) callback_ok();
+        },
+        function() {
+          if (callback_no) callback_no();
+        }
+      )
       .catch(() => {
         callback_no();
       });

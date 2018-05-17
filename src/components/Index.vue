@@ -38,43 +38,20 @@ export default {
     //   console.log("res :", res);
     // });
     console.log("module_token :", module_token);
-    this.$api({
-      name: "com_manage",
-      params: { module_token },
-      callback: res => {
-        console.log("rres :", res);
-      },
-      errorcallback: res => {
-        console.log("eres :", res);
-      },
-      catchcallback(res) {
-        console.log("cres :", res);
-      }
-    });
-    // this.$getComDatas(module_token, {
-    //   callback: res => {
-    //     console.log("res :", res);
-    //   }
-    // });
-    // this.$http("/api/" + module_token, {}).then(res => {
-    //   this.current_ther = res.data;
-    //   console.log(res);
-    // });
-    this.$http("/api/single", {}).then(res => {
-      this.current_ther = res.data;
-      // console.log(res);
-    });
-    this.$http("/api/mutepuly", {}).then(res => {
-      this.all_ther = res.data.lists;
-      // console.log(res);
-    });
-    this.$nextTick(() => {
-      this.checkUser();
-    });
+    this.getData("com_manage", { module_token })
+      .then(res => {
+        console.log("object :", res.data);
+      })
+      .catch(rej => {
+        this.$err(rej.msg);
+      });
 
     // this.$http("/api/getuser", {}).then(res => {
     //   this.user = res.data;
     //   console.log(res.data);
+  },
+  beforeUpdate() {
+    this.checkUser();
   },
   methods: {
     alert1() {
@@ -89,14 +66,13 @@ export default {
       );
       //     this.$suc("成功");
     },
-    checkUser() {
+    async checkUser() {
       // this.user = this.$login_info();
-      console.log("object :", this.user);
-      if (this.user.is_ther && !this.user.is_singned) {
+      await this.getStatus();
+      console.log(this.is_teacher, this.is_signed, this.is_hasJiuwa);
+      if (this.is_teacher && !this.is_signed) {
         this.$confirm_dlg(
-          "灸疗师" +
-            this.user.user_nickname +
-            ",你还未报名参赛，是否报名参加活动",
+          "灸疗师" + this.user.nick_name + ",你还未报名参赛，是否报名参加活动",
           () => {
             this.$go("/sign");
           },
@@ -105,17 +81,33 @@ export default {
           }
         );
       }
-      if (!this.user.is_ther && !this.user.is_getpet) {
+      if (!this.is_teacher && !this.is_hasJiuwa) {
         this.$confirm_dlg(
-          "顾客" + this.user.user_nickname + ",你还未领取灸娃，是否领取",
+          "顾客" + this.user.nick_name + ",你还未领取灸娃，是否领取",
           () => {
-            console.log("领取");
+            this.getJiuwa();
           },
           () => {
             console.log("不领取");
           }
         );
       }
+    },
+    getJiuwa() {
+      let user_type = 0,
+        module_token = this.$api_urls["getJiuwa"],
+        inviter_token = "263764d167ee33343036fb1510a58503";
+      this.getData("com_manage", {
+        user_type,
+        module_token,
+        inviter_token
+      }).then(res => {
+        this.$alert_dlg(
+          "领养小灸灸成功，你可以采集艾草让小灸灸成长咯",
+          "",
+          () => {}
+        );
+      });
     }
   }
 };

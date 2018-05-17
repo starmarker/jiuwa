@@ -1,7 +1,7 @@
 <template>
     <div class="myfooter van-hairline--top">
         <van-row>
-            <van-col span="12">
+            <van-col span="12" @click.native="$go('/')">
                 <van-icon name="home" />
                 <p>首页</p>
             </van-col>
@@ -10,7 +10,7 @@
                 <p>订单</p>                
             </van-col>
         </van-row>
-        <div class=" picker " v-if="isShowPick">
+        <div class=" picker " v-if="isShowPick" @click="pick">
             <div class="picker-content">
                 <img src="../../assets/hand.png" alt="">
                 <p>采集艾草</p>
@@ -24,6 +24,11 @@ export default {
     isShowPick: {
       type: Boolean,
       default: true
+    }
+  },
+  methods: {
+    pick() {
+      this.$emit("pick");
     }
   }
 };
@@ -48,8 +53,8 @@ export default {
   }
   .picker {
     position: absolute;
-    width: 20vw;
-    height: 20vw;
+    width: 80px;
+    height: 80px;
     bottom: 0;
     left: 50%;
     transform: translate(-50%, -10%);
@@ -58,8 +63,8 @@ export default {
     z-index: 101;
     background-color: #fff;
     .picker-content {
-      width: calc(20vw - 6px);
-      height: calc(20vw - 6px);
+      width: calc(100% - 6px);
+      height: calc(100% - 6px);
       position: relative;
       top: 3px;
       left: 3px;

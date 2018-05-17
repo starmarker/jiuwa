@@ -7,20 +7,34 @@
             @click-left="back"
         />
         <van-tabs v-model="active">
-            <van-tab  title="灸疗师排行">
+            <van-tab  title="灸娃排行">
                 <div class="page-body">
                     <van-cell-group>
-                        <van-cell :value="item.user_score" v-for="(item,index) in aicao_rank" :key="item.user_token">
+                        <van-cell :value="item.aicao_num+''" v-for="(item,index) in jiuwa_rank" :key="item.user_token">
                             <template slot="title">
                             <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
                             <span class="van-cell-text">
-                                {{item.user_nickname}}</span>                            
+                                {{item.nickname.nickname}}</span>                            
+                            </template>
+                        </van-cell>
+                    </van-cell-group>
+                </div>
+            </van-tab>
+            <van-tab  title="灸疗师排行">
+                <div class="page-body">
+                    <van-cell-group>
+                        <van-cell :value="item.basescore+''" v-for="(item,index) in aicao_rank" :key="item.user_token">
+                            <template slot="title">
+                            <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
+                            <span class="van-cell-text">
+                                {{item.nickname.nickname}}</span>                            
                             </template>
                         </van-cell>
                     </van-cell-group>
                 </div> 
             </van-tab>
-            <van-tab  title="灸娃排行">
+
+            <!-- <van-tab  title="团队排行">
                 <div class="page-body">
                     <van-cell-group>
                         <van-cell :value="item.user_score" v-for="(item,index) in jiuwa_rank" :key="item.user_token">
@@ -32,20 +46,7 @@
                         </van-cell>
                     </van-cell-group>
                 </div>
-            </van-tab>
-            <van-tab  title="团队排行">
-                <div class="page-body">
-                    <van-cell-group>
-                        <van-cell :value="item.user_score" v-for="(item,index) in jiuwa_rank" :key="item.user_token">
-                            <template slot="title">
-                            <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
-                            <span class="van-cell-text">
-                                {{item.user_nickname}}</span>                            
-                            </template>
-                        </van-cell>
-                    </van-cell-group>
-                </div>
-            </van-tab>
+            </van-tab> -->
         </van-tabs>
         <GlobalFooter></GlobalFooter>
     </div>
@@ -66,18 +67,23 @@ export default {
   created() {
     this.getRank();
   },
+  watch: {
+    active: function(newValue) {
+      this.getRank();
+    }
+  },
   methods: {
     getRank() {
-      this.$http.post("/api/rank", {}).then(res => {
+      let user_type = this.active;
+      let module_token = this.$api_urls["rank"];
+      this.getData("com_manage", { user_type, module_token }).then(res => {
         console.log(res.data);
-
         //this.aicao_rank = res.data.aicao;
-        this.aicao_rank = res.data.aicao.sort((x, y) => {
-          return x.user_score > y.user_score ? -1 : 1;
-        });
-        this.jiuwa_rank = res.data.jiuwa.sort((x, y) => {
-          return x.user_score > y.user_score ? -1 : 1;
-        });
+        if (user_type == 0) {
+          this.jiuwa_rank = res.data;
+        } else {
+          this.aicao_rank = res.data;
+        }
       });
     }
   }
