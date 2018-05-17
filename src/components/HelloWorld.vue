@@ -39,8 +39,8 @@ export default {
     // });
     console.log("module_token :", module_token);
     this.$api({
-      name: "index",
-      params: {},
+      name: "com_manage",
+      params: { module_token },
       callback: res => {
         console.log("rres :", res);
       },
@@ -51,6 +51,15 @@ export default {
         console.log("cres :", res);
       }
     });
+    // this.$getComDatas(module_token, {
+    //   callback: res => {
+    //     console.log("res :", res);
+    //   }
+    // });
+    // this.$http("/api/" + module_token, {}).then(res => {
+    //   this.current_ther = res.data;
+    //   console.log(res);
+    // });
     this.$http("/api/single", {}).then(res => {
       this.current_ther = res.data;
       // console.log(res);
