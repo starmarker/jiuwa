@@ -16,7 +16,7 @@
     </div>
     <Jiuwa :model="jiuwa" @rescue="help"></Jiuwa>
     <myFooter :isShowPick="false" />
-      <van-popup v-model="showHelpList" position="right" :overlay="false" style="width:100%">
+      <van-popup v-model="showHelpList" position="right" :overlay="false" style="width:100%;height:100%;">
         <van-nav-bar title="附近的灸疗师" left-text="返回" left-arrow @click-left="showHelpList=false"/>
         <HelpList  :finished="finish" :list="teacher_list" @loadmore="getList" :loading="loading"></HelpList>
       </van-popup>
@@ -37,7 +37,13 @@ export default {
   },
   data() {
     return {
-      model: {},
+      model: {
+        userfeil: {
+          avatar_src: "",
+          nickname: ""
+        },
+        aicao_num: ""
+      },
       jiuwa: {},
       finish: false,
       loading: false,
@@ -64,12 +70,12 @@ export default {
     },
     getList() {
       this.loading = true;
-      this.$http
-        .post("/api/rank", {})
+      let module_token = this.$api_urls["index"];
+      this.getData("com_manage", { module_token })
         .then(res => {
           console.log("res.data :", res.data);
           this.cur_page++;
-          this.teacher_list = this.teacher_list.concat(res.data.aicao);
+          this.teacher_list = this.teacher_list.concat(res.data.lists);
           this.finish = this.cur_page >= 3;
           this.loading = false;
         })

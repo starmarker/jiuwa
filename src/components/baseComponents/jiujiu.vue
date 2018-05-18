@@ -1,6 +1,6 @@
 <template>
   <div class="jiu-info">
-      <p>你的艾草颗数:{{model.aicao_number}}</p>
+      <!-- <p>你的艾草颗数:{{model.aicao_number}}</p> -->
       <p>{{model.name}}</p>
       <div class="progress">
           小九九成长度:{{model.experience+'/100'}}
@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     dealInfo() {
-      if (this.model.health == 100) {
+      if (this.model.health < 100) {
         this.$emit("rescue");
       } else {
         this.$go("/");

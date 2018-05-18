@@ -41,6 +41,7 @@ export default {
   width: 100%;
   height: 50px;
   z-index: 100;
+  background-color: #fff;
   p {
     -webkit-margin-before: 0em;
     -webkit-margin-after: 0em;

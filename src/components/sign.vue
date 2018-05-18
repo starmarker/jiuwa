@@ -48,7 +48,8 @@ export default {
   data() {
     return {
       sign_info: {
-        message: "",
+        id: null,
+        declaration: "",
         liliao_image: ""
       },
       avatar_id: "",
@@ -64,6 +65,7 @@ export default {
   async created() {
     await this.isTeacher();
     this.checkUser();
+    this.getInfo();
   },
   methods: {
     onRead(files) {
@@ -114,11 +116,15 @@ export default {
       });
     },
     submit() {
-      let module_token = this.$api_urls["sign"];
+      let module_token = this.$route.params.token
+        ? this.$api_urls["t_sign_update"]
+        : this.$api_urls["sign"];
       let obj = Object.assign({}, this.sign_info, { module_token });
       this.getData("com_manage", obj)
         .then(res => {
-          this.$alert_dlg("更新报名信息成功", "", () => {});
+          this.$alert_dlg("更新报名信息成功", "", () => {
+            this.$go("/");
+          });
         })
         .catch(rej => {
           this.$alert_dlg(rej.msg, "", () => {});
@@ -130,6 +136,20 @@ export default {
       if (!this.is_teacher) {
         this.$alert_dlg("你不是灸疗师,无须报名", "", () => {
           this.$router.back();
+        });
+      }
+    },
+    getInfo() {
+      let user_token = this.$route.params.token;
+      if (user_token) {
+        let module_token = this.$api_urls["t_info"];
+        this.getData("com_manage", { module_token, user_token }).then(res => {
+          //this.userInfo = res.data;
+          //console.log("res :", res.data);
+          this.sign_info.id = res.data.id;
+          this.sign_info.declaration = res.data.declaration;
+          this.avatar_src = res.data.liliao_image_src;
+          this.sign_info.liliao_image = res.data.liliao_image;
         });
       }
     }

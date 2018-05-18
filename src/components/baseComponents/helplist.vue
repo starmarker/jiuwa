@@ -8,8 +8,8 @@
         :offset="800"
         >
             <van-cell v-for="item in list" :key="item.user_token"  >
-                <img :src="item.avatar_src" alt="" slot="icon">
-                <span slot="title">{{item.user_nickname}}</span> 
+                <img :src="item.headimage" alt="" slot="icon">
+                <span slot="title">{{item.nickname}}</span> 
                 <van-button type="primary" :disabled="item.disabled" size="small" slot="right-icon">向TA求助</van-button>
             </van-cell>
         </van-list>

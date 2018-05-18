@@ -34,6 +34,8 @@ const api_urls = {
   t_info:
     "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enx5yJiWnY-6gJ-Vn7WpxmiPrnqcaKM",
   uploadPic:
-    "MDAwMDAwMDAwMLW60ZOCz6qqimWpY8l9f6OSd2nSxtCFma57rIKKjp6lwL7MmoWlfGSVetupvo2KoomBdaM"
+    "MDAwMDAwMDAwMLW60ZOCz6qqimWpY8l9f6OSd2nSxtCFma57rIKKjp6lwL7MmoWlfGSVetupvo2KoomBdaM",
+  inviter:
+    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enx-y7ynoJ66gKOUZrWiv46DoZR3pODIpX6U"
 };
 export default api_urls;

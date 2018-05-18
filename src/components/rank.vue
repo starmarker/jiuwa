@@ -6,7 +6,7 @@
             left-arrow
             @click-left="back"
         />
-        <van-tabs v-model="active">
+        <van-tabs v-model="activeTab">
             <van-tab  title="灸娃排行">
                 <div class="page-body">
                     <van-cell-group>
@@ -14,7 +14,7 @@
                             <template slot="title">
                             <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
                             <span class="van-cell-text">
-                                {{item.nickname.nickname}}</span>                            
+                                {{item.nickname}}</span>                            
                             </template>
                         </van-cell>
                     </van-cell-group>
@@ -27,28 +27,14 @@
                             <template slot="title">
                             <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
                             <span class="van-cell-text">
-                                {{item.nickname.nickname}}</span>                            
+                                {{item.nickname}}</span>                            
                             </template>
                         </van-cell>
                     </van-cell-group>
                 </div> 
             </van-tab>
-
-            <!-- <van-tab  title="团队排行">
-                <div class="page-body">
-                    <van-cell-group>
-                        <van-cell :value="item.user_score" v-for="(item,index) in jiuwa_rank" :key="item.user_token">
-                            <template slot="title">
-                            <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
-                            <span class="van-cell-text">
-                                {{item.user_nickname}}</span>                            
-                            </template>
-                        </van-cell>
-                    </van-cell-group>
-                </div>
-            </van-tab> -->
         </van-tabs>
-        <GlobalFooter></GlobalFooter>
+        <GlobalFooter :teacher="is_teacher" :actived="2"></GlobalFooter>
     </div>
 </template>
 <script>
@@ -59,7 +45,7 @@ export default {
   components: { GlobalFooter },
   data() {
     return {
-      active: 0,
+      activeTab: 0,
       aicao_rank: [],
       jiuwa_rank: []
     };
@@ -68,13 +54,13 @@ export default {
     this.getRank();
   },
   watch: {
-    active: function(newValue) {
+    activeTab: function(newValue) {
       this.getRank();
     }
   },
   methods: {
     getRank() {
-      let user_type = this.active;
+      let user_type = this.activeTab;
       let module_token = this.$api_urls["rank"];
       this.getData("com_manage", { user_type, module_token }).then(res => {
         console.log(res.data);

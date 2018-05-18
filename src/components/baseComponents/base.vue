@@ -15,9 +15,10 @@ export default {
     if (!this.user) {
       await this.getuser();
     }
-    await this.isTeacher();
-    await this.isHasJiuwa();
-    await this.isSigned();
+    // await this.isTeacher();
+    // await this.isHasJiuwa();
+    // await this.isSigned();
+    await this.checkUser();
   },
   beforeRouteEnter: (to, from, next) => {
     // ...
@@ -113,10 +114,54 @@ export default {
       this.is_teacher = await this.isTeacher();
       console.log("user_token :", this.user_token);
     },
-    getStatus() {
-      this.isTeacher();
-      this.isHasJiuwa();
-      this.isSigned();
+    async getStatus() {
+      await this.isTeacher();
+      await this.isHasJiuwa();
+      await this.isSigned();
+    },
+    async checkUser() {
+      // this.user = this.$login_info();
+      let inviter_token =
+        this.$route.query.inviter_code || "33359507b753485b6f47490383a47aa8";
+      await this.getStatus();
+      console.log(this.is_teacher, this.is_signed, this.is_hasJiuwa);
+      if (this.is_teacher && !this.is_signed) {
+        this.$confirm_dlg(
+          "灸疗师" + this.user.nick_name + ",你还未报名参赛，是否报名参加活动",
+          () => {
+            this.$go("/sign");
+          },
+          () => {
+            console.log("不参加活动");
+          }
+        );
+      }
+      if (!this.is_teacher && !this.is_hasJiuwa) {
+        this.$confirm_dlg(
+          "顾客" + this.user.nick_name + ",你还未领取灸娃，是否领取",
+          () => {
+            this.getJiuwa(inviter_token);
+          },
+          () => {
+            console.log("不领取");
+          }
+        );
+      }
+    },
+    getJiuwa(inviter_token) {
+      let user_type = 0,
+        module_token = this.$api_urls["getJiuwa"];
+      this.getData("com_manage", {
+        user_type,
+        module_token,
+        inviter_token
+      }).then(res => {
+        this.$alert_dlg(
+          "领养小灸灸成功，你可以采集艾草让小灸灸成长咯",
+          "",
+          () => {}
+        );
+      });
     }
   }
 };

@@ -3,13 +3,13 @@
         <div class="sign-header">
           <van-row>
               <van-col span="8">
-                  <img :src="user.avatar_src" alt="">
+                  <img :src="userInfo.userfeil.avatar_src" alt="">
               </van-col>
               <van-col span="16">
                   <div class="user-info">
-                      <p>姓名：{{user.user_nickname}}</p>
+                      <p>姓名：{{userInfo.userfeil.nickname}}</p>
                       <p>店铺:高新直营店</p>
-                      <p>[ <router-link to="/sign">点击修改</router-link>]</p>
+                      <p v-if="userInfo.user_token==user.user_token && is_teacher">[ <router-link :to="'/sign/'+userInfo.user_token" >点击修改</router-link>]</p>
                   </div>
               </van-col>
               <van-button size="small" type="primary" @click="isShowMore=true">查看更多信息</van-button>
@@ -22,13 +22,13 @@
         </van-panel>
         <van-panel title="艾草地" desc="" status="" style="text-align:left;">
             <div class="panel-content" style="text-align:center">
-                <img :src="user.avatar_src" alt="" srcset="" @click="pick">
+                <img :src="userInfo.userfeil" alt="" srcset="" @click="pick">
             </div>
         </van-panel> 
         <van-popup position="right" v-model="isShowMore" style="width:100vw;" :modal="false">
-          <more-info :user="user" :teamWorker="teamWorker"></more-info>
+          <more-info :moreInfo="userInfo" :teamWorker="teamWorker" :showEdit="userInfo.user_token==user.user_token" @click-pick="pick"></more-info>
         </van-popup>
-        <myFooter @pick="pick"/>
+        <myFooter @pick="pick" :isShowPick="!this.is_teacher"/>
     </div>
 </template>
 <script>
@@ -46,16 +46,19 @@ export default {
   data() {
     return {
       teamWorker: [],
-      isShowMore: false
+      isShowMore: false,
+      userInfo: {
+        userfeil: {
+          avatar_src: "",
+          nickname: ""
+        }
+      }
     };
   },
   async created() {
     await this.isTeacher();
-    if (!this.is_teacher && !this.$route.params.token) {
-      this.$go("/jiuwa");
-    } else {
-      this.getInfo();
-    }
+    this.getInfo();
+
     // this.getTeamWorker();
   },
   methods: {
@@ -69,10 +72,14 @@ export default {
         plucking_type
       })
         .then(res => {
-          this.$suc("采摘成功");
+          if (res.data) {
+            this.$suc("采摘成功");
+          } else {
+            this.$err("采摘失败");
+          }
         })
         .catch(rej => {
-          this.$fail(rej.msg);
+          this.$err(rej.msg);
         });
     },
     getTeamWorker() {
@@ -81,9 +88,14 @@ export default {
       });
     },
     getInfo() {
-      let module_token = this.$api_urls["myinfo"];
-      this.getData("com_manage", { module_token }).then(res => {
-        console.log("res :", res.data);
+      let user_token = this.$route.params.token;
+      let module_token = user_token
+        ? this.$api_urls["t_info"]
+        : this.$api_urls["myinfo"];
+
+      this.getData("com_manage", { module_token, user_token }).then(res => {
+        this.userInfo = res.data;
+        //console.log("res :", res.data);
       });
     }
   }
@@ -91,6 +103,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .main {
+  overflow-y: auto;
   .sign-header {
     width: 100%;
     box-sizing: border-box;

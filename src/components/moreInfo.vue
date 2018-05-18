@@ -1,15 +1,16 @@
 <template>
     <div class="main">
+      <div class="main-body">
         <div class="sign-header">
           <van-row>
               <van-col span="8">
-                  <img :src="user.avatar_src" alt="">
+                  <img :src="moreInfo.userfeil.avatar_src" alt="">
               </van-col>
               <van-col span="16">
                   <div class="user-info">
-                      <p>姓名：{{user.user_nickname}}</p>
+                      <p>姓名：{{moreInfo.userfeil.nickname}}</p>
                       <p>店铺:高新直营店</p>
-                      <p>[ <router-link to="/sign">点击修改</router-link>]</p>
+                      <p v-if="showEdit">[ <router-link :to="'/sign/'+moreInfo.user_token">点击修改</router-link>]</p>
                   </div>
               </van-col>
           </van-row>
@@ -26,26 +27,41 @@
         </van-panel>   
         <van-panel title="参赛照片" desc="" status="" style="text-align:left;">
             <div class="panel-content" style="text-align:center">
-                <img :src="user.avatar_src" alt="" srcset="">
+                <img :src="moreInfo.liliao_image_src" alt="" srcset="">
             </div>
-        </van-panel> 
-        <myFooter />
+        </van-panel>
+      </div>
+ 
+      <myFooter @pick="pick"/>
     </div>  
 </template>
 <script>
 import teamMember from "./baseComponents/teamMember";
 import myFooter from "./baseComponents/myFooter";
+// import Base from "./baseComponents/base";
 export default {
-  props: ["user", "teamWorker"],
+  props: ["moreInfo", "teamWorker", "showEdit"],
+  // extends: Base,
   components: {
     teamMember,
     myFooter
+  },
+  methods: {
+    pick() {
+      this.$emit("click-pick");
+    }
   }
 };
 </script>
 <style lang="less" scoped>
 .main {
   height: 100vh;
+  position: relative;
+  .main-body {
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 50px;
+  }
   .sign-header {
     width: 100%;
     box-sizing: border-box;
@@ -87,6 +103,9 @@ export default {
     box-sizing: border-box;
     width: 100%;
     padding: 5px 15px;
+    img {
+      max-width: 90%;
+    }
   }
 }
 </style>

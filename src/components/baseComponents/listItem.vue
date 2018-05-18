@@ -1,15 +1,16 @@
 <template>
-  <div class="listitem van-hairline--surround">
+  <div class="listitem van-hairline--surround" v-if="item!==null">
       <div class="item-header">
-          <img :src="item.avatar_src" alt="" srcset="">
-      </div>
-      <div class="item-intro">
-          <p class="match-no">{{item.match_no}}</p>
-          <p class="user-name">{{item.user_nickname}}</p>
+          <img :src="item.liliao_image_src" alt="" srcset="">
+          <div class="item-intro">
+              <p class="match-no">编号:{{match_no}} <span class="user-name">{{item.nickname}}</span></p>
+              <!-- <p class="user-name">{{item.nickname}}</p> -->          
+          </div>
       </div>
       <div class="item-oper">
-          <span class="user-score">{{item.user_score}}</span>
-          <van-button size="small" type="primary" @click="pick">采集TA的艾草</van-button>
+          <span class="user-score">得分:{{item.basescore}}</span>    
+          <a href="javascript:;" @click="pick">采TA的艾草</a>    
+          
       </div>
   </div>
 </template>
@@ -20,13 +21,19 @@ export default {
       type: Object,
       default() {
         return {
-          avatar_src: "",
-          match_no: "",
+          liliao_image_src: "",
+          id: "",
           user_token: "",
-          user_nickname: "",
-          user_score: ""
+          nickname: "",
+          basescore: ""
         };
       }
+    }
+  },
+  computed: {
+    match_no() {
+      let id = this.item.id + "";
+      return id.padStart(4, "0");
     }
   },
   methods: {
@@ -44,26 +51,49 @@ export default {
   font-size: 14px;
   margin: 0 auto;
   padding: 5px;
+  padding-bottom: 0;
+  border-radius: 10px;
   .item-header {
     text-align: center;
+    position: relative;
     img {
       width: 100%;
     }
   }
   .item-intro {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+    background-color: rgba(209, 31, 64, 0.5);
+    color: #fff;
     overflow: hidden;
-    .match-no {
-      float: left;
+    position: absolute;
+    bottom: 2px;
+    p {
+      -webkit-margin-before: 0em;
+      -webkit-margin-after: 0em;
+      width: 100%;
+      text-align: left;
+      font-weight: 700;
+      // line-height: 30px;
+      // height: 30px;
+      box-sizing: border-box;
     }
+
     .user-name {
       float: right;
     }
   }
   .item-oper {
     overflow: hidden;
-    .user-score {
-      float: left;
+    .user-score,
+    a {
       line-height: 30px;
+      color: rgb(203, 23, 58);
+      font-weight: 700;
+    }
+    a {
+      float: right;
     }
     .van-button {
       float: right;
