@@ -1,15 +1,37 @@
 <template>
   <div class="hello">
+<form action="/">
+    <van-search
+      v-model="search"
+      placeholder="请输入理疗师名字"
+      show-action
+      @search="onSearch"
+      @cancel="onCancel"
+    />
+  </form>
+  <div class="banner">
+    <img src="../assets/index_banner.jpg" alt="" srcset="">
+  </div>
     <van-row v-if="current_ther">
       <van-col span="12" offset="6">
         <player-item :item="current_ther" @pick="goPage" />
       </van-col>
     </van-row>
-    <van-row>
-      <van-col span="12" v-for="item in all_ther" :key="item.user_token" style="margin-top:1vh">
-        <player-item :item="item" @pick="goPage" />
-      </van-col>      
-    </van-row>
+    
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        @load="getIndex"
+        :immediate-check="false"
+      >
+  <!-- <van-cell v-for="item in list" :key="item" :title="item + ''" /> -->
+        <van-row>
+          <van-col span="12" v-for="item in all_ther" :key="item.user_token" style="margin-top:1vh">
+            <player-item :item="item" @pick="goPage" />
+          </van-col>      
+        </van-row>
+    </van-list>
+    
     <globalFooter :teacher="is_teacher"></globalFooter>
   </div>
 </template>
@@ -24,8 +46,15 @@ export default {
   data() {
     return {
       msg: "Welcome to Your Vue.js App",
-      current_ther: {},
-      all_ther: []
+      current_ther: null,
+      all_ther: [],
+      showTest: false,
+      list: [],
+      loading: false,
+      finished: false,
+      cur_page: 1,
+      search: "",
+      isSearch: false
     };
   },
   components: { playerItem, GlobalFooter },
@@ -64,21 +93,58 @@ export default {
         });
     },
     getIndex() {
-      let module_token = this.$api_urls["index"];
+      let module_token = this.$api_urls["index"],
+        search = this.search;
       console.log("module_token :", module_token);
-      this.getData("com_manage", { module_token })
+      this.loading = true;
+      this.getData("com_manage", { module_token, page: this.cur_page, search })
         .then(res => {
           console.log("object :", res.data);
           this.all_ther = res.data.lists;
+          this.cur_page++;
+          this.finished = this.cur_page > res.data.page_info.last_page;
+          this.loading = false;
         })
         .catch(rej => {
           this.$err(rej.msg);
+          this.loading = false;
         });
+    },
+    onLoad() {
+      setTimeout(() => {
+        for (let i = 0; i < 10; i++) {
+          this.list.push(this.list.length + 1);
+        }
+        this.loading = false;
+
+        if (this.list.length >= 40) {
+          this.finished = true;
+        }
+      }, 500);
+    },
+    onSearch() {
+      this.isSearch = true;
+      this.cur_page = 1;
+      this.list = [];
+      this.getIndex();
+    },
+    onCancel() {
+      this.isSearch = false;
+      this.cur_page = 1;
+      this.list = [];
+      this.search = "";
+      this.getIndex();
     }
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="less">
+@import "../assets/css/base.less";
+.banner {
+  img {
+    width: 100%;
+  }
+}
 </style>

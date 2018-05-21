@@ -38,11 +38,12 @@
         </van-cell-group>
         <van-button type="primary" size="large" @click="submit">提交</van-button>
       </div>
-
+      <GlobalFooter :teacher="is_teacher" :actived="2"></GlobalFooter>
     </div>
 </template>
 <script>
 import Base from "./baseComponents/base";
+import GlobalFooter from "./baseComponents/globalFooter";
 export default {
   extends: Base,
   data() {
@@ -56,6 +57,9 @@ export default {
       avatar_src: "",
       photo: {}
     };
+  },
+  components: {
+    GlobalFooter
   },
   computed: {
     bgi() {

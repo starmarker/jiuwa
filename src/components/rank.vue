@@ -7,19 +7,7 @@
             @click-left="back"
         />
         <van-tabs v-model="activeTab">
-            <van-tab  title="灸娃排行">
-                <div class="page-body">
-                    <van-cell-group>
-                        <van-cell :value="item.aicao_num+''" v-for="(item,index) in jiuwa_rank" :key="item.user_token">
-                            <template slot="title">
-                            <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
-                            <span class="van-cell-text">
-                                {{item.nickname}}</span>                            
-                            </template>
-                        </van-cell>
-                    </van-cell-group>
-                </div>
-            </van-tab>
+
             <van-tab  title="灸疗师排行">
                 <div class="page-body">
                     <van-cell-group>
@@ -33,8 +21,34 @@
                     </van-cell-group>
                 </div> 
             </van-tab>
+            <van-tab  title="团队排行">
+                <div class="page-body">
+                    <van-cell-group>
+                        <van-cell :value="item.basescore+''" v-for="(item,index) in aicao_rank" :key="item.user_token">
+                            <template slot="title">
+                            <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
+                            <span class="van-cell-text">
+                                {{item.nickname}}</span>                            
+                            </template>
+                        </van-cell>
+                    </van-cell-group>
+                </div> 
+            </van-tab>
+            <van-tab  title="灸娃排行">
+                <div class="page-body">
+                    <van-cell-group>
+                        <van-cell :value="item.aicao_num+''" v-for="(item,index) in jiuwa_rank" :key="item.user_token">
+                            <template slot="title">
+                            <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
+                            <span class="van-cell-text">
+                                {{item.nickname}}</span>                            
+                            </template>
+                        </van-cell>
+                    </van-cell-group>
+                </div>
+            </van-tab>
         </van-tabs>
-        <GlobalFooter :teacher="is_teacher" :actived="2"></GlobalFooter>
+        <GlobalFooter :teacher="is_teacher" :actived="1"></GlobalFooter>
     </div>
 </template>
 <script>

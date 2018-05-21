@@ -2,6 +2,7 @@
   
 </template>
 <script>
+import Bus from "../../libs/bus.js";
 export default {
   data() {
     return {
@@ -9,6 +10,8 @@ export default {
       is_teacher: true,
       is_signed: false,
       is_hasJiuwa: false
+      // petname: "",
+      // show: false
     };
   },
   async created() {
@@ -28,7 +31,18 @@ export default {
   computed: {
     user() {
       return this.$login_info();
+    },
+    inviter_code() {
+      return (
+        this.$route.query.inviter_code || "33359507b753485b6f47490383a47aa8"
+      );
     }
+  },
+  mounted() {
+    Bus.$on("subname", resultname => {
+      this.petname = resultname;
+      this.getJiuwa();
+    });
   },
   methods: {
     getData(name, obj) {
@@ -121,8 +135,7 @@ export default {
     },
     async checkUser() {
       // this.user = this.$login_info();
-      let inviter_token =
-        this.$route.query.inviter_code || "33359507b753485b6f47490383a47aa8";
+
       await this.getStatus();
       console.log(this.is_teacher, this.is_signed, this.is_hasJiuwa);
       if (this.is_teacher && !this.is_signed) {
@@ -140,7 +153,9 @@ export default {
         this.$confirm_dlg(
           "顾客" + this.user.nick_name + ",你还未领取灸娃，是否领取",
           () => {
-            this.getJiuwa(inviter_token);
+            // this.show = true;
+            this.showAlert();
+            //this.getJiuwa(inviter_token);
           },
           () => {
             console.log("不领取");
@@ -148,20 +163,33 @@ export default {
         );
       }
     },
-    getJiuwa(inviter_token) {
+    getJiuwa() {
       let user_type = 0,
-        module_token = this.$api_urls["getJiuwa"];
+        module_token = this.$api_urls["getJiuwa"],
+        inviter_token = this.inviter_token,
+        petname = this.petname;
+      if (petname.trim() == "" || petname.length > 7) {
+        this.$alert_dlg("小灸灸名字长度应介于1-7之间");
+        return false;
+      }
       this.getData("com_manage", {
         user_type,
         module_token,
-        inviter_token
+        inviter_token,
+        petname
       }).then(res => {
         this.$alert_dlg(
           "领养小灸灸成功，你可以采集艾草让小灸灸成长咯",
           "",
-          () => {}
+          () => {
+            this.petname = "";
+          }
         );
       });
+    },
+    showAlert() {
+      // this.show = true;
+      Bus.$emit("showConfirm");
     }
   }
 };

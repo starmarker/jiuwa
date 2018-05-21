@@ -75,7 +75,7 @@ export default {
           if (res.data) {
             this.$suc("采摘成功");
           } else {
-            this.$err("采摘失败");
+            this.$err("采集失败,5小时后才能采集");
           }
         })
         .catch(rej => {

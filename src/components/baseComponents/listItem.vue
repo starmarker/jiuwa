@@ -1,5 +1,5 @@
 <template>
-  <div class="listitem van-hairline--surround" v-if="item!==null">
+  <div class="listitem" v-if="item!==null">
       <div class="item-header">
           <img :src="item.liliao_image_src" alt="" srcset="">
           <div class="item-intro">
@@ -32,8 +32,9 @@ export default {
   },
   computed: {
     match_no() {
-      let id = this.item.id + "";
-      return id.padStart(4, "0");
+      return (Array(4).join("0") + this.item.id).slice(-4);
+      // let id = this.item.id + "";
+      // return id.padStart(4, "0");
     }
   },
   methods: {
@@ -44,8 +45,10 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+@import "../../assets/css/base.less";
 .listitem {
   width: 96%;
+  .box-shadow;
   box-sizing: border-box;
   text-align: left;
   font-size: 14px;

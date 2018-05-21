@@ -1,5 +1,5 @@
 <template>
-    <div class="myfooter van-hairline--top">
+    <div class="myfooter">
         <van-row>
             <van-col span="12" @click.native="$go('/')">
                 <van-icon name="home" />
@@ -11,10 +11,10 @@
             </van-col>
         </van-row>
         <div class=" picker " v-if="isShowPick" @click="pick">
-            <div class="picker-content">
+            <!-- <div class="picker-content">
                 <img src="../../assets/hand.png" alt="">
                 <p>采集艾草</p>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -39,9 +39,14 @@ export default {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 50px;
+  height: 60px;
   z-index: 100;
-  background-color: #fff;
+  background-color: rgb(111, 163, 80);
+  border: 1px solid rgb(111, 163, 80);
+  color: #fff;
+  box-shadow: 0px 1px 1px 0px #fff inset;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
   p {
     -webkit-margin-before: 0em;
     -webkit-margin-after: 0em;
@@ -49,8 +54,15 @@ export default {
     line-height: 1.2em;
   }
   .van-col {
-    line-height: 24px;
-    padding: 5px 0;
+    line-height: 1.6;
+
+    padding: 8px 0;
+    .van-icon {
+      font-size: 20px;
+    }
+    p {
+      font-size: 14px;
+    }
   }
   .picker {
     position: absolute;
@@ -58,27 +70,10 @@ export default {
     height: 80px;
     bottom: 0;
     left: 50%;
+    background: transparent url("../../assets/pick.png") no-repeat top left;
+    background-size: 100%;
     transform: translate(-50%, -10%);
-    border-radius: 50% !important;
-    border: solid 1px #ccc;
     z-index: 101;
-    background-color: #fff;
-    .picker-content {
-      width: calc(100% - 6px);
-      height: calc(100% - 6px);
-      position: relative;
-      top: 3px;
-      left: 3px;
-      background-color: rgb(168, 44, 44);
-      text-align: center;
-      border-radius: 50%;
-      img {
-        width: 60%;
-      }
-      p {
-        color: #fff;
-      }
-    }
   }
 }
 </style>
