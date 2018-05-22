@@ -12,6 +12,13 @@
   <div class="banner">
     <img src="../assets/index_banner.jpg" alt="" srcset="">
   </div>
+  <div class="container">
+    <flow-block />
+  </div>
+  
+  <div class="container">
+    <game-detail :teachernumber="696" :picktotal="696" :gamertotal="696" />
+  </div>
     <van-row v-if="current_ther">
       <van-col span="12" offset="6">
         <player-item :item="current_ther" @pick="goPage" />
@@ -40,6 +47,8 @@
 import Base from "./baseComponents/base";
 import playerItem from "./baseComponents/listItem";
 import GlobalFooter from "./baseComponents/globalFooter";
+import FlowBlock from "./baseComponents/flow";
+import GameDetail from "./baseComponents/gamedetail";
 export default {
   name: "HelloWorld",
   extends: Base,
@@ -57,7 +66,7 @@ export default {
       isSearch: false
     };
   },
-  components: { playerItem, GlobalFooter },
+  components: { playerItem, GlobalFooter, FlowBlock, GameDetail },
   // async created() {
   //   await this.checkUser();
   // },
@@ -142,9 +151,21 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
 @import "../assets/css/base.less";
-.banner {
-  img {
-    width: 100%;
+.hello {
+  .banner {
+    .box-shadow();
+    //box-shadow: 0 3px 0px 3px #aaa;
+    // height: 40vw;
+    img {
+      display: block;
+      width: 100%;
+    }
+  }
+  .van-list {
+    padding-bottom: 20px;
+  }
+  .container {
+    .container;
   }
 }
 </style>

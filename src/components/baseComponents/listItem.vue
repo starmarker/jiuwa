@@ -48,12 +48,13 @@ export default {
 @import "../../assets/css/base.less";
 .listitem {
   width: 96%;
-  .box-shadow;
+  .box-shadow(3px);
   box-sizing: border-box;
   text-align: left;
   font-size: 14px;
   margin: 0 auto;
-  padding: 5px;
+  // padding: 5px;
+  background-color: #fff;
   padding-bottom: 0;
   border-radius: 10px;
   .item-header {
@@ -89,6 +90,8 @@ export default {
   }
   .item-oper {
     overflow: hidden;
+    padding: 0 5px;
+    box-sizing: border-box;
     .user-score,
     a {
       line-height: 30px;
@@ -104,5 +107,3 @@ export default {
   }
 }
 </style>
-
-

@@ -54,6 +54,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-bottom: 60px;
+  margin-bottom: 50px;
+  background-image: url("./assets/app_bg.jpg");
+  background-attachment: fixed;
+  background-size: 100%;
 }
 </style>

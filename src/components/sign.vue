@@ -13,31 +13,30 @@
               </van-col>
           </van-row>
       </div>
-      <div class="sign-body">
-       <van-cell-group>
+      <div class="container">
+        <div class="field-title van-hairline--bottom">参赛宣言</div>
         <van-field
           v-model="sign_info.declaration"
-          label="参赛宣言"
           type="textarea"
           placeholder="请输入参赛宣言"
-          rows="1"
+          rows="4"
           autosize
+          class="text-area"
         />
-
-        <van-cell title="我的照片"></van-cell>        
-        <van-cell>
-          <van-uploader :after-read="onRead" accept="image/gif, image/jpeg">
-            <div class="update-photo" :style="{'background-image':bgi}">
-              
-            </div>
-            <p>+</p>        
-          </van-uploader>
-          
-        </van-cell>
-
-        </van-cell-group>
-        <van-button type="primary" size="large" @click="submit">提交</van-button>
       </div>
+
+      <div class="container">
+        <div class="field-title van-hairline--bottom">我的照片</div>
+            <van-uploader :after-read="onRead" accept="image/gif, image/jpeg,image/png">
+            <div class="upload-icon">
+              <van-icon name="photograph" /> 
+            </div>
+                     
+          </van-uploader>        
+      </div>
+
+        <van-button type="primary" size="large" @click="submit">提交</van-button>
+      
       <GlobalFooter :teacher="is_teacher" :actived="2"></GlobalFooter>
     </div>
 </template>
@@ -68,7 +67,7 @@ export default {
   },
   async created() {
     await this.isTeacher();
-    this.checkUser();
+    //this.checkUser();
     this.getInfo();
   },
   methods: {
@@ -161,13 +160,15 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-@import "vant/lib/vant-css/panel.css";
+@import "../assets/css/base.less";
 .main {
   .sign-header {
+    .box-shadow();
     width: 100%;
     box-sizing: border-box;
-    padding: 5vw 2vw;
-    background-image: linear-gradient(to right, orange, orangered);
+    padding: 5vw 5vw;
+    background-color: #fff;
+    // background-image: linear-gradient(to right, orange, orangered);
     img {
       width: 80%;
       border-radius: 50%;
@@ -186,39 +187,40 @@ export default {
       }
     }
   }
-  .sign-body {
-    text-align: left;
-    .van-cell {
-      font-size: 4vw;
-      p {
-        position: absolute;
-        font-size: 20vw;
-        top: 0;
-        left: 0;
-        text-align: center;
-        width: 100%;
-        line-height: 100%;
-      }
+  .container {
+    .container();
+    background-color: #fff;
+    .field-title {
+      line-height: 40px;
     }
-    .van-uploader {
+    .text-area .van-field__control {
+      border: 1px solid #9fc28a !important;
+    }
+  }
+
+  .van-uploader {
+    margin: auto;
+    width: 100%;
+    padding: 20px 0;
+    .upload-icon {
+      width: 20vw;
+      height: 20vw;
       margin: auto;
-      width: 100%;
-    }
-    .update-photo {
-      display: block;
-      margin: auto;
-      width: 250px;
-      text-align: center;
-      font-size: 20vw;
-      line-height: 250px;
-      height: 250px;
-      p {
-        display: none;
-      }
-      &:hover p {
-        display: block;
+      color: #9fc28a;
+      border: 1px solid #9fc28a;
+      border-radius: 50%;
+      line-height: 30vw;
+      i {
+        font-size: 48px;
       }
     }
+  }
+  .van-button--primary {
+    background-color: #9fc28a;
+  }
+  .van-button {
+    border-radius: 0;
+    border-color: #9fc28a;
   }
 }
 </style>
