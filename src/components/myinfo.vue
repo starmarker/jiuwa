@@ -1,10 +1,10 @@
 <template>
     <div class="main">
-      <img src="../assets/home_01.jpg" alt="" srcset="">
-      <img src="../assets/home_02.jpg" alt="" srcset="">
-      <img src="../assets/home_03.jpg" alt="" srcset="">
-      <img src="../assets/home_04.jpg" alt="" srcset="">
-      <info-top-bar  :nickname="userInfo.userfeil.nickname" :avatar="userInfo.userfeil.avatar_src" basescore="145666" rank="8" class="topbar"/>
+      <div class="info-pic1"></div>
+      <div class="info-pic2"></div>
+      <div class="info-pic3"></div>
+      <div class="info-pic4"></div>
+      <info-top-bar  :nickname="userInfo.userfeil.nickname" :avatar="userInfo.userfeil.avatar_src" :basescore="userInfo.basescore" :rank="userInfo.paiming" class="topbar"/>
         <!-- <div class="sign-header">
           <van-row>
               <van-col span="8">
@@ -120,6 +120,32 @@ export default {
   width: 100vw;
   height: 100vh;
   text-align: left;
+  .info-pic1,
+  .info-pic2,
+  .info-pic3,
+  .info-pic4 {
+    position: fixed;
+    width: 50%;
+    height: 50vh;
+    top: 0;
+    left: 0;
+    background-image: url("../assets/home_01.jpg");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+  .info-pic2 {
+    left: 50%;
+    background-image: url("../assets/home_02.jpg");
+  }
+  .info-pic3 {
+    top: 50vh;
+    background-image: url("../assets/home_03.jpg");
+  }
+  .info-pic4 {
+    top: 50vh;
+    left: 50%;
+    background-image: url("../assets/home_04.jpg");
+  }
   & > img {
     display: block;
     width: 50vw;

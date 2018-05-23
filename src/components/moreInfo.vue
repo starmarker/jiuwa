@@ -1,7 +1,6 @@
 <template>
     <div class="main">
-      <div class="main-body">
-        <div class="sign-header">
+        <!-- <div class="sign-header">
           <van-row>
               <van-col span="8">
                   <img :src="moreInfo.userfeil.avatar_src" alt="">
@@ -14,98 +13,229 @@
                   </div>
               </van-col>
           </van-row>
-        </div>
-        <van-panel title="我的队友" desc="" status="" style="text-align:left;">
-            <div class="panel-content">
-                <teamMember :members="teamWorker"/>
-            </div>
-        </van-panel>
-        <van-panel title="个人介绍" desc="" status="" style="text-align:left;">
-            <div class="panel-content">
-                <p>个人介绍内容</p>
-            </div>
-        </van-panel>   
-        <van-panel title="参赛照片" desc="" status="" style="text-align:left;">
-            <div class="panel-content" style="text-align:center">
-                <img :src="moreInfo.liliao_image_src" alt="" srcset="">
-            </div>
-        </van-panel>
+        </div> -->
+        <div class="sign-header">
+          <!-- <van-row>
+              <van-col span="8">
+                  <img :src="user.avatar_src" alt="">
+              </van-col>
+              <van-col span="16">
+                  <div class="user-info">
+                      <p>姓名：{{user.nick_name}}</p>
+                      <p>电话:{{user.user_tel}}</p>
+                  </div>
+              </van-col>
+          </van-row> -->
+          <img :src="user.avatar_src" alt="" srcset="">
+          <p class="user-name">{{user.nick_name}} <van-icon name="edit-data" v-if="showEdit" /></p>
+          <div class="user-intro">这里是用户介绍，理疗师介绍(内容来自系统已有的灸疗师信息)</div>
       </div>
- 
-      <myFooter @pick="pick"/>
+
+      <div class="container">
+        <div class="field-title van-hairline--bottom"> <van-icon name="shop" /> 所在店铺</div>
+        <van-cell>
+          <div class="location">
+            <van-icon name="location" /> 灸正堂蜀汉路店
+          </div>
+        </van-cell>
+      </div>
+      <div class="container">
+        <div class="field-title van-hairline--bottom">  参赛照片</div>
+        <van-cell>
+          <div class="photo">
+            <img :src="moreInfo.liliao_image_src" alt="" srcset="">
+          </div>
+        </van-cell>
+      </div>
+      <div class="container">
+        <div class="field-title van-hairline--bottom"> <i class="iconfont icon-members"></i>Ta的队友</div>
+        
+          <teamMember :members="members" @avatar_click="goPage"></teamMember>
+        
+      </div>
+       <div class="container">
+        <div class="field-title van-hairline--bottom">  团队成绩</div>
+        <van-cell>
+          <div class="team-score">
+            <van-row>
+              <van-col span="12">
+                <p>采摘成绩</p>
+                <p class="score">68</p>
+              </van-col>
+              <van-col span="12">
+                <p>下单成绩</p>
+                <p class="score">68</p>
+              </van-col>
+              <van-col span="12">
+                <p>总成绩</p>
+                <p class="score">68</p>
+              </van-col>
+              <van-col span="12">
+                <p>团队排名</p>
+                <p class="score">68</p>
+              </van-col>
+            </van-row>
+          </div>
+        </van-cell>
+      </div>     
+
+      <div class="container">
+        <div class="field-title van-hairline--bottom">比赛介绍</div>
+        <van-cell>
+          <div class="intro">
+            <p>比赛介绍，这里是相关详情</p>
+          </div>
+        </van-cell>
+      </div>
+      <div class="messages" v-if="showEdit" @click="$go('/helplist/')"></div>
+      <div class="picker" v-if="!is_teacher" @click="$go('/pick/'+$route.params.token)"></div>
+      <globalFooter :actived="3"/>
     </div>  
 </template>
 <script>
 import teamMember from "./baseComponents/teamMember";
-import myFooter from "./baseComponents/myFooter";
-// import Base from "./baseComponents/base";
+import globalFooter from "./baseComponents/globalFooter";
+import Base from "./baseComponents/base";
 export default {
-  props: ["moreInfo", "teamWorker", "showEdit"],
-  // extends: Base,
+  name: "detail",
+  extends: Base,
   components: {
     teamMember,
-    myFooter
+    globalFooter
+  },
+  data() {
+    return {
+      moreInfo: {
+        avatar_src: "",
+        userfeil: {}
+      },
+      // showEdit: false,
+      members: []
+    };
+  },
+  computed: {
+    showEdit() {
+      return (
+        this.is_teacher && this.user.user_token == this.moreInfo.user_token
+      );
+    }
+  },
+  beforeMount() {
+    this.getInfo();
   },
   methods: {
     pick() {
       this.$emit("click-pick");
+    },
+    getInfo() {
+      let user_token = this.$route.params.token;
+      let module_token = user_token
+        ? this.$api_urls["t_info"]
+        : this.$api_urls["myinfo"];
+
+      this.getData("com_manage", { module_token, user_token }).then(res => {
+        this.moreInfo = res.data;
+        //console.log("res :", res.data);
+      });
+    },
+    goPage(user_token) {
+      this.$go("/my/" + user_token);
     }
   }
 };
 </script>
 <style lang="less" scoped>
+@import "../assets/css/base.less";
+@import "../assets/css/iconfont.css";
 .main {
-  height: 100vh;
   position: relative;
-  .main-body {
-    overflow: hidden;
-    position: relative;
-    margin-bottom: 50px;
-  }
+  padding-bottom: 10px;
   .sign-header {
+    .box-shadow();
     width: 100%;
     box-sizing: border-box;
-    padding: 2vw;
-    position: relative;
-    background-image: linear-gradient(to right, orange, orangered);
+    padding: 5vw 5vw;
+    background-color: #fff;
+    text-align: center;
+    // background-image: linear-gradient(to right, orange, orangered);
     img {
-      width: 80%;
-      border-radius: 50%;
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      border-radius: 50px;
     }
-    .user-info {
+    .user-intro {
+      width: 80%;
+      margin: auto;
       text-align: left;
-      font-size: 4vw;
-      height: 26vw;
-      display: flex;
-      flex-direction: column;
-      p,
-      a {
+      box-sizing: border-box;
+      padding: 5px;
+      color: #999;
+    }
+  }
+  .container {
+    .container();
+    background-color: #fff;
+    .field-title {
+      line-height: 40px;
+      font-size: 18px;
+      color: #cc163a;
+      i {
+        font-size: 22px;
+        vertical-align: text-bottom;
+        color: #9fc28a;
+      }
+      i.iconfont {
+        vertical-align: baseline;
+      }
+    }
+    .location {
+      text-align: center;
+      font-size: 16px;
+    }
+    .photo {
+      text-align: center;
+      img {
+        max-height: 40vh;
+      }
+    }
+    .team-score {
+      text-align: center;
+      p {
         -webkit-margin-before: 0em;
         -webkit-margin-after: 0em;
-        flex-grow: 1;
-        color: #fff;
+        line-height: 1.2;
+        font-size: 16px;
+      }
+      .score {
+        color: #cc163a;
+        font-size: 20px;
+        font-weight: 700;
       }
     }
-    .van-button {
-      position: absolute;
-      top: 10vw;
-      right: 1vw;
-    }
-    .info-detail {
-      color: #fff;
-      font-size: 4.5vw;
-      small {
-        font-size: 0.8em;
-      }
+    .text-area .van-field__control {
+      border: 1px solid #9fc28a !important;
     }
   }
-  .panel-content {
-    box-sizing: border-box;
-    width: 100%;
-    padding: 5px 15px;
-    img {
-      max-width: 90%;
-    }
+  .messages,
+  .picker {
+    position: fixed;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    right: 10px;
+    background-size: contain;
+  }
+  .messages {
+    width: 80px;
+    height: 60px;
+    background-image: url("../assets/messages.jpg");
+    bottom: 200px;
+  }
+  .picker {
+    width: 80px;
+    height: 80px;
+    background-image: url("../assets/info_pick.png");
+    bottom: 100px;
   }
 }
 </style>

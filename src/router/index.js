@@ -60,13 +60,21 @@ export default new Router({
       meta: {
         title: "个人信息"
       },
-      component: resolve => require(["@/components/myinfo"], resolve)
+      component: resolve => require(["@/components/moreInfo"], resolve)
     },
     {
       path: "/my/",
       name: "myinfo1",
       meta: {
         title: "个人信息"
+      },
+      component: resolve => require(["@/components/moreInfo"], resolve)
+    },
+    {
+      path: "/pick/:token",
+      name: "pick",
+      meta: {
+        title: "采摘页面"
       },
       component: resolve => require(["@/components/myinfo"], resolve)
     },

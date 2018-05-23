@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <div class="sign-header">
+    <!-- <div class="sign-header">
       <van-row>
           <van-col span="8">
               <img :src="model.userfeil.avatar_src" alt="">
@@ -13,12 +13,19 @@
           </van-col>
           
       </van-row>
+    </div> -->
+    <top-jiuwa-bar :avatar="user.avatar_src" :nickname="jiuwa.petname" :basescore="model.aicao_num" :experience="jiuwa.experience"/>
+    <div class="jiuwa-talk">
+      <div class="talk-content" v-html="showInfo">       
+      </div>
     </div>
+    <div class="help-btn" @click="help"></div>
     <Jiuwa :model="jiuwa" @rescue="help"></Jiuwa>
-    <myFooter :isShowPick="false" />
-      <van-popup v-model="showHelpList" position="right" :overlay="false" style="width:100%;height:100%;">
-        <van-nav-bar title="附近的灸疗师" left-text="返回" left-arrow @click-left="showHelpList=false"/>
-        <HelpList  :finished="finish" :list="teacher_list" @loadmore="getList" :loading="loading"></HelpList>
+    <myFooter :isShowPick="true" />
+      <van-popup v-model="showHelpList" :close-on-click-overlay="true" :overlay-style="{height:'100vh'}" :lock-scroll="false" class="help-div">
+        <van-nav-bar title="您附近的灸疗师" />
+        <HelpList :list="teacher_list" :finished="finish" :loading="loading" @loadmore="getList"></HelpList> 
+       
       </van-popup>
   </div>
 </template>
@@ -26,6 +33,7 @@
 import Jiuwa from "./baseComponents/jiujiu";
 import Base from "./baseComponents/base";
 import myFooter from "./baseComponents/myFooter";
+import TopJiuwaBar from "./baseComponents/top_jiuwa_bar";
 import HelpList from "./baseComponents/helplist";
 export default {
   name: "jiuwa",
@@ -33,24 +41,56 @@ export default {
   components: {
     Jiuwa,
     myFooter,
-    HelpList
+    HelpList,
+    TopJiuwaBar
   },
   data() {
     return {
       model: {
+        aicao_num: 0,
         userfeil: {
           avatar_src: "",
           nickname: ""
         },
         aicao_num: ""
       },
-      jiuwa: {},
+      jiuwa: {
+        experience: 0,
+        petname: "",
+        health: 100
+      },
       finish: false,
       loading: false,
       showHelpList: false,
       teacher_list: [],
-      cur_page: 1
+      cur_page: 1,
+      last_page: 1,
+      page_size: 6
     };
+  },
+  computed: {
+    showInfo() {
+      let result;
+      if (this.jiuwa.experience <= 100) {
+        result = `给我采摘艾草<br/>我要快快长大`;
+      } else {
+        if (this.jiuwa.health == 100) {
+          let now = new Date().getHours();
+          if (now < 11) {
+            result = "早上好";
+          } else if (now >= 11 && now < 13) {
+            result = "中午好";
+          } else if (now >= 13 && now < 17) {
+            result = "下午好";
+          } else {
+            result = "晚上好";
+          }
+        } else {
+          result = `我现在生病了，${this.jiuwa.ill_name} 找灸疗师救助我`;
+        }
+      }
+      return result;
+    }
   },
   created() {
     this.getInfo();
@@ -69,15 +109,20 @@ export default {
       this.showHelpList = true;
     },
     getList() {
-      this.loading = true;
       let module_token = this.$api_urls["index"];
-      this.getData("com_manage", { module_token })
+      this.getData("com_manage", {
+        module_token,
+        page: this.cur_page,
+        page_size: this.page_size
+      })
         .then(res => {
           console.log("res.data :", res.data);
           this.cur_page++;
+          res.data.lists.forEach(item => {
+            item.type = "primary";
+          });
           this.teacher_list = this.teacher_list.concat(res.data.lists);
-          this.finish = this.cur_page >= 3;
-          this.loading = false;
+          this.last_page = res.data.page_info.last_page;
         })
         .catch(res => {
           this.loading = false;
@@ -87,41 +132,90 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.sign-header {
+.main {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 100%;
   box-sizing: border-box;
-  padding: 2vw;
-  position: relative;
-  background-image: linear-gradient(to right, orange, orangered);
-  img {
-    width: 80%;
-    border-radius: 50%;
-  }
-  .user-info {
-    text-align: left;
-    font-size: 3.4vw;
-    height: 26vw;
-    display: flex;
-    flex-direction: column;
-    p,
-    a {
-      flex-grow: 1;
-      color: #fff;
+  background: url("../assets/jiuwa_bg.jpg") no-repeat top left;
+  background-size: 100% 100%;
+  .jiuwa-talk {
+    position: absolute;
+    right: 10vw;
+    bottom: 40%;
+    width: 40vw;
+    height: 41vw;
+    background-image: url("../assets/xjj_talk.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    .talk-content {
+      width: 75%;
+      position: absolute;
+      height: 40%;
+      top: 12%;
+      left: 10%;
+      font-size: 4vw;
+      color: #45a50e;
     }
   }
-  .van-button {
+  .help-btn {
+    width: 15vw;
+    height: 15vw;
     position: absolute;
-    top: 10vw;
-    right: 1vw;
+    right: 10vw;
+    bottom: 25vw;
+    background: url(../assets/get_help_btn.png) no-repeat top left;
+    background-size: contain;
   }
-  .info-detail {
-    color: #fff;
-    font-size: 4.5vw;
-    small {
-      font-size: 0.8em;
+  .help-div {
+    width: 80%;
+    max-height: 80%;
+    background-color: rgba(255, 255, 255, 0.8);
+    overflow-y: auto;
+    .van-nav-bar {
+      background-color: transparent;
+      color: #45a50e;
+      font-size: 18px;
     }
   }
 }
+// .sign-header {
+//   width: 100%;
+//   box-sizing: border-box;
+//   padding: 2vw;
+//   position: relative;
+//   background-image: linear-gradient(to right, orange, orangered);
+//   img {
+//     width: 80%;
+//     border-radius: 50%;
+//   }
+//   .user-info {
+//     text-align: left;
+//     font-size: 3.4vw;
+//     height: 26vw;
+//     display: flex;
+//     flex-direction: column;
+//     p,
+//     a {
+//       flex-grow: 1;
+//       color: #fff;
+//     }
+//   }
+//   .van-button {
+//     position: absolute;
+//     top: 10vw;
+//     right: 1vw;
+//   }
+//   .info-detail {
+//     color: #fff;
+//     font-size: 4.5vw;
+//     small {
+//       font-size: 0.8em;
+//     }
+//   }
+// }
 </style>
 
 

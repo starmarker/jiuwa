@@ -21,6 +21,9 @@ export default {};
   background-color: #fff;
   position: relative;
   padding-bottom: 30px;
+  .van-step--vertical {
+    padding: 2px 10px 2px 0;
+  }
   a {
     font-size: 14px;
     color: #ca0e33;

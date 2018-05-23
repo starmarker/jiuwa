@@ -1,16 +1,15 @@
 <template>
-  <div class="jiu-info">
+  <div class="jiu-info" :class="{'baby':model.experience<100,'illness':model.health<100}">
       <!-- <p>你的艾草颗数:{{model.aicao_number}}</p> -->
-      <p>{{model.name}}</p>
+      <!-- <p>{{model.name}}</p>
       <div class="progress">
           小九九成长度:{{model.experience+'/100'}}
-          <!-- <van-progress :pivot-text="process_txt" :percentage="percentage" /> -->
       </div>
       <div class="jiu-img">
          <img :src="model.img_url" alt="" srcset=""> 
          {{showInfo}}
          <van-button size="small" @click="dealInfo">{{buttonText}}</van-button>
-      </div>
+      </div> -->
   </div>
 </template>
 <script>
@@ -72,6 +71,21 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.jiu-info {
+  position: absolute;
+  bottom: 18vh;
+  left: 18vw;
+  width: 60vw;
+  height: 62vw;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+.baby {
+  background-image: url("../../assets/xjj_baby.png");
+}
+.illness {
+  background-image: url("../../assets/xjj_illness.png");
+}
 </style>
 
 

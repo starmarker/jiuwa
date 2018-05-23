@@ -21,7 +21,7 @@
                     </van-cell-group>
                 </div> 
             </van-tab>
-            <van-tab  title="团队排行">
+            <!-- <van-tab  title="团队排行">
                 <div class="page-body">
                     <van-cell-group>
                         <van-cell :value="item.basescore+''" v-for="(item,index) in aicao_rank" :key="item.user_token">
@@ -33,7 +33,7 @@
                         </van-cell>
                     </van-cell-group>
                 </div> 
-            </van-tab>
+            </van-tab> -->
             <van-tab  title="灸娃排行">
                 <div class="page-body">
                     <van-cell-group>

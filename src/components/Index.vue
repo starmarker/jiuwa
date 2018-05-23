@@ -17,7 +17,7 @@
   </div>
   
   <div class="container">
-    <game-detail :teachernumber="696" :picktotal="696" :gamertotal="696" />
+    <game-detail :teachernumber="gameData.liliaoshi_num" :picktotal="gameData.caizhai_num" :gamertotal="gameData.guke_num" v-if="gameData"/>
   </div>
     <van-row v-if="current_ther">
       <van-col span="12" offset="6">
@@ -63,7 +63,8 @@ export default {
       finished: false,
       cur_page: 1,
       search: "",
-      isSearch: false
+      isSearch: false,
+      gameData: null
     };
   },
   components: { playerItem, GlobalFooter, FlowBlock, GameDetail },
@@ -73,6 +74,7 @@ export default {
   mounted() {
     this.getInviter();
     this.getIndex();
+    this.getIndexData();
   },
   beforeUpdate() {},
   methods: {
@@ -89,7 +91,7 @@ export default {
       //     this.$suc("成功");
     },
     goPage(user_token) {
-      this.$go("/my/" + user_token);
+      this.$go("/pick/" + user_token);
     },
     getInviter() {
       let module_token = this.$api_urls["inviter"];
@@ -143,6 +145,12 @@ export default {
       this.list = [];
       this.search = "";
       this.getIndex();
+    },
+    getIndexData() {
+      let module_token = this.$api_urls["index_data"];
+      this.getData("com_manage", { module_token }).then(res => {
+        this.gameData = res.data;
+      });
     }
   }
 };
