@@ -23,11 +23,6 @@ export default {
     return {};
   },
 
-  mounted() {
-    this.list.forEach(item => {
-      item.type = "primary";
-    });
-  },
   methods: {
     onLoad() {
       this.$emit("loadmore");
