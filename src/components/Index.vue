@@ -21,7 +21,7 @@
   </div>
     <van-row v-if="current_ther">
       <van-col span="12" offset="6">
-        <player-item :item="current_ther" @pick="goPage" />
+        <player-item :item="current_ther" @pick="pick" @jumpPage="goPage"/>
       </van-col>
     </van-row>
     
@@ -34,7 +34,7 @@
   <!-- <van-cell v-for="item in list" :key="item" :title="item + ''" /> -->
         <van-row>
           <van-col span="12" v-for="item in all_ther" :key="item.user_token" style="margin-top:1vh">
-            <player-item :item="item" @pick="goPage" />
+            <player-item :item="item" @pick="pick" @jumpPage="goPage" />
           </van-col>      
         </van-row>
     </van-list>
@@ -51,7 +51,7 @@ import FlowBlock from "./baseComponents/flow";
 import GameDetail from "./baseComponents/gamedetail";
 export default {
   name: "HelloWorld",
-  extends: Base,
+  mixins: [Base],
   data() {
     return {
       msg: "Welcome to Your Vue.js App",
@@ -93,6 +93,26 @@ export default {
     goPage(user_token) {
       this.$go("/pick/" + user_token);
     },
+    pick(user_token) {
+      let module_token = this.$api_urls["pick"];
+      let moxibustion_token = user_token;
+      let plucking_type = 0;
+      this.getData("com_manage", {
+        module_token,
+        moxibustion_token,
+        plucking_type
+      })
+        .then(res => {
+          if (res.data) {
+            this.$suc("采摘成功");
+          } else {
+            this.$err("采集失败,5小时后才能采集");
+          }
+        })
+        .catch(rej => {
+          this.$err(rej.msg);
+        });
+    },
     getInviter() {
       let module_token = this.$api_urls["inviter"];
       this.getData("com_manage", { module_token })
@@ -103,12 +123,32 @@ export default {
           this.$err(rej.msg);
         });
     },
-    getIndex() {
+    async getIndex() {
+      let position = {};
+      await this.getLocation()
+        .then(res => {
+          position = res;
+        })
+        .catch(() => {
+          position = {
+            longitude: "104.0678322315",
+            latitude: "30.5465175160"
+          };
+        });
       let module_token = this.$api_urls["index"],
         search = this.search;
       console.log("module_token :", module_token);
       this.loading = true;
-      this.getData("com_manage", { module_token, page: this.cur_page, search })
+      let obj = Object.assign(
+        {},
+        {
+          module_token,
+          page: this.cur_page,
+          search
+        },
+        position
+      );
+      this.getData("com_manage", obj)
         .then(res => {
           console.log("object :", res.data);
           this.all_ther = res.data.lists;
@@ -118,9 +158,10 @@ export default {
         })
         .catch(rej => {
           this.$err(rej.msg);
-          this.loading = false;
+          // this.loading = false;
         });
     },
+    getResult() {},
     onLoad() {
       setTimeout(() => {
         for (let i = 0; i < 10; i++) {

@@ -28,15 +28,42 @@ export default new Router({
       meta: {
         title: "活动首页"
       },
-      component: Index
-    },
-    {
-      path: "/rank",
-      name: "rank",
-      meta: {
-        title: "排行榜"
-      },
-      component: resolve => require(["@/components/rank"], resolve)
+      redirect: "index",
+      component: resolve => require(["@/components/main"], resolve),
+      children: [
+        {
+          path: "index",
+          name: "home",
+          meta: {
+            title: "活动首页"
+          },
+          component: Index
+        },
+        {
+          path: "rank",
+          name: "rank",
+          meta: {
+            title: "排行榜"
+          },
+          component: resolve => require(["@/components/rank"], resolve)
+        },
+        {
+          path: "my/:token",
+          name: "myinfo",
+          meta: {
+            title: "个人信息"
+          },
+          component: resolve => require(["@/components/moreInfo"], resolve)
+        },
+        {
+          path: "my",
+          name: "myinfo1",
+          meta: {
+            title: "个人信息"
+          },
+          component: resolve => require(["@/components/moreInfo"], resolve)
+        }
+      ]
     },
     {
       path: "/sign/:token",
@@ -54,25 +81,18 @@ export default new Router({
       },
       component: resolve => require(["@/components/sign"], resolve)
     },
-    {
-      path: "/my/:token",
-      name: "myinfo",
-      meta: {
-        title: "个人信息"
-      },
-      component: resolve => require(["@/components/moreInfo"], resolve)
-    },
-    {
-      path: "/my/",
-      name: "myinfo1",
-      meta: {
-        title: "个人信息"
-      },
-      component: resolve => require(["@/components/moreInfo"], resolve)
-    },
+
     {
       path: "/pick/:token",
       name: "pick",
+      meta: {
+        title: "采摘页面"
+      },
+      component: resolve => require(["@/components/myinfo"], resolve)
+    },
+    {
+      path: "/pick",
+      name: "mypick",
       meta: {
         title: "采摘页面"
       },

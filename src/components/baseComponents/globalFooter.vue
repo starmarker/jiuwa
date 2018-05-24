@@ -1,14 +1,13 @@
 <template>
     <van-tabbar v-model="active" @change="change">
-      <van-tabbar-item icon="wap-home" to="/">首页</van-tabbar-item>
+      <van-tabbar-item icon="wap-home" to="/index">首页</van-tabbar-item>
       <van-tabbar-item to="/rank">
       <i class="iconfont icon-paihang" slot="icon"></i>
       排行榜</van-tabbar-item>
-      <van-tabbar-item to="/sign">
+      <van-tabbar-item to="/sign" v-if="teacher && !isact">
       <i class="iconfont icon-edit-2" slot="icon"></i>
       报名</van-tabbar-item>
-
-      <van-tabbar-item icon="contact" :to="user_center">我的</van-tabbar-item>
+      <van-tabbar-item icon="contact" :to="user_center" v-else>我的</van-tabbar-item>
     </van-tabbar>
 </template>
 <script>
@@ -18,37 +17,38 @@ export default {
       type: Boolean,
       default: false
     },
-    actived: {
-      type: Number,
-      default: 0
+    isact: {
+      type: Boolean,
+      default: true
     }
   },
+  data() {},
   mounted() {
     console.log(this.$props);
     // this.$emit("input", this.actived);
+    this.setActive();
   },
   computed: {
     user_center() {
-      let result = this.teacher ? "/my" : "/jiuwa";
+      let result = this.teacher ? "/pick" : "/jiuwa";
       return result;
     },
-    active: {
-      set() {
-        return this.actived;
-      },
-      get() {
-        return this.actived;
-      }
+    arrList() {
+      this.teacher;
     }
   },
   data() {
     return {
-      //active: 0
+      active: 0
     };
   },
   methods: {
-    change(index) {
-      //this.active = index;
+    change(index) {},
+    setActive() {
+      let arr = ["index", "rank", "sign"];
+      let cname = this.$route.name;
+      let result = arr.indexOf(cname);
+      this.active = result > -1 ? result : 0;
     }
   }
 };

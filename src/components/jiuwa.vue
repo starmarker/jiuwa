@@ -24,8 +24,7 @@
     <myFooter :isShowPick="true" />
       <van-popup v-model="showHelpList" :close-on-click-overlay="true" :overlay-style="{height:'100vh'}" :lock-scroll="false" class="help-div">
         <van-nav-bar title="您附近的灸疗师" />
-        <HelpList :list="teacher_list" :finished="finish" :loading="loading" @loadmore="getList"></HelpList> 
-       
+        <HelpList :list="teacher_list" :finished="finish" :loading="loading" @loadmore="getList" @rqhelp="rqhelp"></HelpList>        
       </van-popup>
   </div>
 </template>
@@ -55,6 +54,7 @@ export default {
         aicao_num: ""
       },
       jiuwa: {
+        id: null,
         experience: 0,
         petname: "",
         health: 100
@@ -108,24 +108,60 @@ export default {
     help() {
       this.showHelpList = true;
     },
-    getList() {
-      let module_token = this.$api_urls["index"];
+    rqhelp(item) {
+      let module_token = this.$api_urls["rescue"];
+      let jiujiu_id = this.jiuwa.id;
+      let moxibustion_token = item.user_token;
       this.getData("com_manage", {
         module_token,
-        page: this.cur_page,
-        page_size: this.page_size
-      })
+        jiujiu_id,
+        moxibustion_token
+      }).then(res => {
+        if (res.data) {
+          item.type = "disabled";
+        } else {
+          this.$err("发生错误");
+        }
+      });
+    },
+    async getList() {
+      let position = {};
+      await this.getLocation()
         .then(res => {
-          console.log("res.data :", res.data);
-          this.cur_page++;
+          position = res;
+        })
+        .catch(() => {
+          position = {
+            longitude: "104.0678322315",
+            latitude: "30.5465175160"
+          };
+        });
+      let module_token = this.$api_urls["index"],
+        search = this.search;
+      console.log("module_token :", module_token);
+      this.loading = true;
+      let obj = Object.assign(
+        {},
+        {
+          module_token,
+          page: this.cur_page,
+          search
+        },
+        position
+      );
+      this.getData("com_manage", obj)
+        .then(res => {
           res.data.lists.forEach(item => {
-            item.type = "primary";
+            item.type = "danger";
           });
           this.teacher_list = this.teacher_list.concat(res.data.lists);
-          this.last_page = res.data.page_info.last_page;
-        })
-        .catch(res => {
+          this.cur_page++;
+          this.finished = this.cur_page > res.data.page_info.last_page;
           this.loading = false;
+        })
+        .catch(rej => {
+          this.$err(rej.msg);
+          // this.loading = false;
         });
     }
   }

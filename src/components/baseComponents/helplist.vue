@@ -31,9 +31,7 @@ export default {
       if (item.type == "disabled") {
         return false;
       }
-      console.log("item.user_token :", item.user_token);
-      item.type = "disabled";
-      this.$forceUpdate();
+      this.$emit("rqhelp", item);
     }
   }
 };

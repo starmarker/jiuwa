@@ -2,7 +2,7 @@
     <div class="top-info-bar">
         <van-row>
             <van-col span="10">
-                <div class="user">
+                <div class="user" @click="clickUser">
                     <img :src="avatar" alt="">
                     <span>{{nickname}}</span>
                 </div>
@@ -25,7 +25,12 @@
 <script>
 export default {
   name: "info-top-bar",
-  props: ["nickname", "basescore", "rank", "avatar"]
+  props: ["nickname", "basescore", "rank", "avatar"],
+  methods: {
+    clickUser() {
+      this.$emit("clickuser");
+    }
+  }
 };
 </script>
 <style lang="less" scoped>

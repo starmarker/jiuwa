@@ -4,7 +4,7 @@
       <div class="info-pic2"></div>
       <div class="info-pic3"></div>
       <div class="info-pic4"></div>
-      <info-top-bar  :nickname="userInfo.userfeil.nickname" :avatar="userInfo.userfeil.avatar_src" :basescore="userInfo.basescore" :rank="userInfo.paiming" class="topbar"/>
+      <info-top-bar :nickname="userInfo.userfeil.nickname" :avatar="userInfo.userfeil.avatar_src" :basescore="userInfo.basescore" :rank="userInfo.paiming"  @clickuser="godetail" class="topbar"/>
         <!-- <div class="sign-header">
           <van-row>
               <van-col span="8">
@@ -36,7 +36,13 @@
         <myFooter @pick="pick" :isShowPick="!this.is_teacher"/> -->
         <router-link to="/" class="backhome">        
         </router-link>
-        <div class="pick" @click="pick"></div>
+        <div class="pick" @click="pick" v-if="!is_teacher"></div>
+        <div class="calc" @click="calc" v-if="is_teacher && isSelf "></div>
+        <!-- 默认小灸灸记录 -->
+      <van-popup v-model="showneed" :close-on-click-overlay="true" :overlay-style="{height:'100vh'}" :lock-scroll="false" class="help-div">
+        <van-nav-bar title="您附近的灸疗师" />
+        <HelpList :list="need_list" :finished="need_finish" :loading="need_loading" @loadmore="getNeedList" @rqhelp="helpJiuwa"></HelpList>        
+      </van-popup>
     </div>
 </template>
 <script>
@@ -44,13 +50,14 @@ import Base from "./baseComponents/base";
 import teamMember from "./baseComponents/teamMember";
 import MoreInfo from "./moreInfo";
 import InfoTopBar from "./baseComponents/top_info_bar";
+import HelpList from "./baseComponents/helplist";
 // import myFooter from "./baseComponents/myFooter";
 export default {
   extends: Base,
   components: {
     teamMember,
     MoreInfo,
-
+    HelpList,
     InfoTopBar
   },
   data() {
@@ -62,20 +69,45 @@ export default {
           avatar_src: "",
           nickname: ""
         }
-      }
+      },
+      isFirst: true,
+      need_list: [],
+      cur_need_page: 1,
+      need_finish: true,
+      need_loading: false,
+      showneed: false
     };
+  },
+  computed: {
+    isSelf: {
+      get: function() {
+        return this.userInfo.user_token == this.user.user_token;
+      },
+      set: function(value) {
+        // this.showneed = value;
+      }
+    }
   },
   async created() {
     await this.isTeacher();
-    this.getInfo();
+    await this.getInfo();
 
     // this.getTeamWorker();
+  },
+  mounted() {
+    this.calc();
+  },
+  beforeUpdate() {
+    if (this.isFirst && this.isSelf) {
+      this.showneed = true;
+      this.isFirst = false;
+    }
   },
   methods: {
     pick() {
       let module_token = this.$api_urls["pick"];
       let moxibustion_token = this.$route.params.token;
-      let plucking_type = 0;
+      let plucking_type = 1;
       this.getData("com_manage", {
         module_token,
         moxibustion_token,
@@ -107,7 +139,20 @@ export default {
         this.userInfo = res.data;
         //console.log("res :", res.data);
       });
-    }
+    },
+    godetail() {
+      let user_token = this.$route.params.user_token || "";
+      this.$go("/my/" + user_token);
+    },
+    calc() {
+      if (this.isSelf) {
+        this.showneed = true;
+      } else {
+        this.showneed = false;
+      }
+    },
+    getNeedList() {},
+    helpJiuwa() {}
   }
 };
 </script>
@@ -159,7 +204,8 @@ export default {
     left: 0;
   }
   .backhome,
-  .pick {
+  .pick,
+  .calc {
     position: absolute;
     bottom: 10px;
     display: block;
@@ -171,9 +217,24 @@ export default {
     background-image: url("../assets/back_home_icon.png");
     left: 5vw;
   }
-  .pick {
+  .pick,
+  .calc {
     background-image: url("../assets/info_pick_icon.png");
     right: 5vw;
+  }
+  .calc {
+    background-image: url("../assets/pick_calc_btn.png");
+  }
+  .help-div {
+    width: 80%;
+    max-height: 80%;
+    background-color: rgba(255, 255, 255, 0.8);
+    overflow-y: auto;
+    .van-nav-bar {
+      background-color: transparent;
+      color: #45a50e;
+      font-size: 18px;
+    }
   }
 }
 </style>

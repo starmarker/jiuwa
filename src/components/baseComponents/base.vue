@@ -68,8 +68,8 @@ export default {
           navigator.geolocation.getCurrentPosition(
             function(p) {
               let position = {
-                lat: p.coords.latitude,
-                lng: p.coords.longitude
+                latitude: p.coords.latitude,
+                longitude: p.coords.longitude
               };
               resolve(position);
             },
@@ -99,6 +99,7 @@ export default {
       return new Promise((resolve, reject) => {
         this.getData("com_manage", { module_token }).then(res => {
           this.is_teacher = res.data;
+          Bus.$emit("isTeacher", this.is_teacher);
           resolve(res.data);
         });
       });
@@ -108,6 +109,7 @@ export default {
       return new Promise((resolve, reject) => {
         this.getData("com_manage", { module_token }).then(res => {
           this.is_hasJiuwa = res.data;
+          Bus.$emit("isHasJiuwa", this.is_hasJiuwa);
           resolve(res.data);
         });
       });
@@ -117,6 +119,7 @@ export default {
       return new Promise((resolve, reject) => {
         this.getData("com_manage", { module_token }).then(res => {
           this.is_signed = res.data;
+          Bus.$emit("isSigned", this.is_signed);
           resolve(res.data);
         });
       });
@@ -163,21 +166,38 @@ export default {
         );
       }
     },
-    getJiuwa() {
+    async getJiuwa() {
+      let position = {};
+      await this.getLocation()
+        .then(res => {
+          position = res;
+        })
+        .catch(() => {
+          postion = {
+            longitude: "104.0678322315",
+            latitude: "30.5465175160"
+          };
+        });
       let user_type = 0,
         module_token = this.$api_urls["getJiuwa"],
-        inviter_token = this.inviter_token,
+        inviter_token =
+          this.inviter_token || "33359507b753485b6f47490383a47aa8",
         petname = this.petname;
       if (petname.trim() == "" || petname.length > 7) {
         this.$alert_dlg("小灸灸名字长度应介于1-7之间");
         return false;
       }
-      this.getData("com_manage", {
-        user_type,
-        module_token,
-        inviter_token,
-        petname
-      }).then(res => {
+      let obj = Object.assign(
+        {},
+        {
+          user_type,
+          module_token,
+          inviter_token,
+          petname
+        },
+        position
+      );
+      this.getData("com_manage", obj).then(res => {
         this.$alert_dlg(
           "领养小灸灸成功，你可以采集艾草让小灸灸成长咯",
           "",

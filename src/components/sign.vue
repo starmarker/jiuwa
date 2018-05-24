@@ -67,7 +67,7 @@ export default {
   },
   async created() {
     await this.isTeacher();
-    //this.checkUser();
+    this.checkUser();
     this.getInfo();
   },
   methods: {
@@ -118,11 +118,24 @@ export default {
         }
       });
     },
-    submit() {
+    async submit() {
       let module_token = this.$route.params.token
         ? this.$api_urls["t_sign_update"]
         : this.$api_urls["sign"];
-      let obj = Object.assign({}, this.sign_info, { module_token });
+      let position = {};
+      await this.getLocation()
+        .then(res => {
+          position = res;
+        })
+        .catch(() => {
+          postion = {
+            longitude: "104.0678322315",
+            latitude: "30.5465175160"
+          };
+        });
+      let obj = Object.assign({}, this.sign_info, position, {
+        module_token
+      });
       this.getData("com_manage", obj)
         .then(res => {
           this.$alert_dlg("更新报名信息成功", "", () => {

@@ -16,7 +16,7 @@
 </template>
 <script>
 export default {
-  props: [, "teachernumber", "picktotal", "gamertotal"],
+  props: ["teachernumber", "picktotal", "gamertotal"],
   computed: {}
 };
 </script>
