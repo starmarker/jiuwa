@@ -24,7 +24,11 @@
     <myFooter :isShowPick="true" />
       <van-popup v-model="showHelpList" :close-on-click-overlay="true" :overlay-style="{height:'100vh'}" :lock-scroll="false" class="help-div">
         <van-nav-bar title="您附近的灸疗师" />
-        <HelpList :list="teacher_list" :finished="finish" :loading="loading" @loadmore="getList" @rqhelp="rqhelp"></HelpList>        
+        <!-- <HelpList :list="teacher_list"  :loading="loading" @loadmore="getList" @rqhelp="rqhelp"></HelpList>  -->
+        <van-list  :finished="finish" v-model="loading"  @loadmore="getList" :immediate-check="false" :offset="50">
+          <user-list-item v-for="item in teacher_list" :key="item.id" @btnClick="()=>{reqhelp(item)}" :disabled="item.disabled" :avatar="item.headimage" :title="item.nickname"/> 
+          </van-list>  
+              
       </van-popup>
   </div>
 </template>
@@ -34,6 +38,7 @@ import Base from "./baseComponents/base";
 import myFooter from "./baseComponents/myFooter";
 import TopJiuwaBar from "./baseComponents/top_jiuwa_bar";
 import HelpList from "./baseComponents/helplist";
+import userListItem from "./baseComponents/user_list_item";
 export default {
   name: "jiuwa",
   extends: Base,
@@ -41,7 +46,8 @@ export default {
     Jiuwa,
     myFooter,
     HelpList,
-    TopJiuwaBar
+    TopJiuwaBar,
+    userListItem
   },
   data() {
     return {
@@ -108,7 +114,7 @@ export default {
     help() {
       this.showHelpList = true;
     },
-    rqhelp(item) {
+    reqhelp(item) {
       let module_token = this.$api_urls["rescue"];
       let jiujiu_id = this.jiuwa.id;
       let moxibustion_token = item.user_token;
@@ -118,7 +124,9 @@ export default {
         moxibustion_token
       }).then(res => {
         if (res.data) {
-          item.type = "disabled";
+          this.$suc("成功求助");
+          item.disabled = true;
+          this.$forceUpdate();
         } else {
           this.$err("发生错误");
         }
@@ -161,7 +169,7 @@ export default {
         })
         .catch(rej => {
           this.$err(rej.msg);
-          // this.loading = false;
+          this.loading = false;
         });
     }
   }
@@ -215,6 +223,10 @@ export default {
       color: #45a50e;
       font-size: 18px;
     }
+  }
+  .van-list {
+    max-height: 80%;
+    overflow-y: auto;
   }
 }
 // .sign-header {

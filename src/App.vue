@@ -6,10 +6,10 @@
   <van-dialog v-model="show"
     show-cancel-button
     :before-close="beforeClose"
+    title="给小灸灸取个名字"
   >
     <van-field
       v-model="petname"
-      label="用户名"
       placeholder="请输入用户名"
     />
   </van-dialog>

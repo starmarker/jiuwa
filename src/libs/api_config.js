@@ -21,10 +21,16 @@ const api_urls = {
     "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K3vrqGnMd7q6d6o3Scyqu_mZupqZyKhKBw",
   rescue:
     "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K5vrqCmsaPzqmLaYSgyZi7mZyUiJ-XdqymrqKLsouHfpbGuYqlxn2wo5NpnprAua-V",
+  rescue_jiuwa:
+    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K5vrqCmsaPzqmLaYSgyZi7mZyUiJ-XdqymrqJ7qJaIhtbGlYafvJCsnJR-nqrKrLeqk7l4Y5SKuajJeYOd",
   need_rescue:
     "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K5vrqCmsaPzqmLaYSgyZi7mZyUiJ-XdqymrqKLsouHfpbGuYqlxn3apJRqg5m-t6Ju",
+  rescued_list:
+    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K5vrqCmsaPzqmLaYSgyZi7mZyUiJ-XdqymrqF_rJSdjs6-qqCFxaW4nJV-iJu6rdGrnaV8lw",
   pick_recourd:
     "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K3xbmCosOPl6KUpIiayJmvnJO6mZx-dq2Exo2Hq5KHbdS5z4qaxGusn3qjYm0",
+  picked_recourd:
+    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K3xbmCosOPl6KUpIiayJmvnJO6mZx-dq2Exn6ls5KHcZbFqYqpu5CkpJRqhIHHvbOjmrlnoYeguZ3HaYOkepxoow",
   is_hundred:
     "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K3xbmCosOPl6KUpIiayJmvnJO6mZx-dq19yGahpYqHsJbFqI6YxIC4oHqjYm0",
   isHasJiuwa:

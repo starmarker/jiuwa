@@ -7,7 +7,7 @@
         :immediate-check="false"
         :offset="800"
         >
-            <van-cell v-for="item in list" :key="item.user_token"  >
+            <van-cell v-for="item in list" :key="item.moxibustion_token"  >
                 <img :src="item.headimage" alt="" slot="icon">
                 <span slot="title">{{item.nickname}}</span> 
                 <van-button :type="item.type" :disabled="item.disabled" size="small" slot="right-icon" @click="rqHelp(item)">{{item.type=="disabled"?'已发送请求':'向TA求助'}}</van-button>
@@ -18,7 +18,28 @@
 </template>
 <script>
 export default {
-  props: ["list", "finished", "loading"],
+  props: {
+    list: {
+      type: Array,
+      default() {
+        return [
+          {
+            user_token: "",
+            moxibustion_token: "",
+            nickname: "",
+            type: "",
+            headimage: ""
+          }
+        ];
+      }
+    },
+    finished: {
+      type: Boolean
+    },
+    loading: {
+      type: Boolean
+    }
+  },
   data() {
     return {};
   },
