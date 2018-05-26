@@ -26,11 +26,39 @@
                   </div>
               </van-col>
           </van-row> -->
-          <img :src="user.avatar_src" alt="" srcset="">
-          <p class="user-name">{{user.nick_name}} <van-icon name="edit-data" v-if="showEdit" /></p>
+          <img :src="moreInfo.userfeil.avatar_src" alt="" srcset="">
+          <p class="user-name">{{moreInfo.userfeil.nickname}} <van-icon name="edit-data" v-if="showEdit" /></p>
           <div class="user-intro">这里是用户介绍，理疗师介绍(内容来自系统已有的灸疗师信息)</div>
       </div>
-
+       <div class="container">
+        <div class="field-title van-hairline--bottom">  个人成绩</div>
+        <van-cell>
+          <div class="team-score">
+            <van-row>
+              <van-col span="8">
+                <p>艾草成绩</p>
+                <p class="score">68</p>
+              </van-col>
+              <van-col span="8">
+                <p>下单成绩</p>
+                <p class="score">68</p>
+              </van-col>
+              <van-col span="8">
+                <p>出货成绩</p>
+                <p class="score">68</p>
+              </van-col>
+              <van-col span="12">
+                <p>总成绩</p>
+                <p class="score">68</p>
+              </van-col>
+              <van-col span="12">
+                <p>团队排名</p>
+                <p class="score">68</p>
+              </van-col>
+            </van-row>
+          </div>
+        </van-cell>
+      </div>
       <div class="container">
         <div class="field-title van-hairline--bottom"> <van-icon name="shop" /> 所在店铺</div>
         <van-cell>
@@ -58,12 +86,16 @@
         <van-cell>
           <div class="team-score">
             <van-row>
-              <van-col span="12">
-                <p>采摘成绩</p>
+              <van-col span="8">
+                <p>艾草成绩</p>
                 <p class="score">68</p>
               </van-col>
-              <van-col span="12">
+              <van-col span="8">
                 <p>下单成绩</p>
+                <p class="score">68</p>
+              </van-col>
+              <van-col span="8">
+                <p>出货成绩</p>
                 <p class="score">68</p>
               </van-col>
               <van-col span="12">
@@ -87,7 +119,7 @@
           </div>
         </van-cell>
       </div>
-      <div class="messages" v-if="showEdit" @click="$go('/helplist/')"></div>
+      
       <div class="picker" v-if="!is_teacher" @click="$go('/pick/'+$route.params.token)"></div>
       <globalFooter :actived="3"/>
     </div>  
@@ -107,7 +139,10 @@ export default {
     return {
       moreInfo: {
         avatar_src: "",
-        userfeil: {}
+        userfeil: {
+          nickname: "",
+          avatar_src: ""
+        }
       },
       // showEdit: false,
       members: []
@@ -204,7 +239,7 @@ export default {
       p {
         -webkit-margin-before: 0em;
         -webkit-margin-after: 0em;
-        line-height: 1.2;
+        line-height: 1.6;
         font-size: 16px;
       }
       .score {

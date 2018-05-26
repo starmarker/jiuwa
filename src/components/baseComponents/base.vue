@@ -154,7 +154,7 @@ export default {
       }
       if (!this.is_teacher && !this.is_hasJiuwa) {
         this.$confirm_dlg(
-          "顾客" + this.user.nick_name + ",你还未领取灸娃，是否领取",
+          "顾客" + this.user.nick_name + ",你还未领取小灸灸，是否领取",
           () => {
             // this.show = true;
             this.showAlert();
@@ -198,13 +198,17 @@ export default {
         position
       );
       this.getData("com_manage", obj).then(res => {
-        this.$alert_dlg(
-          "领养小灸灸成功，你可以采集艾草让小灸灸成长咯",
-          "",
-          () => {
-            this.petname = "";
-          }
-        );
+        if (res.data) {
+          this.$alert_dlg(
+            "领养小灸灸成功，你可以采集艾草让小灸灸成长咯",
+            "",
+            () => {
+              this.petname = "";
+            }
+          );
+        } else {
+          this.$err("领取失败");
+        }
       });
     },
     showAlert() {

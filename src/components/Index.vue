@@ -11,6 +11,7 @@
   </form>
   <div class="banner">
     <img src="../assets/index_banner.jpg" alt="" srcset="">
+    <bullet-words :maxheight="80" style="position:absolute;top:0;height:80%"/>
   </div>
   <div class="container">
     <flow-block />
@@ -49,6 +50,7 @@ import playerItem from "./baseComponents/listItem";
 import GlobalFooter from "./baseComponents/globalFooter";
 import FlowBlock from "./baseComponents/flow";
 import GameDetail from "./baseComponents/gamedetail";
+import BulletWords from "./baseComponents/bullet_words";
 export default {
   name: "HelloWorld",
   mixins: [Base],
@@ -67,7 +69,7 @@ export default {
       gameData: null
     };
   },
-  components: { playerItem, GlobalFooter, FlowBlock, GameDetail },
+  components: { playerItem, GlobalFooter, FlowBlock, GameDetail, BulletWords },
   // async created() {
   //   await this.checkUser();
   // },
@@ -94,6 +96,14 @@ export default {
       this.$go("/pick/" + user_token);
     },
     pick(user_token) {
+      if (this.is_teacher) {
+        this.$err("灸疗师不能采摘");
+        return false;
+      }
+      if (!this.is_hasJiuwa) {
+        this.$err("领取小灸灸后方可采摘");
+        return false;
+      }
       let module_token = this.$api_urls["pick"];
       let moxibustion_token = user_token;
       let plucking_type = 0;
@@ -104,9 +114,9 @@ export default {
       })
         .then(res => {
           if (res.data) {
-            this.$suc("采摘成功");
+            this.$suc("成功采摘1棵");
           } else {
-            this.$err("采集失败,5小时后才能采集");
+            this.$err("采摘失败,5小时后才能采摘");
           }
         })
         .catch(rej => {
@@ -205,9 +215,11 @@ export default {
     .box-shadow();
     //box-shadow: 0 3px 0px 3px #aaa;
     // height: 40vw;
+    position: relative;
     img {
       display: block;
       width: 100%;
+      z-index: 0;
     }
   }
   .van-list {

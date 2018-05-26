@@ -141,6 +141,14 @@ export default {
   },
   methods: {
     pick() {
+      if (this.is_teacher) {
+        this.$err("灸疗师不能采摘");
+        return false;
+      }
+      if (!this.is_hasJiuwa) {
+        this.$err("领取小灸灸后方可采摘");
+        return false;
+      }
       let module_token = this.$api_urls["pick"];
       let moxibustion_token = this.$route.params.token;
       let plucking_type = 1;
@@ -151,9 +159,9 @@ export default {
       })
         .then(res => {
           if (res.data) {
-            this.$suc("采摘成功");
+            this.$suc("成功采摘3棵");
           } else {
-            this.$err("采集失败,5小时后才能采集");
+            this.$err("采摘失败,5小时后才能采摘");
           }
         })
         .catch(rej => {
@@ -177,7 +185,7 @@ export default {
       });
     },
     godetail() {
-      let user_token = this.$route.params.user_token || "";
+      let user_token = this.$route.params.token || "";
       this.$go("/my/" + user_token);
     },
     calc() {
@@ -232,7 +240,7 @@ export default {
       let page = this.cur_pick_page;
       this.getData("com_manage", { module_token, page })
         .then(res => {
-          this.pick_recourd = this.pick_recourd.concat(res.data.list);
+          this.pick_recourd = this.pick_recourd.concat(res.data.lists);
           this.cur_pick_page++;
           this.pick_finish = this.cur_pick_page > res.data.page_info.last_page;
           this.loading = false;
@@ -348,12 +356,16 @@ export default {
   .help-div {
     width: 80%;
     max-height: 80%;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 7vw;
     overflow-y: auto;
     .van-nav-bar {
       background-color: transparent;
       color: #45a50e;
       font-size: 18px;
+    }
+    .van-tab--active {
+      background-color: #000 !important;
     }
     .van-tab__pane {
       padding: 15px;

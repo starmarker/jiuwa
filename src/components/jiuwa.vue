@@ -106,9 +106,10 @@ export default {
     getInfo() {
       let module_token = this.$api_urls["myinfo"];
       this.getData("com_manage", { module_token }).then(res => {
-        console.log("object :", res.data);
-        this.model = res.data;
-        this.jiuwa = res.data.xiaojiujiu;
+        if (res.data) {
+          this.model = res.data;
+          this.jiuwa = res.data.xiaojiujiu;
+        }
       });
     },
     help() {

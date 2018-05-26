@@ -128,7 +128,7 @@ export default {
           position = res;
         })
         .catch(() => {
-          postion = {
+          position = {
             longitude: "104.0678322315",
             latitude: "30.5465175160"
           };

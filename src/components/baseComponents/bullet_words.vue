@@ -1,0 +1,163 @@
+<template>
+    <div class="bullet-container" style="{height:maxheight+'px'}">
+        <div class="lines" v-for="(item1,index1) in lineContent" :key="index1">
+            <div class="word" :style="curStyle" v-for="item in item1.list" :key="item" @animationend="checkPosition($event,index1,item)" @webkitAnimationEnd="checkPosition($event,index1,item)">{{item}}</div>
+        </div>
+    </div>
+</template>
+<script>
+export default {
+  name: "bullet",
+  props: {
+    lines: {
+      type: Number,
+      default: 5 //弹幕行数，默认5行
+    },
+    maxheight: {
+      type: Number,
+      default: 100 //容器高度比例，默认100%
+    },
+    speed: {
+      type: Number,
+      default: 30 //弹幕速度，默认100px/s
+    }
+  },
+  data() {
+    return {
+      ws_url: "ws://test.z9168.com:7272",
+      lineContent: [],
+      count: 0
+    };
+  },
+
+  computed: {
+    ws() {
+      if (window.WebScoket) {
+        return new WebSoceket(this_url);
+      } else {
+        return null;
+      }
+    },
+    duration() {
+      let cwidth = document.body.clientWidth;
+      let wordMaxWidth = cwidth * 2;
+      return wordMaxWidth / this.speed;
+    },
+    curStyle() {
+      return { animationDuration: this.duration + "s" };
+    }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      setInterval(() => {
+        let random = Math.random();
+        this.joinWord(random);
+      }, 3000);
+    });
+    this.create_link();
+  },
+  beforeCreate() {},
+  created() {
+    let arr = [];
+    for (let i = 0; i < this.lines; i++) {
+      arr.push({
+        addable: true,
+        list: []
+      });
+    }
+    this.lineContent = arr;
+    // console.log("this.lineContent :", this.lineContent);
+  },
+  methods: {
+    create_link() {
+      if (this.ws) {
+        this.ws.onmessage = message => {
+          let data = JSON.parse(message.data);
+          let client_id = data.client_id;
+          let user_token = this.$login_info().user_token,
+            obj = {};
+          switch (data.type) {
+            case "init":
+              obj = {
+                type: "bindUser",
+                client_id,
+                user_token
+              };
+              this.bindUser(client_id, obj);
+          }
+        };
+      }
+    },
+    bindUser(client_id, obj) {
+      this.ws.send(JSON.stringify(obj));
+    },
+    checkPosition(e, n, item) {
+      //   e.target.removeNode()
+      let parent = e.target.parentNode;
+      parent.removeChild(e.target);
+      console.log("n,index :", n, item);
+      let i = this.lineContent[n].list.indexOf(item);
+      this.lineContent[n].list.splice(i, 1);
+      item = null;
+    },
+    joinWord(content) {
+      if (this.count > this.lineContent.length - 1) {
+        this.count = 0;
+      }
+      let cur = this.lineContent[this.count];
+      cur.list.push(content);
+      this.count++;
+      //   cur.addable = false;
+      //   //   Array.push.call(cur.list, content);
+      //   console.log("cur :", cur);
+    }
+    // editArr(){
+
+    // }
+  }
+};
+</script>
+<style lang="less" scoped>
+.bullet-container {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  flex-direction: column;
+  .lines {
+    width: 100%;
+    position: relative;
+    min-height: 25px;
+    .word {
+      display: inline-block;
+      position: absolute;
+      right: 0;
+      color: #ca0e33;
+      padding: 3px 8px;
+      background-color: rgba(255, 255, 255, 0.3);
+      font-size: 16px;
+      white-space: nowrap;
+      text-overflow: clip;
+      animation: mymove 20s;
+    }
+    @-webkit-keyframes mymove {
+      from {
+        right: -100%;
+      }
+      to {
+        right: 200%;
+      }
+    }
+    @keyframes mymove {
+      from {
+        right: -100%;
+      }
+      to {
+        right: 200%;
+      }
+    }
+  }
+}
+</style>
+
+
+

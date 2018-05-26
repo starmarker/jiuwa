@@ -7,7 +7,7 @@
             @click-left="back"
         />
         <van-tabs v-model="activeTab">
-            <van-tab  title="灸娃排行">
+            <van-tab  title="采摘排行">
                 <div class="page-body">
                     <van-cell-group>
                         <van-cell :value="item.aicao_num+''" v-for="(item,index) in jiuwa_rank" :key="item.user_token">
@@ -22,7 +22,7 @@
             </van-tab>
             <van-tab  title="灸疗师排行">
                 <div class="page-body">
-                    <van-cell-group>
+                    <!-- <van-cell-group>
                         <van-cell :value="item.basescore+''" v-for="(item,index) in aicao_rank" :key="item.user_token">
                             <template slot="title">
                             <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
@@ -30,7 +30,32 @@
                                 {{item.nickname}}</span>                            
                             </template>
                         </van-cell>
-                    </van-cell-group>
+                    </van-cell-group> -->
+                    <table class="table van-hairline--bottom">
+                        <thead>
+                            <tr class="van-hairline--bottom">
+                                <th style="width:30%;">&nbsp;</th>
+                                <th class="odd" style="width:18%;">艾草成绩</th>
+                                <th style="width:18%;">下单成绩</th>
+                                <th class="odd" style="width:18%;">出货成绩</th>
+                                <th style="width:17%;">总成绩</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item,index) in aicao_rank" :key="item.user_token">
+                                <td class="first-column">
+                                    <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
+                                    <span class="van-cell-text">
+                                        {{item.nickname}}
+                                    </span>
+                                </td>
+                                <td class="odd">1</td>
+                                <td>2</td>
+                                <td class="odd">3</td>
+                                <td>{{item.basescore}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div> 
             </van-tab>
             <!-- <van-tab  title="团队排行">
@@ -96,6 +121,32 @@ export default {
   height: calc(100vh - 150px);
   text-align: left;
   overflow-y: auto;
+  .table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    tr {
+      border-bottom: 1px solid #f0e3d6;
+      th,
+      td {
+        color: #ce1f42;
+        font-weight: normal;
+        height: 40px;
+        background-color: #fff;
+        text-align: center;
+        font-size: 14px;
+        &.odd {
+          background-color: #efefef;
+        }
+        &.first-column {
+          text-align: left;
+          .van-cell-text {
+            color: #666;
+          }
+        }
+      }
+    }
+  }
 }
 </style>
 
