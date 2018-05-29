@@ -73,9 +73,9 @@ export default {
   // async created() {
   //   await this.checkUser();
   // },
-  mounted() {
-    this.getIndex();
+  beforeMount() {
     this.getIndexData();
+    this.getIndex();
   },
   beforeUpdate() {},
   methods: {
@@ -92,6 +92,7 @@ export default {
       //     this.$suc("成功");
     },
     goPage(user_token) {
+      console.log("user_token :", user_token);
       this.$go("/pick/" + user_token);
     },
     pick(user_token) {
@@ -158,6 +159,9 @@ export default {
         },
         position
       );
+      // if (this.cur_page == 1) {
+      //   this.all_ther = [];
+      // }
       this.getData("com_manage", obj)
         .then(res => {
           let arr = res.data.lists;
@@ -230,6 +234,9 @@ export default {
   }
   .van-list {
     padding-bottom: 20px;
+    .van-row {
+      width: 100%;
+    }
   }
   .container {
     .container;

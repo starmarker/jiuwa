@@ -36,7 +36,12 @@
           </van-uploader>        
       </div>
 
-        <van-button type="primary" size="large" @click="submit">提交</van-button>
+        <van-button type="primary" size="large" @click="submit" class="submit">提交</van-button>
+        <van-popup v-model="show" :overlay="true" style="width:80%;height:70%;background-color:#fff">
+          <vue-cropper ref="cropper" :img="photo.content" :fixed="option.fixed" :fixedNumber="option.fixedNumber" 	:autoCrop="option.autoCrop" :autoCropWidth="option.autoCropWidth" :autoCropHeight="option.autoCropHeight" :full="option.full" :fixedBox="option.fixedBox"/>
+          <van-button type="danger" @click="cancelFixed" >取消</van-button>
+          <van-button type="primary" @click="fixedImg">确定</van-button>
+        </van-popup>
       
       <GlobalFooter :teacher="is_teacher" :actived="2"></GlobalFooter>
     </div>
@@ -44,6 +49,7 @@
 <script>
 import Base from "./baseComponents/base";
 import GlobalFooter from "./baseComponents/globalFooter";
+import VueCropper from "vue-cropper";
 export default {
   extends: Base,
   data() {
@@ -55,11 +61,26 @@ export default {
       },
       avatar_id: "",
       avatar_src: "",
-      photo: {}
+      photo: {
+        file: {},
+        content: ""
+      },
+      show: false,
+      option: {
+        autoCrop: true,
+        // 只有自动截图开启 宽度高度才生效
+        autoCropWidth: 250,
+        autoCropHeight: 300,
+        fixed: true,
+        fixedNumber: [5, 6],
+        full: true,
+        fixedBox: false
+      }
     };
   },
   components: {
-    GlobalFooter
+    GlobalFooter,
+    VueCropper
   },
   computed: {
     bgi() {
@@ -73,7 +94,6 @@ export default {
   },
   methods: {
     onRead(files) {
-      let module_token = this.$api_urls["uploadPic"];
       const _this = this;
       if (files instanceof Array) {
         _this.photo = files.shift();
@@ -83,7 +103,13 @@ export default {
       } else {
         _this.photo = files;
       }
-      let params = new FormData(); // 创建form对象
+      _this.show = true;
+      _this.$refs.cropper.startCrop();
+    },
+    upload() {
+      let params = new FormData(),
+        _this = this; // 创建form对象
+      let module_token = this.$api_urls["uploadPic"];
       params.append("file", _this.photo.file, _this.photo.file.name); // 通过append向form对象添加数据
       params.append("module_token", module_token);
       params.append("dir", "images");
@@ -150,11 +176,11 @@ export default {
     async checkUser() {
       //await this.getStatus();
       console.log("is_teacher :", this.is_teacher);
-      if (!this.is_teacher) {
-        this.$alert_dlg("你不是灸疗师,无须报名", "", () => {
-          this.$router.back();
-        });
-      }
+      // if (!this.is_teacher) {
+      //   this.$alert_dlg("你不是灸疗师,无须报名", "", () => {
+      //     this.$router.back();
+      //   });
+      // }
     },
     getInfo() {
       let user_token = this.$route.params.token;
@@ -169,6 +195,25 @@ export default {
           this.sign_info.liliao_image = res.data.liliao_image;
         });
       }
+    },
+    fixedImg() {
+      // this.$refs.cropper.stopCrop();
+
+      this.$refs.cropper.getCropData(data => {
+        this.photo.content = data;
+        this.avatar_src = data;
+      });
+      this.$refs.cropper.getCropBlob(data => {
+        this.photo.file = data;
+      });
+      this.show = false;
+
+      //this.upload();
+    },
+    cancelFixed() {
+      this.$refs.cropper.clearCrop();
+      this.show = false;
+      //this.upload();
     }
   }
 };
@@ -241,10 +286,11 @@ export default {
       }
     }
   }
-  .van-button--primary {
+  // .van-button--primary {
+
+  // }
+  .van-button.submit {
     background-color: #9fc28a;
-  }
-  .van-button {
     border-radius: 0;
     border-color: #9fc28a;
   }

@@ -7,11 +7,13 @@ export default {
   data() {
     return {
       user_token: "",
+      a_token: undefined,
       is_teacher: true,
       is_signed: false,
-      is_hasJiuwa: false
+      is_hasJiuwa: false,
       // petname: "",
       // show: false
+      wxPosition: null
     };
   },
   async created() {
@@ -22,6 +24,7 @@ export default {
     // await this.isHasJiuwa();
     // await this.isSigned();
     await this.checkUser();
+    await this.wxLocation();
   },
   beforeRouteEnter: (to, from, next) => {
     // ...
@@ -29,9 +32,15 @@ export default {
     next();
   },
   computed: {
-    user() {
-      return this.$login_info();
-    },
+    // activity_token() {
+    //   let result;
+    //   if (this.a_token) {
+    //     result = this.a_token;
+    //   } else {
+    //     result = this.$route.query.act_token || 12;
+    //   }
+    //   return result;
+    // },
     inviter_code() {
       return (
         this.$route.query.inviter_code || "33359507b753485b6f47490383a47aa8"
@@ -46,6 +55,10 @@ export default {
   },
   methods: {
     getData(name, obj) {
+      // obj.activity_token = this.activity_token;
+      // let obj1 = Object.assign({}, obj, {
+      //   activity_token: 12
+      // });
       return new Promise((resolve, reject) => {
         this.$api({
           name: name,
@@ -65,25 +78,9 @@ export default {
     getLocation() {
       let position = {};
       return new Promise((resolve, reject) => {
-        if (this.$getBrowserType() == "weixin") {
-          console.log("weixin :", "微信浏览器");
-          wx.getLocation({
-            type: "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-            success: function(res) {
-              var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-              var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-              position = { latitude, longitude };
-              resolve(position);
-            },
-            cancel: function(rej) {
-              reject(rej);
-            },
-            fail: function(err) {
-              reject(err);
-            }
-          });
+        if (this.wxPosition) {
+          resolve(this.wxPosition);
         } else {
-          console.log("不是微信浏览器");
           if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
               function(p) {
@@ -176,7 +173,7 @@ export default {
       }
       if (!this.is_teacher && !this.is_hasJiuwa) {
         this.$confirm_dlg(
-          "顾客" + this.user.nick_name + ",你还未领取小灸灸，是否领取",
+          this.user.nick_name + ",你还未领取小灸灸，是否领取",
           () => {
             // this.show = true;
             this.showAlert();
@@ -240,6 +237,21 @@ export default {
     showAlert() {
       // this.show = true;
       Bus.$emit("showConfirm");
+    },
+    wxLocation() {
+      if (this.$getBrowserType() == "weixin") {
+        wx.getLocation({
+          type: "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+          success: function(res) {
+            var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+            var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+            this.wxPosition = { latitude, longitude };
+            resolve(position);
+          },
+          cancel: function(rej) {},
+          fail: function(err) {}
+        });
+      }
     }
   }
 };

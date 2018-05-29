@@ -55,7 +55,7 @@ export default {
   box-sizing: border-box;
   text-align: left;
   font-size: 14px;
-  margin: 0 auto;
+  margin: 1vw auto;
   // padding: 5px;
   background-color: #fff;
   padding-bottom: 0;
@@ -65,6 +65,7 @@ export default {
     position: relative;
     img {
       width: 100%;
+      // height: 40vw;
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
     }
