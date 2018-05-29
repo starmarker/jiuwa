@@ -69,7 +69,8 @@ export default {
         client_version: "1.2.8",
         m_type: this.$route.params.m_type || 4
       },
-      refer: ""
+      refer: "",
+      isWeixin: false
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -80,6 +81,18 @@ export default {
     next(vm => {
       vm.refer = from.path;
     });
+  },
+  updated() {
+    // this.$cklogin(() => {
+    //   let next_path = _this.refer == "" ? "/" : _this.refer;
+    //   this.$go(next_path);
+    // }, false);
+  },
+  mounted() {
+    if (this.$getBrowserType() == "weixin") {
+      this.isWeixin = true;
+      this.$weixin_login();
+    }
   },
   methods: {
     showAutoLogin() {
@@ -121,6 +134,7 @@ export default {
         });
       }
     },
+
     signup() {
       this.$router.push({ path: "/signup/4" });
     },

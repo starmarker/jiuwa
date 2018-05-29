@@ -74,7 +74,6 @@ export default {
   //   await this.checkUser();
   // },
   mounted() {
-    this.getInviter();
     this.getIndex();
     this.getIndexData();
   },
@@ -135,6 +134,7 @@ export default {
     },
     async getIndex() {
       let position = {};
+      await this.getInviter();
       await this.getLocation()
         .then(res => {
           position = res;
@@ -160,8 +160,14 @@ export default {
       );
       this.getData("com_manage", obj)
         .then(res => {
-          console.log("object :", res.data);
-          this.all_ther = res.data.lists;
+          let arr = res.data.lists;
+          if (this.current_ther !== null && this.current_ther !== false) {
+            arr = arr.filter(item => {
+              console.log(item.id != this.current_ther.id);
+              return item.id != this.current_ther.id;
+            });
+          }
+          this.all_ther = this.all_ther.concat(arr);
           this.cur_page++;
           this.finished = this.cur_page > res.data.page_info.last_page;
           this.loading = false;

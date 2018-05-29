@@ -35,9 +35,9 @@
                         <thead>
                             <tr class="van-hairline--bottom">
                                 <th style="width:30%;">&nbsp;</th>
-                                <th class="odd" style="width:18%;">艾草成绩</th>
-                                <th style="width:18%;">下单成绩</th>
-                                <th class="odd" style="width:18%;">出货成绩</th>
+                                <th class="odd" style="width:18%;">艾草</th>
+                                <th style="width:18%;">下单</th>
+                                <th class="odd" style="width:18%;">出货</th>
                                 <th style="width:17%;">总成绩</th>
                             </tr>
                         </thead>
@@ -49,7 +49,7 @@
                                         {{item.nickname}}
                                     </span>
                                 </td>
-                                <td class="odd">1</td>
+                                <td class="odd">{{item.aicao_num}}</td>
                                 <td>2</td>
                                 <td class="odd">3</td>
                                 <td>{{item.basescore}}</td>
@@ -129,14 +129,14 @@ export default {
       border-bottom: 1px solid #f0e3d6;
       th,
       td {
-        color: #ce1f42;
+        color: #666;
         font-weight: normal;
         height: 40px;
-        background-color: #fff;
+        background-color: transparent;
         text-align: center;
         font-size: 14px;
         &.odd {
-          background-color: #efefef;
+          background-color: rgba(255, 255, 255, 0.4);
         }
         &.first-column {
           text-align: left;

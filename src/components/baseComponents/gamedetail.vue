@@ -9,7 +9,7 @@
             <p class="col-detail">{{picktotal}}</p>
         </van-col>
         <van-col :span="8" class="van-hairline--top">
-            <p class="col-title">参与人数</p>
+            <p class="col-title">参与人次</p>
             <p class="col-detail">{{gamertotal}}</p>
         </van-col>
     </van-row>

@@ -63,23 +63,44 @@ export default {
       });
     },
     getLocation() {
+      let position = {};
       return new Promise((resolve, reject) => {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            function(p) {
-              let position = {
-                latitude: p.coords.latitude,
-                longitude: p.coords.longitude
-              };
+        if (this.$getBrowserType() == "weixin") {
+          console.log("weixin :", "微信浏览器");
+          wx.getLocation({
+            type: "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+            success: function(res) {
+              var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+              var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+              position = { latitude, longitude };
               resolve(position);
             },
-            function(e) {
-              var msg = e.code + "\n" + e.message;
-              reject(e.message);
+            cancel: function(rej) {
+              reject(rej);
+            },
+            fail: function(err) {
+              reject(err);
             }
-          );
+          });
         } else {
-          reject("硬件不支持");
+          console.log("不是微信浏览器");
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              function(p) {
+                position = {
+                  latitude: p.coords.latitude,
+                  longitude: p.coords.longitude
+                };
+                resolve(position);
+              },
+              function(e) {
+                var msg = e.code + "\n" + e.message;
+                reject(e.message);
+              }
+            );
+          } else {
+            reject("硬件不支持");
+          }
         }
       });
     },
@@ -88,9 +109,10 @@ export default {
     },
     test() {
       return new Promise((resolve, reject) => {
-        this.$ckServiceLogin(res => {
-          resolve(res);
-        });
+        this.$cklogin(() => {
+          this.$go("/");
+          resolve();
+        }, false);
       });
     },
 
@@ -197,19 +219,23 @@ export default {
         },
         position
       );
-      this.getData("com_manage", obj).then(res => {
-        if (res.data) {
-          this.$alert_dlg(
-            "领养小灸灸成功，你可以采集艾草让小灸灸成长咯",
-            "",
-            () => {
-              this.petname = "";
-            }
-          );
-        } else {
+      this.getData("com_manage", obj)
+        .then(res => {
+          if (res.data) {
+            this.$alert_dlg(
+              "领养小灸灸成功，你可以采集艾草让小灸灸成长咯",
+              "",
+              () => {
+                this.petname = "";
+              }
+            );
+          } else {
+            this.$err("领取失败");
+          }
+        })
+        .catch(rej => {
           this.$err("领取失败");
-        }
-      });
+        });
     },
     showAlert() {
       // this.show = true;

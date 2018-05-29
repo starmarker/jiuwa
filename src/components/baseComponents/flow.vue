@@ -1,14 +1,14 @@
 <template>
     <div class="process">
-        <van-steps direction="vertical" :active="1" active-color="#f60">
+        <!-- <van-steps direction="vertical" :active="1" active-color="#f60">
             <van-step>
-                <!-- <h3>【城市】物流状态1</h3> -->
+               
                 <p>领取小灸灸</p>
             </van-step>
             <van-step>            
                 <p>采摘艾草</p>
             </van-step>
-        </van-steps>
+        </van-steps> -->
         <router-link to="">查看详情 <van-icon name="arrow" size="14px" /></router-link>
         <!-- <a href="">查看详情</a> -->
     </div>

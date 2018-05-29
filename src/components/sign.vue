@@ -27,11 +27,12 @@
 
       <div class="container">
         <div class="field-title van-hairline--bottom">我的照片</div>
+        <img :src="avatar_src" alt="" srcset="" class="cur-img" v-if="this.avatar_src">
             <van-uploader :after-read="onRead" accept="image/gif, image/jpeg,image/png">
             <div class="upload-icon">
               <van-icon name="photograph" /> 
             </div>
-                     
+                                 
           </van-uploader>        
       </div>
 
@@ -210,12 +211,24 @@ export default {
       border: 1px solid #9fc28a !important;
     }
   }
-
+  .cur-img {
+    position: relative;
+    z-index: 2;
+    max-width: 80%;
+    max-height: 40vh;
+    margin: auto;
+  }
   .van-uploader {
+    position: absolute;
     margin: auto;
     width: 100%;
     padding: 20px 0;
+    z-index: 4;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
     .upload-icon {
+      z-index: 5;
       width: 20vw;
       height: 20vw;
       margin: auto;

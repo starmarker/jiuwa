@@ -19,7 +19,7 @@
       <div class="talk-content" v-html="showInfo">       
       </div>
     </div>
-    <div class="help-btn" @click="help"></div>
+    <div class="help-btn" @click="help" v-if="jiuwa.health<100"></div>
     <Jiuwa :model="jiuwa" @rescue="help"></Jiuwa>
     <myFooter :isShowPick="true" />
       <van-popup v-model="showHelpList" :close-on-click-overlay="true" :overlay-style="{height:'100vh'}" :lock-scroll="false" class="help-div">

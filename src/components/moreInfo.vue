@@ -27,7 +27,7 @@
               </van-col>
           </van-row> -->
           <img :src="moreInfo.userfeil.avatar_src" alt="" srcset="">
-          <p class="user-name">{{moreInfo.userfeil.nickname}} <van-icon name="edit-data" v-if="showEdit" /></p>
+          <p class="user-name">{{moreInfo.userfeil.nickname}} <van-icon name="edit-data" v-if="showEdit" @click="$go('/sign/'+moreInfo.userfeil.user_token)"/></p>
           <div class="user-intro">这里是用户介绍，理疗师介绍(内容来自系统已有的灸疗师信息)</div>
       </div>
        <div class="container">
