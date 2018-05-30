@@ -14,7 +14,8 @@ export default {
       // petname: "",
       // show: false
       wxPosition: null,
-      a_token: undefined
+      a_token: undefined,
+      status: 1
     };
   },
   async created() {
@@ -63,7 +64,9 @@ export default {
   mounted() {
     Bus.$on("subname", resultname => {
       this.petname = resultname;
-      this.getJiuwa();
+      if (this.status) {
+        this.getJiuwa();
+      }
     });
     // console.log(this.$login_info());
   },
@@ -200,13 +203,14 @@ export default {
       }
     },
     async getJiuwa() {
+      this.status = 0;
       let position = {};
       await this.getLocation()
         .then(res => {
           position = res;
         })
         .catch(() => {
-          postion = {
+          position = {
             longitude: "104.0678322315",
             latitude: "30.5465175160"
           };
@@ -238,13 +242,16 @@ export default {
               "",
               () => {
                 this.petname = "";
+                this.status = 1;
               }
             );
           } else {
+            this.status = 1;
             this.$err("领养失败");
           }
         })
         .catch(rej => {
+          this.status = 1;
           this.$err("领养失败");
         });
     },

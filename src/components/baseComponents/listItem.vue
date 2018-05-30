@@ -1,7 +1,7 @@
 <template>
   <div class="listitem" v-if="item!==null">
-      <div class="item-header">
-          <img :src="item.liliao_image_src" alt="" srcset="" @click="jumpPage">
+      <div class="item-header" @click="jumpPage">
+          <img :src="item.liliao_image_src" alt="" srcset="" >
           <div class="item-intro">
               <p class="match-no">编号:{{match_no}} <span class="user-name">{{item.nickname}}</span></p>
               <!-- <p class="user-name">{{item.nickname}}</p> -->          

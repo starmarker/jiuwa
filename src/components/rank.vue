@@ -7,30 +7,9 @@
             @click-left="back"
         />
         <van-tabs v-model="activeTab">
-            <van-tab  title="采摘排行">
-                <div class="page-body">
-                    <van-cell-group>
-                        <van-cell :value="item.aicao_num+''" v-for="(item,index) in jiuwa_rank" :key="item.user_token">
-                            <template slot="title">
-                            <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
-                            <span class="van-cell-text">
-                                {{item.nickname}}</span>                            
-                            </template>
-                        </van-cell>
-                    </van-cell-group>
-                </div>
-            </van-tab>
+
             <van-tab  title="灸疗师排行">
                 <div class="page-body">
-                    <!-- <van-cell-group>
-                        <van-cell :value="item.basescore+''" v-for="(item,index) in aicao_rank" :key="item.user_token">
-                            <template slot="title">
-                            <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
-                            <span class="van-cell-text">
-                                {{item.nickname}}</span>                            
-                            </template>
-                        </van-cell>
-                    </van-cell-group> -->
                     <table class="table van-hairline--bottom">
                         <thead>
                             <tr class="van-hairline--bottom">
@@ -45,6 +24,7 @@
                             <tr v-for="(item,index) in aicao_rank" :key="item.user_token">
                                 <td class="first-column">
                                     <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
+                                    <img :src="item.headimage" alt="">
                                     <span class="van-cell-text">
                                         {{item.nickname}}
                                     </span>
@@ -57,6 +37,32 @@
                         </tbody>
                     </table>
                 </div> 
+            </van-tab>
+            <van-tab  title="采摘排行">
+                <div class="page-body">
+                    <table class="table van-hairline--bottom">
+                        <thead>
+                            <tr class="van-hairline--bottom">
+                                <th style="width:30%;">名次</th>
+                                <th class="odd first-column" style="width:40%;text-align:center">顾客</th>
+                                <th style="width:30%;">总成绩</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item,index) in jiuwa_rank" :key="item.user_token">
+                                <td><van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag></td>
+                                <td class="first-column odd user-rank">
+                                    
+                                    <img :src="item.headimage" alt="">
+                                    <span class="van-cell-text">
+                                        {{item.nickname}}
+                                    </span>
+                                </td>
+                                <td >{{item.aicao_num}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </van-tab>
             <!-- <van-tab  title="团队排行">
                 <div class="page-body">
@@ -86,7 +92,8 @@ export default {
     return {
       activeTab: 0,
       aicao_rank: [],
-      jiuwa_rank: []
+      jiuwa_rank: [],
+      u_arr: [1, 0, 1]
     };
   },
   created() {
@@ -99,7 +106,7 @@ export default {
   },
   methods: {
     getRank() {
-      let user_type = this.activeTab;
+      let user_type = this.u_arr[this.activeTab];
       let module_token = this.$api_urls["rank"];
       this.getData("com_manage", { user_type, module_token }).then(res => {
         console.log(res.data);
@@ -141,11 +148,32 @@ export default {
         &.first-column {
           text-align: left;
           .van-cell-text {
+            white-space: nowrap;
+            max-width: calc(100% - 60px);
+            display: inline-block;
+            text-overflow: clip;
+            overflow: hidden;
             color: #666;
+          }
+        }
+        &.user-rank {
+          padding-left: 2vw;
+          .van-cell-text {
+            max-width: 100%;
           }
         }
       }
     }
+  }
+  .van-tag {
+    top: -5px;
+  }
+  .first-column img,
+  .page-body img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    vertical-align: text-bottom;
   }
 }
 </style>

@@ -6,10 +6,8 @@
     </div>
 </template>
 <script>
-import Base from "./base";
 export default {
   name: "bullet",
-  mixins: [Base],
   props: {
     lines: {
       type: Number,
@@ -79,6 +77,27 @@ export default {
     // console.log("this.lineContent :", this.lineContent);
   },
   methods: {
+    getData(name, obj) {
+      let activity_token = this.activity_token || 0;
+      let obj1 = Object.assign({}, obj, {
+        activity_token
+      });
+      return new Promise((resolve, reject) => {
+        this.$api({
+          name: name,
+          params: obj1,
+          callback: res => {
+            resolve(res);
+          },
+          errcallback: rej => {
+            reject(rej);
+          },
+          catchcallback: rej => {
+            reject(rej);
+          }
+        });
+      });
+    },
     create_link() {
       if (this.ws) {
         this.ws.onmessage = message => {

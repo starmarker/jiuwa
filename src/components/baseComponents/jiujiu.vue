@@ -1,5 +1,5 @@
 <template>
-  <div class="jiu-info" :class="{'baby':model.experience<100,'illness':model.health<100}">
+  <div class="jiu-info" :class="{'baby':model.experience<100,'illness':model.health<100,'normal':model.experience>100&&model.health==100}">
       <!-- <p>你的艾草颗数:{{model.aicao_number}}</p> -->
       <!-- <p>{{model.name}}</p>
       <div class="progress">
@@ -19,7 +19,9 @@ export default {
     model: {
       type: Object,
       default: () => {
-        return {};
+        return {
+          ill_name: "感冒"
+        };
       }
     }
   },
@@ -84,6 +86,9 @@ export default {
   background-image: url("../../assets/xjj_baby.png");
 }
 .illness {
+  background-image: url("../../assets/xjj_illness.png");
+}
+.normal {
   background-image: url("../../assets/xjj_illness.png");
 }
 </style>
