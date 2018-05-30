@@ -14,14 +14,14 @@
           
       </van-row>
     </div> -->
-    <top-jiuwa-bar :avatar="user.avatar_src" :nickname="jiuwa.petname" :basescore="model.aicao_num" :experience="jiuwa.experience"/>
+    <top-jiuwa-bar :avatar="model.userfeil.avatar_src" :nickname="jiuwa.petname" :basescore="model.aicao_num" :experience="jiuwa.experience"/>
     <div class="jiuwa-talk">
       <div class="talk-content" v-html="showInfo">       
       </div>
     </div>
     <div class="help-btn" @click="help" v-if="jiuwa.health<100"></div>
     <Jiuwa :model="jiuwa" @rescue="help"></Jiuwa>
-    <myFooter :isShowPick="true" />
+    <myFooter :isShowPick="true" @pick="$go('/')" />
       <van-popup v-model="showHelpList" :close-on-click-overlay="true" :overlay-style="{height:'100vh'}" :lock-scroll="false" class="help-div">
         <van-nav-bar title="您附近的灸疗师" />
         <!-- <HelpList :list="teacher_list"  :loading="loading" @loadmore="getList" @rqhelp="rqhelp"></HelpList>  -->

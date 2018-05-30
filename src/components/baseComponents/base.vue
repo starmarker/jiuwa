@@ -13,7 +13,8 @@ export default {
       is_hasJiuwa: false,
       // petname: "",
       // show: false
-      wxPosition: null
+      wxPosition: null,
+      a_token: undefined
     };
   },
   async created() {
@@ -32,15 +33,18 @@ export default {
     next();
   },
   computed: {
-    // activity_token() {
-    //   let result;
-    //   if (this.a_token) {
-    //     result = this.a_token;
-    //   } else {
-    //     result = this.$route.query.act_token || 12;
-    //   }
-    //   return result;
-    // },
+    activity_token() {
+      let result;
+      if (this.$route.query.act_token) {
+        result = this.$route.query.act_token;
+        this.$login_info().activity_token = this.$route.query.act_token;
+      } else if (this.$login_info().activity_token) {
+        result = this.$login_info().activity_token;
+      } else {
+        result = 12;
+      }
+      return result;
+    },
     inviter_code() {
       return (
         this.$route.query.inviter_code || "33359507b753485b6f47490383a47aa8"
@@ -55,14 +59,14 @@ export default {
   },
   methods: {
     getData(name, obj) {
-      // obj.activity_token = this.activity_token;
-      // let obj1 = Object.assign({}, obj, {
-      //   activity_token: 12
-      // });
+      let activity_token = this.activity_token;
+      let obj1 = Object.assign({}, obj, {
+        activity_token
+      });
       return new Promise((resolve, reject) => {
         this.$api({
           name: name,
-          params: obj,
+          params: obj1,
           callback: res => {
             resolve(res);
           },

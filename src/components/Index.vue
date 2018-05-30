@@ -167,6 +167,9 @@ export default {
               return item.id != this.current_ther.id;
             });
           }
+          if (this.cur_page == 1) {
+            this.all_ther = [];
+          }
           this.all_ther = this.all_ther.concat(arr);
           this.cur_page++;
           this.finished = this.cur_page > res.data.page_info.last_page;
