@@ -107,7 +107,7 @@ export default {
     test() {
       return new Promise((resolve, reject) => {
         this.$cklogin(() => {
-          this.$go("/");
+          // this.$go("/");
           resolve();
         }, false);
       });
@@ -239,7 +239,7 @@ export default {
       Bus.$emit("showConfirm");
     },
     wxLocation() {
-      if (this.$getBrowserType() == "weixin") {
+      return new Promise((resolve, reject) => {
         wx.getLocation({
           type: "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
           success: function(res) {
@@ -248,10 +248,14 @@ export default {
             this.wxPosition = { latitude, longitude };
             resolve(position);
           },
-          cancel: function(rej) {},
-          fail: function(err) {}
+          cancel: function(rej) {
+            reject(rej);
+          },
+          fail: function(err) {
+            reject(err);
+          }
         });
-      }
+      });
     }
   }
 };
