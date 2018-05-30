@@ -63,9 +63,10 @@ export default {
   .item-header {
     text-align: center;
     position: relative;
+    height: 60vw;
     img {
       width: 100%;
-      // height: 40vw;
+      height: 100%;
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
     }
@@ -78,7 +79,7 @@ export default {
     color: #fff;
     overflow: hidden;
     position: absolute;
-    bottom: 2px;
+    bottom: 0px;
     p {
       -webkit-margin-before: 0em;
       -webkit-margin-after: 0em;

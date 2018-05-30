@@ -76,6 +76,7 @@ export default {
   mounted() {
     this.getIndex();
     this.getIndexData();
+    // this.getBullet();
   },
   beforeUpdate() {},
   methods: {
@@ -163,7 +164,6 @@ export default {
           let arr = res.data.lists;
           if (this.current_ther !== null && this.current_ther !== false) {
             arr = arr.filter(item => {
-              console.log(item.id != this.current_ther.id);
               return item.id != this.current_ther.id;
             });
           }
@@ -180,7 +180,6 @@ export default {
           // this.loading = false;
         });
     },
-    getResult() {},
     onLoad() {
       setTimeout(() => {
         for (let i = 0; i < 10; i++) {

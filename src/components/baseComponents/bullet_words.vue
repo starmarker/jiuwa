@@ -6,8 +6,10 @@
     </div>
 </template>
 <script>
+import Base from "./base";
 export default {
   name: "bullet",
+  mixins: [Base],
   props: {
     lines: {
       type: Number,
@@ -26,10 +28,11 @@ export default {
     return {
       ws_url: "ws://test.z9168.com:7272",
       lineContent: [],
-      count: 0
+      count: 0,
+      words: []
     };
   },
-
+  created() {},
   computed: {
     ws() {
       if (window.WebScoket) {
@@ -40,18 +43,25 @@ export default {
     },
     duration() {
       let cwidth = document.body.clientWidth;
-      let wordMaxWidth = cwidth * 2;
+      let wordMaxWidth = cwidth * 3;
       return wordMaxWidth / this.speed;
     },
     curStyle() {
       return { animationDuration: this.duration + "s" };
     }
   },
-  mounted() {
+  async mounted() {
+    await this.getBullet();
     this.$nextTick(() => {
+      let i = 0;
       setInterval(() => {
-        let random = Math.random();
-        this.joinWord(random);
+        if (i > this.words.length - 1) {
+          i = 0;
+        }
+        if (this.words[i]) {
+          this.joinWord(this.words[i]);
+        }
+        i++;
       }, 3000);
     });
     this.create_link();
@@ -95,7 +105,6 @@ export default {
       //   e.target.removeNode()
       let parent = e.target.parentNode;
       parent.removeChild(e.target);
-      console.log("n,index :", n, item);
       let i = this.lineContent[n].list.indexOf(item);
       this.lineContent[n].list.splice(i, 1);
       item = null;
@@ -110,10 +119,15 @@ export default {
       //   cur.addable = false;
       //   //   Array.push.call(cur.list, content);
       //   console.log("cur :", cur);
+    },
+    getBullet() {
+      let module_token = this.$api_urls["bullet"];
+      this.getData("com_manage", { module_token }).then(res => {
+        if (res.data && res.data.length > 0) {
+          this.words = res.data;
+        }
+      });
     }
-    // editArr(){
-
-    // }
   }
 };
 </script>
@@ -128,7 +142,7 @@ export default {
     position: relative;
     min-height: 25px;
     .word {
-      display: inline-block;
+      display: table;
       position: absolute;
       right: 0;
       color: #ca0e33;
@@ -141,7 +155,7 @@ export default {
     }
     @-webkit-keyframes mymove {
       from {
-        right: -100%;
+        right: -200%;
       }
       to {
         right: 200%;
@@ -149,7 +163,7 @@ export default {
     }
     @keyframes mymove {
       from {
-        right: -100%;
+        right: -200%;
       }
       to {
         right: 200%;

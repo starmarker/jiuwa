@@ -35,11 +35,17 @@ export default {
   computed: {
     activity_token() {
       let result;
-      if (this.$route.query.act_token) {
-        result = this.$route.query.act_token;
-        this.$login_info().activity_token = this.$route.query.act_token;
-      } else if (this.$login_info().activity_token) {
-        result = this.$login_info().activity_token;
+      if (this.$route.query.activity_token) {
+        result = this.$route.query.activity_token;
+        window.sessionStorage.setItem(
+          "activity_token",
+          this.$route.query.activity_token
+        );
+      } else if (
+        this.$login_info() != null &&
+        sessionStorage.getItem("activity_token")
+      ) {
+        result = sessionStorage.getItem("activity_token");
       } else {
         result = 12;
       }
@@ -49,6 +55,9 @@ export default {
       return (
         this.$route.query.inviter_code || "33359507b753485b6f47490383a47aa8"
       );
+    },
+    user() {
+      return this.$login_info();
     }
   },
   mounted() {
@@ -56,6 +65,7 @@ export default {
       this.petname = resultname;
       this.getJiuwa();
     });
+    // console.log(this.$login_info());
   },
   methods: {
     getData(name, obj) {
@@ -110,9 +120,9 @@ export default {
     },
     test() {
       return new Promise((resolve, reject) => {
-        this.$cklogin(() => {
+        this.$cklogin(data => {
           // this.$go("/");
-          resolve();
+          resolve(data);
         }, false);
       });
     },
@@ -149,7 +159,7 @@ export default {
     },
     async getuser() {
       //let user_token;
-      this.user_token = await this.test();
+      //this.user_token = await this.test();
       //this.user_token = this.$login_info()["user_token"];
       this.is_teacher = await this.isTeacher();
       console.log("user_token :", this.user_token);
@@ -231,11 +241,11 @@ export default {
               }
             );
           } else {
-            this.$err("领取失败");
+            this.$err("领养失败");
           }
         })
         .catch(rej => {
-          this.$err("领取失败");
+          this.$err("领养失败");
         });
     },
     showAlert() {
