@@ -63,7 +63,8 @@ export default {
         id: null,
         experience: 0,
         petname: "",
-        health: 100
+        health: 100,
+        ill_name: ""
       },
       finish: false,
       loading: false,
@@ -109,6 +110,14 @@ export default {
         if (res.data) {
           this.model = res.data;
           this.jiuwa = res.data.xiaojiujiu;
+          if (this.jiuwa.health < 100) {
+            let m_t = this.$api_urls["illness"];
+            this.getData("com_manage", { module_token: m_t }).then(res => {
+              if (res.data.code == 1) {
+                this.jiuwa.ill_name = res.data.data;
+              }
+            });
+          }
         }
       });
     },

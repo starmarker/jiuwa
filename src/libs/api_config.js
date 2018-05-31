@@ -46,6 +46,8 @@ const api_urls = {
   inviter:
     "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enx-y7ynoJ66gKOUZrWiv46DoZR3pODIpX6U",
   bullet:
-    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enxzv76vqpK5lp-Ges-tyXmDnQ"
+    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enxzv76vqpK5lp-Ges-tyXmDnQ",
+  illness:
+    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K3vrqGnMd7q6d6ooSgyZi7mZyUiISMi7ScvYd2dg"
 };
 export default api_urls;

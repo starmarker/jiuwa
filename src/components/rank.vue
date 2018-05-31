@@ -13,7 +13,7 @@
                     <table class="table van-hairline--bottom">
                         <thead>
                             <tr class="van-hairline--bottom">
-                                <th style="width:30%;">&nbsp;</th>
+                                <th style="width:30%;">灸疗师</th>
                                 <th class="odd" style="width:18%;">艾草</th>
                                 <th style="width:18%;">下单</th>
                                 <th class="odd" style="width:18%;">出货</th>
