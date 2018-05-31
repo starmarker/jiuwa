@@ -14,8 +14,7 @@ export default {
       // petname: "",
       // show: false
       wxPosition: null,
-      a_token: undefined,
-      status: 1
+      a_token: undefined
     };
   },
   async created() {
@@ -64,9 +63,8 @@ export default {
   mounted() {
     Bus.$on("subname", resultname => {
       this.petname = resultname;
-      if (this.status) {
-        this.getJiuwa();
-      }
+
+      this.getJiuwa();
     });
     // console.log(this.$login_info());
   },
@@ -203,7 +201,6 @@ export default {
       }
     },
     async getJiuwa() {
-      this.status = 0;
       let position = {};
       await this.getLocation()
         .then(res => {
@@ -217,8 +214,7 @@ export default {
         });
       let user_type = 0,
         module_token = this.$api_urls["getJiuwa"],
-        inviter_token =
-          this.inviter_token || "33359507b753485b6f47490383a47aa8",
+        inviter_token = this.inviter_token,
         petname = this.petname;
       if (petname.trim() == "" || petname.length > 7) {
         this.$alert_dlg("小灸灸名字长度应介于1-7之间");
@@ -236,23 +232,20 @@ export default {
       );
       this.getData("com_manage", obj)
         .then(res => {
-          if (res.data) {
+          if (res.data.code == 1) {
             this.$alert_dlg(
               "领养小灸灸成功，你可以采集艾草让小灸灸成长咯",
               "",
               () => {
                 this.petname = "";
-                this.status = 1;
               }
             );
           } else {
-            this.status = 1;
-            this.$err("领养失败");
+            this.$err(res.data.msg);
           }
         })
         .catch(rej => {
-          this.status = 1;
-          this.$err("领养失败");
+          this.$err("领养失败,原因未知");
         });
     },
     showAlert() {

@@ -39,7 +39,9 @@
         <van-button type="primary" size="large" @click="submit" class="submit">提交</van-button>
         <van-popup v-model="show" :overlay="true" style="width:80%;height:70%;background-color:#fff">
           <vue-cropper ref="cropper" :img="photo.content" :fixed="option.fixed" :fixedNumber="option.fixedNumber" 	:autoCrop="option.autoCrop" :autoCropWidth="option.autoCropWidth" :autoCropHeight="option.autoCropHeight" :full="option.full" :fixedBox="option.fixedBox"/>
-          <van-button type="danger" @click="cancelFixed" >取消</van-button>
+          <van-button type="danger" @click="cancelFixed" >
+             旋转
+          </van-button>
           <van-button type="primary" @click="fixedImg">确定</van-button>
         </van-popup>
       
@@ -74,7 +76,7 @@ export default {
         fixed: true,
         fixedNumber: [5, 6],
         full: true,
-        fixedBox: false
+        fixedBox: true
       }
     };
   },
@@ -165,9 +167,13 @@ export default {
       });
       this.getData("com_manage", obj)
         .then(res => {
-          this.$alert_dlg("更新报名信息成功", "", () => {
-            this.$go("/");
-          });
+          if (res.data.code == 1) {
+            this.$alert_dlg("更新报名信息成功", "", () => {
+              this.$go("/");
+            });
+          } else {
+            this.$err(res.data.msg);
+          }
         })
         .catch(rej => {
           this.$alert_dlg(rej.msg, "", () => {});
@@ -211,9 +217,7 @@ export default {
       //this.upload();
     },
     cancelFixed() {
-      this.$refs.cropper.clearCrop();
-      this.show = false;
-      //this.upload();
+      this.$refs.cropper.rotate += 90;
     }
   }
 };

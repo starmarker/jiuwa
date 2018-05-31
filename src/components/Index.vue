@@ -20,7 +20,7 @@
   <div class="container">
     <game-detail :teachernumber="gameData.liliaoshi_num" :picktotal="gameData.caizhai_num" :gamertotal="gameData.guke_num" v-if="gameData"/>
   </div>
-    <van-row v-if="current_ther">
+    <van-row v-if="current_ther!=null">
       <van-col span="12" offset="6">
         <player-item :item="current_ther" @pick="pick" @jumpPage="goPage"/>
       </van-col>
@@ -113,10 +113,10 @@ export default {
         plucking_type
       })
         .then(res => {
-          if (res.data) {
+          if (res.data.code == 1) {
             this.$suc("成功采摘1棵");
           } else {
-            this.$err("采摘失败,5小时后才能采摘");
+            this.$err(res.data.msg);
           }
         })
         .catch(rej => {
@@ -127,7 +127,9 @@ export default {
       let module_token = this.$api_urls["inviter"];
       this.getData("com_manage", { module_token })
         .then(res => {
-          this.current_ther = res.data;
+          if (res.data) {
+            this.current_ther = res.data;
+          }
         })
         .catch(rej => {
           this.$err(rej.msg);

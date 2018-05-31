@@ -158,10 +158,10 @@ export default {
         plucking_type
       })
         .then(res => {
-          if (res.data) {
+          if (res.data.code == 1) {
             this.$suc("成功采摘3棵");
           } else {
-            this.$err("采摘失败,5小时后才能采摘");
+            this.$err(res.data.msg);
           }
         })
         .catch(rej => {

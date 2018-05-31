@@ -21,16 +21,21 @@
       <van-button type="default" @click="login">登录</van-button>
       <van-button type="default" @click="signup">注册</van-button>
     </div>
-    <div class="idpsd">
+     <div class="idpsd">
       <p>
-        <span @click="showAutoLogin">
-          <i class="fa fa-check" v-show="loginV.autoLogin" />
-        </span>
+        
+        <label>
+          <span style="display:inline-block;width:30px;">
+            <van-icon name="checked" v-show="loginV.autoLogin" :size="14" style="vertical-align:middle;"/>
+          </span>
+        
+        <input type="checkbox" name="" id="" v-model="loginV.autoLogin" style="font-size:20px;display:none;" >
         记住密码
+        </label>
       </p>
       <p>忘记密码？</p>
     </div>
-    <div class="other">
+   <!-- <div class="other">
       <div class="other-login">
         <div class="header">
           <p>
@@ -50,7 +55,7 @@
     </div>
     <span class="ver">
       v{{ loginV.client_version }}
-    </span>
+    </span> -->
   </div>
 </template>
 
@@ -86,6 +91,15 @@ export default {
       }
     });
   },
+  mounted() {
+    let auto_user = localStorage.getItem("auto_user");
+    if (auto_user) {
+      let auto_user_obj = JSON.parse(auto_user);
+      this.loginV.account = auto_user_obj.account;
+      this.loginV.pwd = auto_user_obj.pwd;
+      //Object.assign(this.loginV, auto_user_obj);
+    }
+  },
   updated() {
     // this.$cklogin(() => {
     //   let next_path = _this.refer == "" ? "/" : _this.refer;
@@ -108,33 +122,37 @@ export default {
       //登录
 
       if (this.loginV.account && this.loginV.pwd) {
-        console.log("this.$api :", this.$api);
         _this.$api({
           name: "login",
           params: _this.loginV,
           callback: function(json_result) {
             // 成功，转到主页
+            console.log("success :");
             if (json_result.data === false) {
-              _this.$info("账号或密码错误");
+              _this.$err("账号或密码错误");
               return false;
             }
 
             //如果不具备my_info则不允许登录(未注册app,权限较高)
             if (json_result.data.my_info === false) {
-              _this.$info("账号或密码错误");
+              _this.$err("未注册APP");
               return false;
             }
-
             // 保存login_info
+            if (_this.loginV.autoLogin) {
+              let { account, pwd } = _this.loginV;
+              let str = JSON.stringify({ account, pwd });
+              localStorage.setItem("auto_user", str);
+            } else {
+              localStorage.removeItem("auto_user");
+            }
             _this.$login_info(json_result.data);
             let next_path = _this.refer == "" ? "/" : _this.refer;
             _this.$router.push(next_path);
             // localStorage.setItem("user_Info", JSON.stringify(json_result.data));
-            console.log(11111);
           },
           errcallback: function(json_result) {
             _this.$err(json_result.msg);
-            console.log(22222);
           }
         });
       }
