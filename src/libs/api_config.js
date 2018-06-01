@@ -48,6 +48,8 @@ const api_urls = {
   bullet:
     "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enxzv76vqpK5lp-Ges-tyXmDnQ",
   illness:
-    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K3vrqGnMd7q6d6ooSgyZi7mZyUiISMi7ScvYd2dg"
+    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K3vrqGnMd7q6d6ooSgyZi7mZyUiISMi7ScvYd2dg",
+  getTeam:
+    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enx-y7y3nZK5YpyKhKBw"
 };
 export default api_urls;

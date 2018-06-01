@@ -40,7 +40,7 @@
         </van-row>
     </van-list>
     
-    <globalFooter :teacher="is_teacher"></globalFooter>
+    <!-- <globalFooter :teacher="is_teacher"></globalFooter> -->
   </div>
 </template>
 
@@ -53,7 +53,7 @@ import GameDetail from "./baseComponents/gamedetail";
 import BulletWords from "./baseComponents/bullet_words";
 export default {
   name: "HelloWorld",
-  mixins: [Base],
+  extends: Base,
   data() {
     return {
       msg: "Welcome to Your Vue.js App",
@@ -188,7 +188,6 @@ export default {
           this.list.push(this.list.length + 1);
         }
         this.loading = false;
-
         if (this.list.length >= 40) {
           this.finished = true;
         }
@@ -202,10 +201,10 @@ export default {
     },
     onCancel() {
       this.isSearch = false;
-      this.cur_page = 1;
-      this.list = [];
+      // this.cur_page = 1;
+      // this.list = [];
       this.search = "";
-      this.getIndex();
+      // this.getIndex();
     },
     getIndexData() {
       let module_token = this.$api_urls["index_data"];

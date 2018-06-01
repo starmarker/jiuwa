@@ -14,8 +14,7 @@
 export default {
   props: {
     teacher: {
-      type: Boolean,
-      default: false
+      type: Boolean
     },
     isact: {
       type: Boolean,

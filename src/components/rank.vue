@@ -4,7 +4,7 @@
             title="排行榜"
             left-text="返回"  
             left-arrow
-            @click-left="back"
+            @click-left="$router.back()"
         />
         <van-tabs v-model="activeTab">
 
@@ -83,10 +83,10 @@
     </div>
 </template>
 <script>
-import Base from "./baseComponents/base";
+//import Base from "./baseComponents/base";
 // import GlobalFooter from "./baseComponents/globalFooter";
 export default {
-  extends: Base,
+  // extends: Base,
   //   components: { GlobalFooter },
   data() {
     return {
@@ -105,6 +105,27 @@ export default {
     }
   },
   methods: {
+    getData(name, obj) {
+      let activity_token = this.activity_token;
+      let obj1 = Object.assign({}, obj, {
+        activity_token
+      });
+      return new Promise((resolve, reject) => {
+        this.$api({
+          name: name,
+          params: obj1,
+          callback: res => {
+            resolve(res);
+          },
+          errcallback: rej => {
+            reject(rej);
+          },
+          catchcallback: rej => {
+            reject(rej);
+          }
+        });
+      });
+    },
     getRank() {
       let user_type = this.u_arr[this.activeTab];
       let module_token = this.$api_urls["rank"];

@@ -8,7 +8,7 @@ export default {
     return {
       user_token: "",
       a_token: undefined,
-      is_teacher: true,
+      // is_teacher: true,
       is_signed: false,
       is_hasJiuwa: false,
       // petname: "",
@@ -19,8 +19,13 @@ export default {
   },
   async created() {
     if (!this.user) {
-      await this.getuser();
+      if (this.$getBrowserType() == "weixin") {
+        this.$weixin_login(() => {});
+      } else {
+        await this.getuser();
+      }
     }
+
     // await this.isTeacher();
     // await this.isHasJiuwa();
     // await this.isSigned();
@@ -58,6 +63,9 @@ export default {
     },
     user() {
       return this.$login_info();
+    },
+    is_teacher() {
+      return Boolean(this.$login_info().is_teacher);
     }
   },
   mounted() {
@@ -66,6 +74,8 @@ export default {
 
       this.getJiuwa();
     });
+
+    //this.is_teacher = this.user.is_teacher == 1 ? true : false;
     // console.log(this.$login_info());
   },
   methods: {
@@ -129,14 +139,14 @@ export default {
     },
 
     isTeacher() {
-      let module_token = this.$api_urls["is_teacher"];
-      return new Promise((resolve, reject) => {
-        this.getData("com_manage", { module_token }).then(res => {
-          this.is_teacher = res.data;
-          Bus.$emit("isTeacher", this.is_teacher);
-          resolve(res.data);
-        });
-      });
+      // let module_token = this.$api_urls["is_teacher"];
+      // return new Promise((resolve, reject) => {
+      //   this.getData("com_manage", { module_token }).then(res => {
+      //     this.is_teacher = res.data;
+      //     Bus.$emit("isTeacher", this.is_teacher);
+      //     resolve(res.data);
+      //   });
+      // });
     },
     isHasJiuwa() {
       let module_token = this.$api_urls["isHasJiuwa"];
@@ -154,6 +164,7 @@ export default {
         this.getData("com_manage", { module_token }).then(res => {
           this.is_signed = res.data;
           Bus.$emit("isSigned", this.is_signed);
+          Bus.$emit("isTeacher", this.is_teacher);
           resolve(res.data);
         });
       });
@@ -161,14 +172,19 @@ export default {
     async getuser() {
       //let user_token;
       await this.test();
+
       //this.user_token = this.$login_info()["user_token"];
-      this.is_teacher = await this.isTeacher();
-      console.log("user_token :", this.user_token);
+      // this.is_teacher = await this.isTeacher();
+      // console.log("user_token :", this.user_token);
     },
     async getStatus() {
-      await this.isTeacher();
-      await this.isHasJiuwa();
-      await this.isSigned();
+      // await this.isTeacher();
+      if (!this.is_hasJiuwa) {
+        await this.isHasJiuwa();
+      }
+      if (!this.is_signed) {
+        await this.isSigned();
+      }
     },
     async checkUser() {
       // this.user = this.$login_info();

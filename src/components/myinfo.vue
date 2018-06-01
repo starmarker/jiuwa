@@ -129,6 +129,7 @@ export default {
     // this.getTeamWorker();
     this.getNeedList();
     this.getPickList();
+    this.getTeamWorker();
   },
   mounted() {
     this.calc();
@@ -169,8 +170,10 @@ export default {
         });
     },
     getTeamWorker() {
-      this.$http.post("/api/rank", {}).then(res => {
-        this.teamWorker = res.data.aicao;
+      let module_token = this.$api_urls["getTeam"];
+      let user_token = this.$route.params.token;
+      this.getData("com_manage", { module_token, user_token }).then(res => {
+        this.members = res.data;
       });
     },
     getInfo() {

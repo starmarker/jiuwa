@@ -85,10 +85,6 @@ export default {
     // console.log(this.refer);
     next(vm => {
       vm.refer = from.path;
-      if (vm.$getBrowserType() == "weixin") {
-        vm.isWeixin = true;
-        vm.$weixin_login(() => {});
-      }
     });
   },
   mounted() {

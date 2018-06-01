@@ -106,7 +106,7 @@ export default {
         _this.photo = files;
       }
       _this.show = true;
-      _this.$refs.cropper.startCrop();
+      // _this.$refs.cropper.startCrop();
     },
     upload() {
       let params = new FormData(),
@@ -214,7 +214,7 @@ export default {
       });
       this.show = false;
 
-      //this.upload();
+      this.upload();
     },
     cancelFixed() {
       this.$refs.cropper.rotate += 90;

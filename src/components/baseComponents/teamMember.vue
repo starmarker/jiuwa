@@ -3,17 +3,18 @@
         <a href="javascript:;" @click="prev" class="prev"><van-icon name="arrow-left" v-if="showNav && members.length>shownumber"/></a>
         <a href="javascript:;" @click="next" class="next"><van-icon name="arrow"  v-if="showNav && members.length>shownumber" /></a>
         <van-row>
-          <van-col span="4" v-for="el in showArray" :key="el.user_token">
-            <img :src="el.avatar_src" alt="" srcset=""  @click="click(el.user_token)">
+          <van-col span="5" v-for="el in showArray" :key="el.user_token">
+            <img :src="el.headimage" alt="" srcset=""  @click="click(el.user_token)">
           </van-col>
-        </van-row> 
         <div class="members-btn" v-if="showBtn" @click="btnClick">
-        </div> 
+        </div>
+        </van-row> 
+ 
        <van-popup v-model="showAll" :close-on-click-overlay="true" :overlay-style="{height:'100vh'}" :lock-scroll="true" class="help-div">
         <van-nav-bar title="全部队友" />
         <van-row>
           <van-col span="4" v-for="el in members" :key="el.user_token">
-            <img :src="el.avatar_src" alt="" srcset=""  @click="click(el.user_token)">
+            <img :src="el.headimage" alt="" srcset=""  @click="click(el.user_token)">
           </van-col>
         </van-row>      
       </van-popup>      
@@ -29,13 +30,13 @@ export default {
         return {
           user_token: "",
           user_nickname: "",
-          avatar_src: ""
+          headimage: ""
         };
       }
     },
     shownumber: {
       type: Number,
-      default: 5
+      default: 4
     },
     showNav: {
       type: Boolean,
@@ -89,11 +90,14 @@ export default {
 </script>
 <style lang="less" scoped>
 .team {
+  max-width: 70vw;
   display: table;
   white-space: nowrap;
   position: relative;
   min-height: 40px;
   min-width: 100px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 10px;
   a {
     position: absolute;
     top: 30%;
@@ -109,17 +113,25 @@ export default {
     width: fill-available;
     margin: 0 auto;
     margin-left: 10%;
-    .van-col img {
-      width: 90%;
-      border-radius: 50%;
+    box-sizing: border-box;
+    position: relative;
+    padding-right: 11vw;
+    .van-col {
+      img {
+        width: 90%;
+        border-radius: 50%;
+      }
     }
   }
   .members-btn {
-    width: 12vw;
-    height: 12vw;
+    width: 10vw;
+    height: 10vw;
     background-image: url("../../assets/pick_team_btn.png");
     background-size: contain;
     float: right;
+    position: absolute;
+    right: 0;
+    top: 0;
   }
   .help-div {
     width: 80%;
