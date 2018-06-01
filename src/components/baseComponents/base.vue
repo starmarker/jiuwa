@@ -160,7 +160,7 @@ export default {
     },
     async getuser() {
       //let user_token;
-      //this.user_token = await this.test();
+      await this.test();
       //this.user_token = this.$login_info()["user_token"];
       this.is_teacher = await this.isTeacher();
       console.log("user_token :", this.user_token);
@@ -216,8 +216,9 @@ export default {
         module_token = this.$api_urls["getJiuwa"],
         inviter_token = this.inviter_token,
         petname = this.petname;
-      if (petname.trim() == "" || petname.length > 7) {
-        this.$alert_dlg("小灸灸名字长度应介于1-7之间");
+      if (petname.trim() == "" || petname.length > 6) {
+        this.$alert_dlg("小灸灸名字长度应介于1-6之间");
+        this.showAlert();
         return false;
       }
       let obj = Object.assign(
