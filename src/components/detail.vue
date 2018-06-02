@@ -1,15 +1,15 @@
 <template>
     <div class="main">
         <van-nav-bar
-        title="标题"
+        :title="title"
         left-text="返回"        
         left-arrow
         @click-left="$router.back()"        
         />
         <div class="detail-body">
-            <h2>{{title}}</h2>
-            <p><img :src="img_src" alt="" srcset=""></p>
-            <p>{{detail}}</p>
+            <!-- <h2>{{title}}</h2> -->
+            <!-- <p><img :src="img_src" alt="" srcset=""></p> -->
+            <div v-html="detail"></div>
         </div>
     </div>
 
@@ -37,11 +37,12 @@ export default {
       this.getData("com_manage", { module_token })
         .then(res => {
           if (res.data.code == 1) {
-            this.detail = res.data.data;
+            this.detail = res.data.data.activity_desc;
+            this.title = res.data.data.activity_title;
           } else {
-            this.$alert_dlg(res.data.msg, "", () => {
-              //   this.$router.back();
-            });
+            // this.$alert_dlg(res.data.msg, "", () => {
+            //   //   this.$router.back();
+            // });
           }
         })
         .catch(rej => {
@@ -63,7 +64,8 @@ export default {
     max-width: 90%;
     margin: auto;
   }
-  p {
+  p,
+  div {
     text-align: left;
     text-indent: 2em;
     word-break: break-all;

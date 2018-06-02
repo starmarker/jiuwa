@@ -176,7 +176,7 @@ export default {
       font-size: 16px;
       white-space: nowrap;
       text-overflow: clip;
-      animation: mymove 10s;
+      animation: mymove 15s;
     }
     @-webkit-keyframes mymove {
       from {

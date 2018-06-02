@@ -14,7 +14,7 @@
           
       </van-row>
     </div> -->
-    <top-jiuwa-bar :avatar="model.userfeil.avatar_src" :nickname="jiuwa.petname" :basescore="model.aicao_num" :experience="jiuwa.experience"/>
+    <top-jiuwa-bar :avatar="model.userfeil.avatar_src" :nickname="jiuwa.petname" :basescore="model.aicao_num" :experience="jiuwa.experience" @editJiuwa="edit"/>
     <div class="jiuwa-talk">
       <div class="talk-content" v-html="showInfo">       
       </div>
@@ -39,6 +39,7 @@ import myFooter from "./baseComponents/myFooter";
 import TopJiuwaBar from "./baseComponents/top_jiuwa_bar";
 import HelpList from "./baseComponents/helplist";
 import userListItem from "./baseComponents/user_list_item";
+// import Bus from "../libs/bus.js";
 export default {
   name: "jiuwa",
   extends: Base,
@@ -185,6 +186,13 @@ export default {
           this.$err(rej.msg);
           this.loading = false;
         });
+    },
+    edit(petname) {
+      // Bus.$emit("showConfirm", petname);
+      if (this.is_teacher || !this.is_hasJiuwa) return false;
+      let jiujiu_id = this.jiuwa.id;
+      console.log(petname);
+      this.showAlert(petname, jiujiu_id);
     }
   }
 };

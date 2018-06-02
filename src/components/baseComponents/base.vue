@@ -14,18 +14,20 @@ export default {
       // petname: "",
       // show: false
       wxPosition: null,
-      a_token: undefined
+      a_token: undefined,
+      sub: false
     };
   },
   async created() {
-    if (!this.user) {
-      if (this.$getBrowserType() == "weixin") {
-        this.$weixin_login(() => {});
-      } else {
-        await this.getuser();
-      }
-    }
-
+    // if (!this.user) {
+    //   if (this.$getBrowserType() == "weixin") {
+    //     this.$weixin_login(() => {});
+    //   } else {
+    //   }
+    // }
+    this.$cklogin(() => {
+      // await this.getuser();
+    }, false);
     // await this.isTeacher();
     // await this.isHasJiuwa();
     // await this.isSigned();
@@ -52,7 +54,7 @@ export default {
       ) {
         result = sessionStorage.getItem("activity_token");
       } else {
-        result = 12;
+        result = "263764d167ee33343036fb1510a58503";
       }
       return result;
     },
@@ -73,10 +75,9 @@ export default {
     }
   },
   mounted() {
-    Bus.$on("subname", resultname => {
+    Bus.$on("subname", (resultname, id) => {
       this.petname = resultname;
-
-      this.getJiuwa();
+      this.getJiuwa(this.petname, id);
     });
 
     //this.is_teacher = this.user.is_teacher == 1 ? true : false;
@@ -165,6 +166,8 @@ export default {
         this.getData("com_manage", { module_token }).then(res => {
           this.is_hasJiuwa = res.data;
           Bus.$emit("isHasJiuwa", this.is_hasJiuwa);
+          Bus.$emit("isSigned", this.is_signed);
+          Bus.$emit("isTeacher", this.is_teacher);
           resolve(res.data);
         });
       });
@@ -173,9 +176,10 @@ export default {
       let module_token = this.$api_urls["is_signed"];
       return new Promise((resolve, reject) => {
         this.getData("com_manage", { module_token }).then(res => {
-          this.is_signed = res.data;
+          Bus.$emit("isHasJiuwa", this.is_hasJiuwa);
           Bus.$emit("isSigned", this.is_signed);
           Bus.$emit("isTeacher", this.is_teacher);
+          this.is_signed = res.data;
           resolve(res.data);
         });
       });
@@ -190,10 +194,9 @@ export default {
     },
     async getStatus() {
       // await this.isTeacher();
-      if (!this.is_hasJiuwa) {
+      if (!this.is_teacher) {
         await this.isHasJiuwa();
-      }
-      if (!this.is_signed) {
+      } else {
         await this.isSigned();
       }
     },
@@ -228,8 +231,9 @@ export default {
         );
       }
     },
-    async getJiuwa() {
+    async getJiuwa(name, id) {
       let position = {};
+      let jiujiu_id = id;
       await this.getLocation()
         .then(res => {
           position = res;
@@ -240,13 +244,18 @@ export default {
             latitude: "30.5465175160"
           };
         });
+      let j_msg = "领养小灸灸成功，你可以采集艾草让小灸灸成长咯";
       let user_type = 0,
         module_token = this.$api_urls["getJiuwa"],
         inviter_token = this.inviter_token,
         petname = this.petname;
+      if (id) {
+        module_token = this.$api_urls["editJiuwa"];
+        j_msg = "修改小灸灸昵称成功";
+      }
       if (petname.trim() == "" || petname.length > 6) {
         this.$alert_dlg("小灸灸名字长度应介于1-6之间");
-        this.showAlert();
+        this.showAlert("");
         return false;
       }
       let obj = Object.assign(
@@ -255,31 +264,32 @@ export default {
           user_type,
           module_token,
           inviter_token,
-          petname
+          petname,
+          id
         },
         position
       );
+      if (this.sub) return false;
+      this.sub = true;
       this.getData("com_manage", obj)
         .then(res => {
           if (res.data.code == 1) {
-            this.$alert_dlg(
-              "领养小灸灸成功，你可以采集艾草让小灸灸成长咯",
-              "",
-              () => {
-                this.petname = "";
-              }
-            );
+            this.$alert_dlg(j_msg, "", () => {
+              this.petname = "";
+            });
           } else {
             this.$err(res.data.msg);
           }
+          this.sub = false;
         })
         .catch(rej => {
           this.$err("领养失败,原因未知");
+          this.sub = false;
         });
     },
-    showAlert() {
+    showAlert(petname, id) {
       // this.show = true;
-      Bus.$emit("showConfirm");
+      Bus.$emit("showConfirm", petname, id);
     },
     wxLocation() {
       return new Promise((resolve, reject) => {

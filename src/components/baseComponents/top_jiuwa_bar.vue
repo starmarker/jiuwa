@@ -11,7 +11,7 @@
                     
                 </div>
             </van-col>
-            <van-col span="9">
+            <van-col span="9" @click.native="$emit('editJiuwa',nickname)">
                 <div class="info-icon">
                     <img src="../../assets/jiujiu_top_name.png" alt="">
                     <span>{{nickname!=""?nickname:'未命名'}}</span>

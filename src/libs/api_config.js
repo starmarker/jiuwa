@@ -54,6 +54,8 @@ const api_urls = {
   search:
     "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K0vrmGoLtqqKeUpIiayJmvnJO6mZx-dq2Hv41_sopin8-8s3Ft",
   act_detail:
-    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enyewL63f5K6fKWMi7Wjx6Ode4pjitbIz6Bgw4-4roSOZ53I36-V"
+    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enyewL63f5K6fKWMi7Wjx6Ode4pjitbIz6Bgw4-4roSOZ53I36-V",
+  editJiuwa:
+    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K3vrqGnMd7q6d6omOmwK3Rnpq5gJuWes-px6KHrYqHsNm4uW1kw4-sZZRqhKDImJmakbNvcA"
 };
 export default api_urls;

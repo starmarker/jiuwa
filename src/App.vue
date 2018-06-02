@@ -6,11 +6,11 @@
   <van-dialog v-model="show"
     show-cancel-button
     :before-close="beforeClose"
-    title="给小灸灸取个名字"
+    :title="title"
   >
     <van-field
       v-model="petname"
-      placeholder="请输入用户名"
+      placeholder="给小灸灸取一个名字"
     />
   </van-dialog>
   </div>
@@ -23,14 +23,16 @@ export default {
   data() {
     return {
       show: false,
-      petname: ""
+      petname: "",
+      id: "",
+      title: ""
     };
   },
   methods: {
     beforeClose(action, done) {
       if (action == "confirm") {
         console.log("action :", action);
-        Bus.$emit("subname", this.petname);
+        Bus.$emit("subname", this.petname, this.id);
         this.petname = "";
 
         done();
@@ -41,8 +43,13 @@ export default {
     }
   },
   mounted() {
-    Bus.$on("showConfirm", e => {
+    Bus.$on("showConfirm", (petname, id) => {
       this.show = true;
+      if (id) {
+        this.title = "给小灸灸换个好听的名字吧";
+      }
+      this.petname = petname;
+      this.id = id;
     });
   }
 };

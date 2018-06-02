@@ -119,15 +119,23 @@ export default {
       // _this.$refs.cropper.startCrop();
     },
     upload() {
-      let params = new FormData(),
-        _this = this; // 创建form对象
+      // let params = new FormData();
+      _this = this; // 创建form对象
       let module_token = this.$api_urls["uploadPic"];
-      params.append("file", _this.photo.file, _this.photo.file.name); // 通过append向form对象添加数据
-      params.append("module_token", module_token);
-      params.append("dir", "images");
-      params.append("from", "");
-      params.append("module", "album"); // 头像填写 avatar，相册上传写 album
-      params.append("name", "uploadImage");
+      // params.append("file", _this.photo.file, _this.photo.file.name); // 通过append向form对象添加数据
+      // params.append("module_token", module_token);
+      // params.append("dir", "images");
+      // params.append("from", "base64");
+      // params.append("module", "album"); // 头像填写 avatar，相册上传写 album
+      // params.append("name", "uploadImage");
+      let params = {
+        file: _this.photo.file,
+        module_token,
+        dir: "images",
+        from: "base64",
+        module: "album",
+        name: "uploadImage"
+      };
       //return false;
       _this.$api({
         name: "com_manage",
@@ -200,12 +208,12 @@ export default {
     },
     async checkUser() {
       //await this.getStatus();
-      console.log("is_teacher :", this.is_teacher);
-      // if (!this.is_teacher) {
-      //   this.$alert_dlg("你不是灸疗师,无须报名", "", () => {
-      //     this.$router.back();
-      //   });
-      // }
+      // console.log("is_teacher :", this.is_teacher);
+      if (!this.is_teacher) {
+        this.$alert_dlg("你不是灸疗师,无须报名", "", () => {
+          this.$router.back();
+        });
+      }
     },
     getInfo() {
       let user_token = this.$route.params.token;
@@ -281,7 +289,7 @@ export default {
   }
   .cur-img {
     position: relative;
-    z-index: 2;
+    z-index: 0;
     max-width: 80%;
     max-height: 40vh;
     margin: auto;
