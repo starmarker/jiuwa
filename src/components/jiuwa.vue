@@ -118,9 +118,9 @@ export default {
                 this.jiuwa.ill_name = res1.data.data;
               }
             });
-          } else {
-            this.$err(res.data.msg);
           }
+        } else {
+          this.$err(res.data.msg);
         }
       });
     },
