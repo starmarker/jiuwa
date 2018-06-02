@@ -148,8 +148,8 @@ export default {
     getBullet() {
       let module_token = this.$api_urls["bullet"];
       this.getData("com_manage", { module_token }).then(res => {
-        if (res.data && res.data.length > 0) {
-          this.words = res.data;
+        if (res.data.code == 1 && res.data.data.length > 0) {
+          this.words = res.data.data;
         }
       });
     }

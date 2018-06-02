@@ -173,7 +173,12 @@ export default {
         : this.$api_urls["myinfo"];
 
       this.getData("com_manage", { module_token, user_token }).then(res => {
-        this.moreInfo = res.data;
+        if (res.data.code == 1) {
+          this.moreInfo = res.data.data;
+        } else {
+          this.$err(res.data.msg);
+        }
+
         //console.log("res :", res.data);
       });
     },
@@ -185,7 +190,9 @@ export default {
       let user_token = this.$route.params.token;
       this.getData("com_manage", { module_token, user_token })
         .then(res => {
-          this.members = res.data;
+          if (res.data.code == 1) {
+            this.members = res.data.data;
+          }
         })
         .catch(rej => {
           this.$err(rej.msg);

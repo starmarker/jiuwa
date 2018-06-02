@@ -161,19 +161,21 @@ export default {
       );
       this.getData("com_manage", obj)
         .then(res => {
-          let arr = res.data.lists;
-          if (this.current_ther !== null && this.current_ther !== false) {
-            arr = arr.filter(item => {
-              return item.id != this.current_ther.id;
-            });
+          if (res.data.code == 1) {
+            let arr = res.data.data.lists;
+            if (this.current_ther !== null && this.current_ther !== false) {
+              arr = arr.filter(item => {
+                return item.id != this.current_ther.id;
+              });
+            }
+            if (this.cur_page == 1) {
+              this.all_ther = [];
+            }
+            this.all_ther = this.all_ther.concat(arr);
+            this.cur_page++;
+            this.finished = this.cur_page > res.data.data.page_info.last_page;
+            this.loading = false;
           }
-          if (this.cur_page == 1) {
-            this.all_ther = [];
-          }
-          this.all_ther = this.all_ther.concat(arr);
-          this.cur_page++;
-          this.finished = this.cur_page > res.data.page_info.last_page;
-          this.loading = false;
         })
         .catch(rej => {
           this.$err(rej.msg);
@@ -204,11 +206,14 @@ export default {
         user_name
       })
         .then(res => {
-          let arr = res.data;
-          if (this.cur_page == 1) {
-            this.all_ther = [];
+          if (res.data.code == 1) {
+            let arr = res.data.data;
+            if (this.cur_page == 1) {
+              this.all_ther = [];
+            }
+            this.all_ther = this.all_ther.concat(arr);
           }
-          this.all_ther = this.all_ther.concat(arr);
+
           // this.cur_page++;
           // this.finished = this.cur_page > res.data.page_info.last_page;
           // this.loading = false;
@@ -227,7 +232,9 @@ export default {
     getIndexData() {
       let module_token = this.$api_urls["index_data"];
       this.getData("com_manage", { module_token }).then(res => {
-        this.gameData = res.data;
+        if (res.data.code == 1) {
+          this.gameData = res.data.data;
+        }
       });
     }
   }

@@ -173,7 +173,9 @@ export default {
       let module_token = this.$api_urls["getTeam"];
       let user_token = this.$route.params.token;
       this.getData("com_manage", { module_token, user_token }).then(res => {
-        this.members = res.data;
+        if (res.data.code == 1) {
+          this.members = res.data.data;
+        }
       });
     },
     getInfo() {
@@ -183,7 +185,10 @@ export default {
         : this.$api_urls["myinfo"];
 
       this.getData("com_manage", { module_token, user_token }).then(res => {
-        this.userInfo = res.data;
+        if (res.data.code == 1) {
+          this.userInfo = res.data.data;
+        }
+
         //console.log("res :", res.data);
       });
     },
@@ -217,21 +222,23 @@ export default {
       }
       this.getData("com_manage", { module_token, page })
         .then(res => {
-          if (res.data) {
-            res.data.lists.forEach(item => {
+          if (res.data.code == 1) {
+            res.data.data.lists.forEach(item => {
               item.type = "danger";
             });
             if (this.showType == 0) {
-              this.need_list = this.need_list.concat(res.data.lists);
+              this.need_list = this.need_list.concat(res.data.data.lists);
               this.cur_need_page++;
               this.need_finish =
-                this.cur_need_page > res.data.page_info.last_page;
+                this.cur_need_page > res.data.data.page_info.last_page;
             } else {
-              this.rescued_list = this.rescued_list.concat(res.data.lists);
+              this.rescued_list = this.rescued_list.concat(res.data.data.lists);
               this.cur_rescued_page++;
               this.recued_finish =
-                this.cur_rescued_page > res.data.page_info.last_page;
+                this.cur_rescued_page > res.data.data.page_info.last_page;
             }
+          } else {
+            this.$err(res.data.msg);
           }
           this.loading = false;
         })
@@ -246,10 +253,15 @@ export default {
       let page = this.cur_pick_page;
       this.getData("com_manage", { module_token, page })
         .then(res => {
-          this.pick_recourd = this.pick_recourd.concat(res.data.lists);
-          this.cur_pick_page++;
-          this.pick_finish = this.cur_pick_page > res.data.page_info.last_page;
-          this.loading = false;
+          if (res.data.code == 1) {
+            this.pick_recourd = this.pick_recourd.concat(res.data.data.lists);
+            this.cur_pick_page++;
+            this.pick_finish =
+              this.cur_pick_page > res.data.data.page_info.last_page;
+            this.loading = false;
+          } else {
+            this.$err(res.data.msg);
+          }
         })
         .catch(rej => {
           this.loading = false;

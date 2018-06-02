@@ -184,12 +184,16 @@ export default {
         //this.aicao_rank = res.data.aicao;
 
         if (user_type == 0) {
-          this.jiuwa_rank = res.data;
+          if (res.data.code == 1) {
+            this.jiuwa_rank = res.data.data;
+          }
         } else if (user_type == 1) {
-          this.aicao_rank = res.data;
+          if (res.data.code == 1) {
+            this.aicao_rank = res.data.data;
+          }
         } else {
           if (res.data.code == 1) {
-            this.shop_rank = res.data;
+            this.shop_rank = res.data.data;
           }
         }
       });

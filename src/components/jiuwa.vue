@@ -107,16 +107,18 @@ export default {
     getInfo() {
       let module_token = this.$api_urls["myinfo"];
       this.getData("com_manage", { module_token }).then(res => {
-        if (res.data) {
-          this.model = res.data;
-          this.jiuwa = res.data.xiaojiujiu;
+        if (res.data.code == 1) {
+          this.model = res.data.data;
+          this.jiuwa = res.data.data.xiaojiujiu;
           if (this.jiuwa.health < 100) {
             let m_t = this.$api_urls["illness"];
-            this.getData("com_manage", { module_token: m_t }).then(res => {
-              if (res.data.code == 1) {
-                this.jiuwa.ill_name = res.data.data;
+            this.getData("com_manage", { module_token: m_t }).then(res1 => {
+              if (res1.data.code == 1) {
+                this.jiuwa.ill_name = res1.data.data;
               }
             });
+          } else {
+            this.$err(res.data.msg);
           }
         }
       });
@@ -133,12 +135,12 @@ export default {
         jiujiu_id,
         moxibustion_token
       }).then(res => {
-        if (res.data) {
+        if (res.data.code == 1) {
           this.$suc("成功求助");
           item.disabled = true;
           this.$forceUpdate();
         } else {
-          this.$err("发生错误");
+          this.$err(res.data.msg);
         }
       });
     },
@@ -169,13 +171,15 @@ export default {
       );
       this.getData("com_manage", obj)
         .then(res => {
-          res.data.lists.forEach(item => {
-            item.type = "danger";
-          });
-          this.teacher_list = this.teacher_list.concat(res.data.lists);
-          this.cur_page++;
-          this.finished = this.cur_page > res.data.page_info.last_page;
-          this.loading = false;
+          if (res.data.code == 1) {
+            res.data.data.lists.forEach(item => {
+              item.type = "danger";
+            });
+            this.teacher_list = this.teacher_list.concat(res.data.data.lists);
+            this.cur_page++;
+            this.finished = this.cur_page > res.data.data.page_info.last_page;
+            this.loading = false;
+          }
         })
         .catch(rej => {
           this.$err(rej.msg);
