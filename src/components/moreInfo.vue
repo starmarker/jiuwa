@@ -26,9 +26,9 @@
                   </div>
               </van-col>
           </van-row> -->
-          <img :src="moreInfo.userfeil.avatar_src" alt="" srcset="">
-          <p class="user-name">{{moreInfo.userfeil.nickname}} <van-icon name="edit-data" v-if="showEdit" @click="$go('/sign/'+moreInfo.userfeil.user_token)"/></p>
-          <div class="user-intro">这里是用户介绍，理疗师介绍(内容来自系统已有的灸疗师信息)</div>
+          <img :src="moreInfo.headimage" alt="" srcset="">
+          <p class="user-name">{{moreInfo.user_name}} <van-icon name="edit-data" v-if="showEdit" @click="$go('/sign/'+moreInfo.user_token)"/></p>
+          <div class="user-intro">{{moreInfo.declaration}}</div>
       </div>
        <div class="container">
         <div class="field-title van-hairline--bottom">  个人成绩</div>
@@ -37,11 +37,11 @@
             <van-row>
               <van-col span="8">
                 <p>艾草成绩</p>
-                <p class="score">68</p>
+                <p class="score">{{moreInfo.aicao_num}}</p>
               </van-col>
               <van-col span="8">
                 <p>下单成绩</p>
-                <p class="score">68</p>
+                <p class="score">{{moreInfo.order_num}}</p>
               </van-col>
               <van-col span="8">
                 <p>出货成绩</p>
@@ -49,11 +49,11 @@
               </van-col>
               <van-col span="12">
                 <p>总成绩</p>
-                <p class="score">68</p>
+                <p class="score">{{moreInfo.basescore}}</p>
               </van-col>
               <van-col span="12">
-                <p>团队排名</p>
-                <p class="score">68</p>
+                <p>个人排名</p>
+                <p class="score">{{moreInfo.paiming}}</p>
               </van-col>
             </van-row>
           </div>
@@ -139,10 +139,13 @@ export default {
     return {
       moreInfo: {
         avatar_src: "",
-        userfeil: {
-          nickname: "",
-          avatar_src: ""
-        }
+        nickname: "",
+        headimage: "",
+        user_name: "",
+        basescore: 0,
+        paiming: 0,
+        aicao_num: 0,
+        order_num: 0
       },
       // showEdit: false,
       members: []
@@ -157,6 +160,7 @@ export default {
   },
   beforeMount() {
     this.getInfo();
+    this.getTeamWorker();
   },
   methods: {
     pick() {
@@ -175,6 +179,17 @@ export default {
     },
     goPage(user_token) {
       this.$go("/my/" + user_token);
+    },
+    getTeamWorker() {
+      let module_token = this.$api_urls["getTeam"];
+      let user_token = this.$route.params.token;
+      this.getData("com_manage", { module_token, user_token })
+        .then(res => {
+          this.members = res.data;
+        })
+        .catch(rej => {
+          this.$err(rej.msg);
+        });
     }
   }
 };

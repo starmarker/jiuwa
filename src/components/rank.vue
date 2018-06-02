@@ -20,13 +20,13 @@
                                 <th style="width:17%;">总成绩</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody v-if="aicao_rank.length>0">
                             <tr v-for="(item,index) in aicao_rank" :key="item.user_token">
                                 <td class="first-column">
                                     <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
                                     <img :src="item.headimage" alt="">
                                     <span class="van-cell-text">
-                                        {{item.nickname}}
+                                        {{item.user_name}}
                                     </span>
                                 </td>
                                 <td class="odd">{{item.aicao_num}}</td>
@@ -34,6 +34,46 @@
                                 <td class="odd">3</td>
                                 <td>{{item.basescore}}</td>
                             </tr>
+                        </tbody>
+                        <tbody v-else>
+                          <tr >
+                            <td colspan="5">没有相关数据</td>
+                          </tr>
+                        </tbody>
+                    </table>
+                </div> 
+            </van-tab>
+            <van-tab  title="团队排行">
+                <div class="page-body">
+                    <table class="table van-hairline--bottom">
+                        <thead>
+                            <tr class="van-hairline--bottom">
+                                <th style="width:10%;">排名</th>
+                                <th style="width:37%;">团队</th>
+                                <th class="odd" style="width:18%;">艾草</th>
+                                <th style="width:18%;">下单</th>
+                                <th class="odd" style="width:18%;">总成绩</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody v-if="shop_rank.length>0">
+                            <tr v-for="(item,index) in shop_rank" :key="item.store_name" >
+                              <td><van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag></td>
+                                <td style="text-align:left;">
+                                    <span class="van-cell-text">
+                                        {{item.stroe_name}}
+                                    </span>
+                                </td>
+                                <td class="odd">{{item.aicao_sum}}</td>
+                                <td>{{item.place_order}}</td>
+                                <td class="odd">{{item.total_achievement}}</td>
+                                
+                            </tr>
+                        </tbody>
+                        <tbody v-else>
+                          <tr >
+                            <td colspan="5">没有相关数据</td>
+                          </tr>
                         </tbody>
                     </table>
                 </div> 
@@ -48,7 +88,7 @@
                                 <th style="width:30%;">总成绩</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody v-if="jiuwa_rank.length>0">
                             <tr v-for="(item,index) in jiuwa_rank" :key="item.user_token">
                                 <td><van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag></td>
                                 <td class="first-column odd user-rank">
@@ -60,6 +100,11 @@
                                 </td>
                                 <td >{{item.aicao_num}}</td>
                             </tr>
+                        </tbody>
+                        <tbody v-else>
+                          <tr >
+                            <td colspan="5">没有相关数据</td>
+                          </tr>
                         </tbody>
                     </table>
                 </div>
@@ -93,7 +138,8 @@ export default {
       activeTab: 0,
       aicao_rank: [],
       jiuwa_rank: [],
-      u_arr: [1, 0, 1]
+      shop_rank: [],
+      u_arr: [1, 2, 0]
     };
   },
   created() {
@@ -106,6 +152,7 @@ export default {
   },
   methods: {
     getData(name, obj) {
+      this.$show_loading();
       let activity_token = this.activity_token;
       let obj1 = Object.assign({}, obj, {
         activity_token
@@ -116,12 +163,15 @@ export default {
           params: obj1,
           callback: res => {
             resolve(res);
+            this.$hide_loading();
           },
           errcallback: rej => {
             reject(rej);
+            this.$hide_loading();
           },
           catchcallback: rej => {
             reject(rej);
+            this.$hide_loading();
           }
         });
       });
@@ -132,10 +182,15 @@ export default {
       this.getData("com_manage", { user_type, module_token }).then(res => {
         console.log(res.data);
         //this.aicao_rank = res.data.aicao;
+
         if (user_type == 0) {
           this.jiuwa_rank = res.data;
-        } else {
+        } else if (user_type == 1) {
           this.aicao_rank = res.data;
+        } else {
+          if (res.data.code == 1) {
+            this.shop_rank = res.data;
+          }
         }
       });
     }

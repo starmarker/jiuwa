@@ -50,6 +50,10 @@ const api_urls = {
   illness:
     "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K3vrqGnMd7q6d6ooSgyZi7mZyUiISMi7ScvYd2dg",
   getTeam:
-    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enx-y7y3nZK5YpyKhKBw"
+    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enx-y7y3nZK5YpyKhKBw",
+  search:
+    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K0vrmGoLtqqKeUpIiayJmvnJO6mZx-dq2Hv41_sopin8-8s3Ft",
+  act_detail:
+    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enyewL63f5K6fKWMi7Wjx6Ode4pjitbIz6Bgw4-4roSOZ53I36-V"
 };
 export default api_urls;

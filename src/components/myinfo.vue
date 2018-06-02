@@ -4,8 +4,8 @@
       <div class="info-pic2"></div>
       <div class="info-pic3"></div>
       <div class="info-pic4"></div>
-      <info-top-bar :nickname="userInfo.userfeil.nickname" :avatar="userInfo.userfeil.avatar_src" :basescore="userInfo.basescore" :rank="userInfo.paiming"  @clickuser="godetail" class="topbar"/>
-      <team-member :members="members" :showNumber="3" :showBtn="true" class="member"/>
+      <info-top-bar :nickname="userInfo.user_name" :avatar="userInfo.headimage" :basescore="userInfo.basescore" :rank="userInfo.paiming"  @clickuser="godetail" class="topbar"/>
+      <team-member :members="members" :showNumber="4" :showBtn="true" class="member" @avatar_click="godetail1"/>
         <!-- <div class="sign-header">
           <van-row>
               <van-col span="8">
@@ -89,10 +89,10 @@ export default {
       teamWorker: [],
       isShowMore: false,
       userInfo: {
-        userfeil: {
-          avatar_src: "",
-          nickname: ""
-        }
+        user_name: "",
+        headimage: "",
+        basescore: "",
+        paiming: ""
       },
       isFirst: true,
       need_list: [],
@@ -186,6 +186,9 @@ export default {
         this.userInfo = res.data;
         //console.log("res :", res.data);
       });
+    },
+    godetail1(user_token) {
+      this.$go("/my/" + user_token);
     },
     godetail() {
       let user_token = this.$route.params.token || "";

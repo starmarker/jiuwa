@@ -7,11 +7,20 @@
               </van-col>
               <van-col span="16">
                   <div class="user-info">
-                      <p>姓名：{{user.nick_name}}</p>
-                      <p>电话:{{user.user_tel}}</p>
+                      <p>昵称：{{user.nick_name}}</p>
+                      <p>电话:{{user.phones[0]}}</p>
                   </div>
               </van-col>
           </van-row>
+      </div>
+      <div class="container">
+        <div class="field-title van-hairline--bottom">参赛姓名</div>
+        <van-field
+          v-model="sign_info.user_name"
+          type="text"
+          placeholder="请输入参赛者姓名" 
+          required
+        />
       </div>
       <div class="container">
         <div class="field-title van-hairline--bottom">参赛宣言</div>
@@ -25,7 +34,7 @@
         />
       </div>
 
-      <div class="container">
+      <div class="container" style="min-height:30vh">
         <div class="field-title van-hairline--bottom">我的照片</div>
         <img :src="avatar_src" alt="" srcset="" class="cur-img" v-if="this.avatar_src">
             <van-uploader :after-read="onRead" accept="image/gif, image/jpeg,image/png">
@@ -59,7 +68,8 @@ export default {
       sign_info: {
         id: null,
         declaration: "",
-        liliao_image: ""
+        liliao_image: "",
+        user_name: ""
       },
       avatar_id: "",
       avatar_src: "",
@@ -148,6 +158,13 @@ export default {
       });
     },
     async submit() {
+      if (
+        trim(this.sign_info.user_name) == "" ||
+        this.sign_info.user_name.length > 5
+      ) {
+        this.$alert_dlg("用户名必填且长度为1-5个汉字");
+        return false;
+      }
       let module_token = this.$route.params.token
         ? this.$api_urls["t_sign_update"]
         : this.$api_urls["sign"];
@@ -168,9 +185,11 @@ export default {
       this.getData("com_manage", obj)
         .then(res => {
           if (res.data.code == 1) {
-            this.$alert_dlg("更新报名信息成功", "", () => {
-              this.$go("/");
-            });
+            let msg = "报名成功";
+            if (this.$route.params.token) {
+              msg = "修改报名信息成功";
+            }
+            this.$alert_dlg(msg, "", () => {});
           } else {
             this.$err(res.data.msg);
           }
@@ -297,6 +316,7 @@ export default {
     background-color: #9fc28a;
     border-radius: 0;
     border-color: #9fc28a;
+    margin-bottom: 10vh;
   }
 }
 </style>

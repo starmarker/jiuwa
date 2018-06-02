@@ -3,7 +3,7 @@
       <div class="item-header" @click="jumpPage">
           <img :src="item.liliao_image_src" alt="" srcset="" >
           <div class="item-intro">
-              <p class="match-no">编号:{{match_no}} <span class="user-name">{{item.nickname}}</span></p>
+              <p class="match-no">编号:{{match_no}} <span class="user-name">{{item.user_name}}</span></p>
               <!-- <p class="user-name">{{item.nickname}}</p> -->          
           </div>
       </div>
@@ -24,7 +24,7 @@ export default {
           liliao_image_src: "",
           id: "",
           user_token: "",
-          nickname: "",
+          user_name: "",
           basescore: ""
         };
       }

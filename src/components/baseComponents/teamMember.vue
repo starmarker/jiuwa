@@ -13,8 +13,9 @@
        <van-popup v-model="showAll" :close-on-click-overlay="true" :overlay-style="{height:'100vh'}" :lock-scroll="true" class="help-div">
         <van-nav-bar title="全部队友" />
         <van-row>
-          <van-col span="4" v-for="el in members" :key="el.user_token">
+          <van-col span="6" v-for="el in members" :key="el.user_token" style="padding-top:10px;">
             <img :src="el.headimage" alt="" srcset=""  @click="click(el.user_token)">
+            <p>{{el.nickname}}</p>
           </van-col>
         </van-row>      
       </van-popup>      
@@ -29,8 +30,9 @@ export default {
       default: () => {
         return {
           user_token: "",
-          user_nickname: "",
-          headimage: ""
+          nickname: "",
+          headimage: "",
+          user_name: "123"
         };
       }
     },
@@ -82,8 +84,12 @@ export default {
       }
     },
     btnClick() {
-      this.$emit("btnClick");
-      this.showAll = true;
+      if (this.members.length > 0) {
+        this.$emit("btnClick");
+        this.showAll = true;
+      } else {
+        this.$alert_dlg("没有更多队友");
+      }
     }
   }
 };
@@ -117,9 +123,18 @@ export default {
     position: relative;
     padding-right: 11vw;
     .van-col {
+      text-align: center;
       img {
         width: 90%;
         border-radius: 50%;
+      }
+      p {
+        font-size: 10px;
+        text-align: center;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: clip;
+        white-space: nowrap;
       }
     }
   }
@@ -147,6 +162,25 @@ export default {
       padding: 15px;
       padding-top: 3px;
       box-sizing: border-box;
+    }
+    .van-row {
+      width: 100%;
+      margin: 0 auto;
+      box-sizing: border-box;
+      position: relative;
+      padding-right: 0;
+      .van-col {
+        p {
+          -webkit-margin-before: 0.2em;
+          -webkit-margin-after: 0.2em;
+          font-size: 10px;
+          text-align: center;
+          max-width: 90%;
+          overflow: hidden;
+          text-overflow: clip;
+          white-space: nowrap;
+        }
+      }
     }
   }
 }

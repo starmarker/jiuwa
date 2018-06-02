@@ -2,7 +2,7 @@
   <div class="hello">
 <form action="/">
     <van-search
-      v-model="search"
+      v-model="user_name"
       placeholder="请输入理疗师名字"
       show-action
       @search="onSearch"
@@ -64,7 +64,7 @@ export default {
       loading: false,
       finished: false,
       cur_page: 1,
-      search: "",
+      user_name: "",
       isSearch: false,
       gameData: null
     };
@@ -148,16 +148,14 @@ export default {
             latitude: "30.5465175160"
           };
         });
-      let module_token = this.$api_urls["index"],
-        search = this.search;
+      let module_token = this.$api_urls["index"];
       console.log("module_token :", module_token);
       this.loading = true;
       let obj = Object.assign(
         {},
         {
           module_token,
-          page: this.cur_page,
-          search
+          page: this.cur_page
         },
         position
       );
@@ -195,15 +193,35 @@ export default {
     },
     onSearch() {
       this.isSearch = true;
+
+      let module_token = this.$api_urls["search"],
+        user_name = this.user_name;
       this.cur_page = 1;
       this.list = [];
-      this.getIndex();
+      this.getData("com_manage", {
+        module_token,
+        page: this.cur_page,
+        user_name
+      })
+        .then(res => {
+          let arr = res.data;
+          if (this.cur_page == 1) {
+            this.all_ther = [];
+          }
+          this.all_ther = this.all_ther.concat(arr);
+          // this.cur_page++;
+          // this.finished = this.cur_page > res.data.page_info.last_page;
+          // this.loading = false;
+        })
+        .catch(rej => {
+          this.$err(rej.msg);
+        });
     },
     onCancel() {
       this.isSearch = false;
-      // this.cur_page = 1;
+      this.cur_page = 1;
       // this.list = [];
-      this.search = "";
+      this.user_name = "";
       // this.getIndex();
     },
     getIndexData() {

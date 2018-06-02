@@ -1,7 +1,7 @@
 <template>
     <div class="bullet-container" style="{height:maxheight+'px'}">
         <div class="lines" v-for="(item1,index1) in lineContent" :key="index1">
-            <div class="word" :style="curStyle" v-for="item in item1.list" :key="item" @animationend="checkPosition($event,index1,item)" @webkitAnimationEnd="checkPosition($event,index1,item)">{{item}}</div>
+            <div class="word" :style="curStyle" v-for="item in item1.list" :key="item.key" @animationend="checkPosition($event,index1,item)" @webkitAnimationEnd="checkPosition($event,index1,item)">{{item.content}}</div>
         </div>
     </div>
 </template>
@@ -41,11 +41,12 @@ export default {
     },
     duration() {
       let cwidth = document.body.clientWidth;
-      let wordMaxWidth = cwidth * 3;
+      let wordMaxWidth = cwidth * 2;
       return wordMaxWidth / this.speed;
     },
     curStyle() {
-      return { animationDuration: this.duration + "s" };
+      // return { animationDuration: this.duration + "s" };
+      return {};
     }
   },
   async mounted() {
@@ -133,7 +134,12 @@ export default {
         this.count = 0;
       }
       let cur = this.lineContent[this.count];
-      cur.list.push(content);
+      let key = Symbol();
+      let obj = {
+        content,
+        key
+      };
+      cur.list.push(obj);
       this.count++;
       //   cur.addable = false;
       //   //   Array.push.call(cur.list, content);
@@ -170,22 +176,22 @@ export default {
       font-size: 16px;
       white-space: nowrap;
       text-overflow: clip;
-      animation: mymove 20s;
+      animation: mymove 10s;
     }
     @-webkit-keyframes mymove {
       from {
-        right: -200%;
+        transform: translateX(100%);
       }
       to {
-        right: 200%;
+        transform: translateX(-100%);
       }
     }
     @keyframes mymove {
       from {
-        right: -200%;
+        transform: translateX(100%);
       }
       to {
-        right: 200%;
+        transform: translateX(-100%);
       }
     }
   }

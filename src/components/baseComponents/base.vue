@@ -66,6 +66,10 @@ export default {
     },
     is_teacher() {
       return Boolean(this.$login_info().is_teacher);
+    },
+    isAlert() {
+      let result = sessionStorage.getItem("no_alert");
+      return Boolean(result);
     }
   },
   mounted() {
@@ -78,8 +82,12 @@ export default {
     //this.is_teacher = this.user.is_teacher == 1 ? true : false;
     // console.log(this.$login_info());
   },
+  updated() {
+    this.$hide_loading();
+  },
   methods: {
     getData(name, obj) {
+      this.$show_loading();
       let activity_token = this.activity_token;
       let obj1 = Object.assign({}, obj, {
         activity_token
@@ -90,12 +98,15 @@ export default {
           params: obj1,
           callback: res => {
             resolve(res);
+            this.$hide_loading();
           },
           errcallback: rej => {
             reject(rej);
+            this.$hide_loading();
           },
           catchcallback: rej => {
             reject(rej);
+            this.$hide_loading();
           }
         });
       });
@@ -191,7 +202,7 @@ export default {
 
       await this.getStatus();
       console.log(this.is_teacher, this.is_signed, this.is_hasJiuwa);
-      if (this.is_teacher && !this.is_signed) {
+      if (this.is_teacher && !this.is_signed && !this.no_alert) {
         this.$confirm_dlg(
           "灸疗师" + this.user.nick_name + ",你还未报名参赛，是否报名参加活动",
           () => {
@@ -199,6 +210,7 @@ export default {
           },
           () => {
             console.log("不参加活动");
+            sessionStorage.setItem("no_alert", true);
           }
         );
       }

@@ -114,6 +114,15 @@ export default new Router({
       },
       component: resolve => require(["@/components/result"], resolve),
       props: true
+    },
+    {
+      path: "/detail",
+      name: "detail",
+      meta: {
+        title: "活动介绍"
+      },
+      component: resolve => require(["@/components/detail"], resolve),
+      props: true
     }
   ]
 });
