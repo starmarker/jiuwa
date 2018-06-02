@@ -107,22 +107,26 @@ export default {
   methods: {
     getInfo() {
       let module_token = this.$api_urls["myinfo"];
-      this.getData("com_manage", { module_token }).then(res => {
-        if (res.data.code == 1) {
-          this.model = res.data.data;
-          this.jiuwa = res.data.data.xiaojiujiu;
-          if (this.jiuwa.health < 100) {
-            let m_t = this.$api_urls["illness"];
-            this.getData("com_manage", { module_token: m_t }).then(res1 => {
-              if (res1.data.code == 1) {
-                this.jiuwa.ill_name = res1.data.data;
-              }
-            });
+      this.getData("com_manage", { module_token })
+        .then(res => {
+          if (res.data.code == 1) {
+            this.model = res.data.data;
+            this.jiuwa = res.data.data.xiaojiujiu;
+            if (this.jiuwa.health < 100) {
+              let m_t = this.$api_urls["illness"];
+              this.getData("com_manage", { module_token: m_t }).then(res1 => {
+                if (res1.data.code == 1) {
+                  this.jiuwa.ill_name = res1.data.data;
+                }
+              });
+            }
+          } else {
+            this.$alert_dlg(res.data.msg);
           }
-        } else {
-          this.$err(res.data.msg);
-        }
-      });
+        })
+        .catch(rej => {
+          this.$alert_dlg(res.data.msg);
+        });
     },
     help() {
       this.showHelpList = true;
