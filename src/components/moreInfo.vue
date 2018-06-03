@@ -187,7 +187,10 @@ export default {
     },
     getTeamWorker() {
       let module_token = this.$api_urls["getTeam"];
-      let user_token = this.$route.params.token;
+      let user_token =
+        this.$route.params.token != undefined
+          ? this.$route.params.token
+          : this.user.user_token;
       this.getData("com_manage", { module_token, user_token })
         .then(res => {
           if (res.data.code == 1) {
