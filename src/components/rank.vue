@@ -29,10 +29,10 @@
                                         {{item.user_name}}
                                     </span>
                                 </td>
-                                <td class="odd">{{item.aicao_num}}</td>
-                                <td>2</td>
-                                <td class="odd">3</td>
-                                <td>{{item.basescore}}</td>
+                                <td class="odd">{{item.aicao_sum}}</td>
+                                <td>{{item.order_sum}}</td>
+                                <td class="odd">{{item.shipments}}</td>
+                                <td>{{item.total}}</td>
                             </tr>
                         </tbody>
                         <tbody v-else>
@@ -98,7 +98,7 @@
                                         {{item.nickname}}
                                     </span>
                                 </td>
-                                <td >{{item.aicao_num}}</td>
+                                <td >{{Number(item.total).toFixed(0)}}</td>
                             </tr>
                         </tbody>
                         <tbody v-else>
@@ -180,7 +180,7 @@ export default {
       let user_type = this.u_arr[this.activeTab];
       let module_token = this.$api_urls["rank"];
       this.getData("com_manage", { user_type, module_token }).then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         //this.aicao_rank = res.data.aicao;
 
         if (user_type == 0) {

@@ -11,7 +11,7 @@ import "vant/lib/vant-css/index.css";
 import apis from "./libs/api_config";
 Vue.use(Vant);
 Vue.config.productionTip = false;
-Vue.use(Zj, { api_lists, notices: notice ,"wxtoken":"MDAwMDAwMDAwMLW60GE"});
+Vue.use(Zj, { api_lists, notices: notice, wxtoken: "MDAwMDAwMDAwMLW60Ks" });
 /* eslint-disable no-new */
 // require("./libs/mock");
 //Vue.prototype.$api_urls = Object.assign({}, Vue.prototype.$api_urls, apis);

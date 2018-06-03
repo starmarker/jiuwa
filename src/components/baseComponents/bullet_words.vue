@@ -63,9 +63,16 @@ export default {
         i++;
       }, 3000);
     });
-    this.create_link();
+    //this.create_link();
   },
   beforeCreate() {},
+  // deactivated() {
+  //   // this.$destroy(true);
+  //   this.lineContent = [];
+  // },
+  // activeted() {
+  //   this.getBullet();
+  // },
   created() {
     let arr = [];
     for (let i = 0; i < this.lines; i++) {

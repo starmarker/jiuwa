@@ -14,19 +14,20 @@
           
       </van-row>
     </div> -->
-    <top-jiuwa-bar :avatar="model.userfeil.avatar_src" :nickname="jiuwa.petname" :basescore="model.aicao_num" :experience="jiuwa.experience" @editJiuwa="edit"/>
+    <top-jiuwa-bar :avatar="model.userfeil.avatar_src" :nickname="jiuwa.petname" :basescore="model.aicao_num" :experience="jiuwa.experience" @editJiuwa="edit" v-if="is_hasJiuwa" />
     <div class="jiuwa-talk">
       <div class="talk-content" v-html="showInfo">       
       </div>
     </div>
     <div class="help-btn" @click="help" v-if="jiuwa.health<100"></div>
-    <Jiuwa :model="jiuwa" @rescue="help"></Jiuwa>
-    <myFooter :isShowPick="true" @pick="$go('/')" />
+    <Jiuwa :model="jiuwa" @rescue="help" v-if="is_hasJiuwa"></Jiuwa>
+    <myFooter :isShowPick="true" @pick="$go('/')" @checkOrder="checkOrder" />
       <van-popup v-model="showHelpList" :close-on-click-overlay="true" :overlay-style="{height:'100vh'}" :lock-scroll="false" class="help-div">
         <van-nav-bar title="您附近的灸疗师" />
         <!-- <HelpList :list="teacher_list"  :loading="loading" @loadmore="getList" @rqhelp="rqhelp"></HelpList>  -->
         <van-list  :finished="finish" v-model="loading"  @loadmore="getList" :immediate-check="false" :offset="50">
           <user-list-item v-for="item in teacher_list" :key="item.id" @btnClick="()=>{reqhelp(item)}" :disabled="item.disabled" :avatar="item.headimage" :title="item.nickname"/> 
+            <p v-if="teacher_list.length<1">没有附近灸疗师数据</p>
           </van-list>  
               
       </van-popup>
@@ -39,6 +40,7 @@ import myFooter from "./baseComponents/myFooter";
 import TopJiuwaBar from "./baseComponents/top_jiuwa_bar";
 import HelpList from "./baseComponents/helplist";
 import userListItem from "./baseComponents/user_list_item";
+import Bus from "../libs/bus.js";
 // import Bus from "../libs/bus.js";
 export default {
   name: "jiuwa",
@@ -104,6 +106,11 @@ export default {
     this.getInfo();
     this.getList();
   },
+  mounted() {
+    Bus.$on("reload", () => {
+      this.getInfo();
+    });
+  },
   methods: {
     getInfo() {
       let module_token = this.$api_urls["myinfo"];
@@ -125,7 +132,7 @@ export default {
           }
         })
         .catch(rej => {
-          this.$alert_dlg(res.data.msg);
+          this.$alert_dlg(rej.data.msg);
         });
     },
     help() {
@@ -197,6 +204,9 @@ export default {
       let jiujiu_id = this.jiuwa.id;
       console.log(petname);
       this.showAlert(petname, jiujiu_id);
+    },
+    checkOrder() {
+      this.$alert_dlg("第二阶段加入此功能");
     }
   }
 };

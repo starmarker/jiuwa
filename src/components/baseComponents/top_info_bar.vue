@@ -48,7 +48,7 @@ export default {
         box-sizing: border-box;
         padding: 5px;
         width: 100%;
-        height: 40px;
+        height: 50px;
         line-height: 40px;
         //   background-size: 30px 30px;
         //   background-repeat: no-repeat;
@@ -59,6 +59,9 @@ export default {
       .info-icon {
         position: relative;
         padding-left: 40px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: clip;
         img {
           width: 40px;
           height: 40px;

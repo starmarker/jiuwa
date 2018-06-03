@@ -13,7 +13,7 @@
        <van-popup v-model="showAll" :close-on-click-overlay="true" :overlay-style="{height:'100vh'}" :lock-scroll="true" class="help-div">
         <van-nav-bar title="全部队友" />
         <van-row>
-          <van-col span="6" v-for="el in members" :key="el.user_token" style="padding-top:10px;">
+          <van-col span="4" v-for="el in members" :key="el.user_token" style="padding-top:10px;">
             <img :src="el.headimage" alt="" srcset=""  @click="click(el.user_token)">
             <p>{{el.nickname}}</p>
           </van-col>

@@ -6,8 +6,8 @@
                 <p>首页</p>
             </van-col>
             <van-col span="12">
-                <van-icon name="pending-orders" />
-                <p>订单</p>                
+                <van-icon name="pending-orders" @click.native="checkOrder"/>
+                <p>下单</p>                
             </van-col>
         </van-row>
         <div class=" picker " v-if="isShowPick" @click="pick">
@@ -29,6 +29,9 @@ export default {
   methods: {
     pick() {
       this.$emit("pick");
+    },
+    checkOrder() {
+      this.$emit("checkOrder");
     }
   }
 };

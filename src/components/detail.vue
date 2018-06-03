@@ -54,7 +54,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .detail-body {
-  font-size: 12px;
+  font-size: 14px;
   background-color: rgba(255, 255, 255, 0.7);
   min-height: 10vw;
   box-sizing: border-box;
@@ -70,6 +70,10 @@ export default {
     text-indent: 2em;
     word-break: break-all;
     line-height: 2;
+  }
+  p {
+    -webkit-margin-before: 0.2em;
+    -webkit-margin-after: 0.2em;
   }
 }
 </style>

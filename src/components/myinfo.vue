@@ -45,15 +45,18 @@
         <van-tabs type="card" v-model="showType" @click="checkType">
           <van-tab title="待救助">
             <!-- 内容 {{ index }} -->
-            <van-list :finished="need_finish" @loadmore="getNeedList" v-model="loading" :immediate-check="false" :offset="50">
+            <van-list :finished="need_finish" @loadmore="getNeedList" v-model="loading" :immediate-check="false" :offset="50" v-if="need_list.length>0">
               <user-list-item v-for="(item,index) in need_list" :disabled="item.disabled" :key="index" :avatar="item.headimage" :title="item.nickname" @btnClick="()=>{helpJiuwa(item)}" mormalText="给TA救治" disText="已救治" />
+              
             </van-list>
+            <p v-else>没有相关数据</p>
             <!-- <HelpList :list="need_list"  :loading=""  @rqhelp="helpJiuwa"></HelpList> -->
           </van-tab>
           <van-tab title="已救助">
-            <van-list :finished="rescued_finish" @loadmore="getNeedList" v-model="loading" :immediate-check="false" :offset="50">
-              <user-list-item v-for="(item ,index) in rescued_list" :disabled="true" :key="index" :avatar="item.headimage" :title="item.nickname" disText="已救治" v-if="rescued_list.length>0"/>
+            <van-list :finished="rescued_finish" @loadmore="getNeedList" v-model="loading" :immediate-check="false" :offset="50" v-if="rescued_list.length>0">
+              <user-list-item v-for="(item ,index) in rescued_list" :disabled="true" :key="index" :avatar="item.headimage" :title="item.nickname" disText="已救治" />
             </van-list>
+            <p v-else>没有相关数据</p>
             <!-- 内容 {{ index }} -->
             <!-- <HelpList :list="recued_list" :finished="rescued_finish" :loading="loading" @loadmore="getRecuedList"></HelpList> -->
           </van-tab>
@@ -135,21 +138,21 @@ export default {
     this.calc();
   },
   beforeUpdate() {
-    if (this.isFirst && this.isSelf) {
+    if (this.isFirst && this.isSelf && this.need_list.length > 0) {
       this.showneed = true;
       this.isFirst = false;
     }
   },
   methods: {
     pick() {
-      if (this.is_teacher) {
-        this.$err("灸疗师不能采摘");
-        return false;
-      }
-      if (!this.is_hasJiuwa) {
-        this.$err("领取小灸灸后方可采摘");
-        return false;
-      }
+      // if (this.is_teacher) {
+      //   this.$err("灸疗师不能采摘");
+      //   return false;
+      // }
+      // if (!this.is_hasJiuwa) {
+      //   this.$err("领取小灸灸后方可采摘");
+      //   return false;
+      // }
       let module_token = this.$api_urls["pick"];
       let moxibustion_token = this.$route.params.token;
       let plucking_type = 1;
@@ -171,7 +174,7 @@ export default {
     },
     getTeamWorker() {
       let module_token = this.$api_urls["getTeam"];
-      let user_token = this.$route.params.token;
+      let user_token = this.$route.params.token || this.user.user_token;
       this.getData("com_manage", { module_token, user_token }).then(res => {
         if (res.data.code == 1) {
           this.members = res.data.data;

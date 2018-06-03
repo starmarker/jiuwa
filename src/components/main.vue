@@ -16,14 +16,14 @@ export default {
       this.is_teacher = is_teacher;
       console.log("result :", is_teacher);
     });
-    Bus.$on("isSigned", is_teacher => {
-      this.isact = is_teacher;
+    Bus.$on("isSigned", is_act => {
+      this.isact = is_act;
     });
   },
   data() {
     return {
-      is_teacher: true,
-      isact: true
+      is_teacher: false,
+      isact: false
     };
   }
 };

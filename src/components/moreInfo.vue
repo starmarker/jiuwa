@@ -121,7 +121,7 @@
       </div>
       
       <div class="picker" v-if="!is_teacher" @click="$go('/pick/'+$route.params.token)"></div>
-      <globalFooter :actived="3"/>
+      <globalFooter :teacher="is_teacher" :isact="is_signed"/>
     </div>  
 </template>
 <script>

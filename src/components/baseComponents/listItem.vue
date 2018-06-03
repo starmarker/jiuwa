@@ -3,7 +3,7 @@
       <div class="item-header" @click="jumpPage">
           <img :src="item.liliao_image_src" alt="" srcset="" >
           <div class="item-intro">
-              <p class="match-no">编号:{{match_no}} <span class="user-name">{{item.user_name}}</span></p>
+              <p class="match-no">编号:{{item.id}} <span class="user-name">{{item.user_name}}</span></p>
               <!-- <p class="user-name">{{item.nickname}}</p> -->          
           </div>
       </div>
@@ -93,6 +93,11 @@ export default {
 
     .user-name {
       float: right;
+      max-width: 60%;
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: clip;
+      white-space: nowrap;
     }
   }
   .item-oper {

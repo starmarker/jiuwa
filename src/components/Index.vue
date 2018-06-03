@@ -96,14 +96,14 @@ export default {
       this.$go("/pick/" + user_token);
     },
     pick(user_token) {
-      if (this.is_teacher) {
-        this.$err("灸疗师不能采摘");
-        return false;
-      }
-      if (!this.is_hasJiuwa) {
-        this.$err("领取小灸灸后方可采摘");
-        return false;
-      }
+      // if (this.is_teacher) {
+      //   this.$err("灸疗师不能采摘");
+      //   return false;
+      // }
+      // if (!this.is_hasJiuwa) {
+      //   this.$err("领取小灸灸后方可采摘");
+      //   return false;
+      // }
       let module_token = this.$api_urls["pick"];
       let moxibustion_token = user_token;
       let plucking_type = 0;

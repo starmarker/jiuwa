@@ -37,7 +37,7 @@
       <div class="container" style="min-height:30vh">
         <div class="field-title van-hairline--bottom">我的照片</div>
         <img :src="avatar_src" alt="" srcset="" class="cur-img" v-if="this.avatar_src">
-            <van-uploader :after-read="onRead" accept="image/gif, image/jpeg,image/png">
+            <van-uploader :after-read="onRead" accept="image/gif, image/jpeg,image/png" result-type="dataUrl">
             <div class="upload-icon">
               <van-icon name="photograph" /> 
             </div>
@@ -54,7 +54,7 @@
           <van-button type="primary" @click="fixedImg">确定</van-button>
         </van-popup>
       
-      <GlobalFooter :teacher="is_teacher" :actived="2"></GlobalFooter>
+      <GlobalFooter :teacher="is_teacher" :isact="is_signed"></GlobalFooter>
     </div>
 </template>
 <script>
@@ -87,7 +87,8 @@ export default {
         fixedNumber: [5, 6],
         full: true,
         fixedBox: true
-      }
+      },
+      baseImg: ""
     };
   },
   components: {
@@ -100,7 +101,8 @@ export default {
     }
   },
   async created() {
-    await this.isTeacher();
+    // await this.isTeacher();
+
     this.checkUser();
     this.getInfo();
   },
@@ -117,11 +119,13 @@ export default {
       }
       _this.show = true;
       // _this.$refs.cropper.startCrop();
+      console.log("_this.photo :", _this.photo);
     },
-    upload() {
+    upload(dataUrl) {
       // let params = new FormData();
-      _this = this; // 创建form对象
+      let _this = this; // 创建form对象
       let module_token = this.$api_urls["uploadPic"];
+      //let bseurl = _this.baseImg.content;
       // params.append("file", _this.photo.file, _this.photo.file.name); // 通过append向form对象添加数据
       // params.append("module_token", module_token);
       // params.append("dir", "images");
@@ -129,32 +133,32 @@ export default {
       // params.append("module", "album"); // 头像填写 avatar，相册上传写 album
       // params.append("name", "uploadImage");
       let params = {
-        file: _this.photo.file,
-        module_token,
+        file: dataUrl,
+        //module_token: module_token,
         dir: "images",
         from: "base64",
-        module: "album",
-        name: "uploadImage"
+        module: "album"
+        //name: "uploadImage"
       };
       //return false;
       _this.$api({
-        name: "com_manage",
+        name: "uploadImage",
         params: params,
-        headers: {
-          "Content-Type": "multipart/form-data"
-        },
+        // headers: {
+        //   "Content-Type": "multipart/form-data"
+        // },
         callback: function(res) {
           console.log("图片上传成功", res);
           // 成功
           if (res.data.code == 1) {
             _this.avatar_id = res.data.id;
-            _this.avatar_src = res.data.path;
+            _this.avatar_src = res.data.url;
             _this.sign_info.liliao_image = res.data.id;
             // console.log("success", res.data.id);
             // _this.editAvatar(res.data.id);
           } else {
             // 失败提示
-            _this.$err(res.data.info);
+            _this.$err(res.data.msg);
           }
         },
         errcallback: function(err) {
@@ -167,7 +171,7 @@ export default {
     },
     async submit() {
       if (
-        trim(this.sign_info.user_name) == "" ||
+        this.sign_info.user_name == "" ||
         this.sign_info.user_name.length > 5
       ) {
         this.$alert_dlg("用户名必填且长度为1-5个汉字");
@@ -203,10 +207,11 @@ export default {
           }
         })
         .catch(rej => {
-          this.$alert_dlg(rej.msg, "", () => {});
+          this.$alert_dlg("失败，异常错误", "", () => {});
         });
     },
     async checkUser() {
+      await this.isSigned();
       //await this.getStatus();
       // console.log("is_teacher :", this.is_teacher);
       if (!this.is_teacher) {
@@ -222,26 +227,34 @@ export default {
         this.getData("com_manage", { module_token, user_token }).then(res => {
           //this.userInfo = res.data;
           //console.log("res :", res.data);
-          this.sign_info.id = res.data.id;
-          this.sign_info.declaration = res.data.declaration;
-          this.avatar_src = res.data.liliao_image_src;
-          this.sign_info.liliao_image = res.data.liliao_image;
+          if (res.data.code == 1) {
+            this.sign_info.id = res.data.data.id;
+            this.sign_info.declaration = res.data.data.declaration;
+            this.avatar_src = res.data.data.liliao_image_src;
+            this.sign_info.liliao_image = res.data.data.liliao_image;
+            this.sign_info.user_name = res.data.data.user_name;
+          }
         });
       }
     },
     fixedImg() {
-      // this.$refs.cropper.stopCrop();
+      this.$refs.cropper.stopCrop();
 
       this.$refs.cropper.getCropData(data => {
-        this.photo.content = data;
+        let old = this.photo.content;
+        // console.log("old :", old);
+        this.baseImg = data;
+        // this.photo.content = data;
+        this.upload(data);
+        //console.log("this.photo.content :", this.baseImg);
         this.avatar_src = data;
+        //console.log("object :", this.baseImg, this.photo.content);
       });
       this.$refs.cropper.getCropBlob(data => {
         this.photo.file = data;
       });
       this.show = false;
-
-      this.upload();
+      // console.log("this.photo :", this.photo);
     },
     cancelFixed() {
       this.$refs.cropper.rotate += 90;
