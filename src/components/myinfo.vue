@@ -290,10 +290,10 @@ export default {
         module_token = this.$api_urls["rescue_jiuwa"];
       this.getData("com_manage", { id, module_token })
         .then(res => {
-          if (res.data) {
-            this.$suc("治疗成功");
+          if (res.data.code == 1) {
+            this.$suc(res.data.msg);
           } else {
-            this.$err("来晚啦！");
+            this.$err(res.data.msg);
           }
           item.disabled = true;
           this.$forceUpdate();
