@@ -15,7 +15,7 @@
         <van-row>
           <van-col span="4" v-for="el in members" :key="el.user_token" style="padding-top:10px;">
             <img :src="el.headimage" alt="" srcset=""  @click="click(el.user_token)">
-            <p>{{el.nickname}}</p>
+            <p>{{el.user_name}}</p>
           </van-col>
         </van-row>      
       </van-popup>      

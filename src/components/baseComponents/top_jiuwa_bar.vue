@@ -11,7 +11,7 @@
                     
                 </div>
             </van-col>
-            <van-col span="9" @click.native="$emit('editJiuwa',nickname)">
+            <van-col span="9" @click.native="edit(nickname)">
                 <div class="info-icon">
                     <img src="../../assets/jiujiu_top_name.png" alt="">
                     <span>{{nickname!=""?nickname:'未命名'}}</span>
@@ -34,6 +34,11 @@ export default {
     percentage() {
       let result = this.experience > 100 ? 100 : this.experience;
       return result;
+    }
+  },
+  methods: {
+    edit(petname) {
+      this.$emit("editJiuwa", petname);
     }
   }
 };

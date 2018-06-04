@@ -63,7 +63,7 @@
         <div class="field-title van-hairline--bottom"> <van-icon name="shop" /> 所在店铺</div>
         <van-cell>
           <div class="location">
-            <van-icon name="location" /> 灸正堂蜀汉路店
+            <van-icon name="location" /> {{moreInfo.store_name.shop_title}}
           </div>
         </van-cell>
       </div>
@@ -145,7 +145,11 @@ export default {
         basescore: 0,
         paiming: 0,
         aicao_num: 0,
-        order_num: 0
+        order_num: 0,
+        store_name: {
+          shop_title: "",
+          shop_tel: ""
+        }
       },
       // showEdit: false,
       members: []
@@ -167,7 +171,7 @@ export default {
       this.$emit("click-pick");
     },
     getInfo() {
-      let user_token = this.$route.params.token;
+      let user_token = this.$route.params.token || this.user.user_token;
       let module_token = user_token
         ? this.$api_urls["t_info"]
         : this.$api_urls["myinfo"];

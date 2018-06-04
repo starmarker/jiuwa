@@ -8,7 +8,7 @@
           </div>
       </div>
       <div class="item-oper">
-          <span class="user-score">得分:{{item.basescore}}</span>    
+          <span class="user-score">得分:{{Number(item.basescore).toFixed(0)}}</span>    
           <a href="javascript:;" @click="pick">采TA的艾草</a>    
           
       </div>
@@ -102,16 +102,23 @@ export default {
   }
   .item-oper {
     overflow: hidden;
-    padding: 0 5px;
+    padding: 5px 1px;
     box-sizing: border-box;
     .user-score,
     a {
-      line-height: 30px;
+      // line-height: 36px;
+      padding: 0px 3px;
+      display: inline-block;
       color: rgb(203, 23, 58);
       font-weight: 700;
     }
     a {
+      background-color: rgba(159, 194, 138, 1);
+      position: relative;
       float: right;
+      color: #fff;
+      padding: 2px 5px;
+      border-radius: 4px;
     }
     .van-button {
       float: right;

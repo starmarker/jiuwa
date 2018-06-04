@@ -62,24 +62,24 @@ export default new Router({
             title: "个人信息"
           },
           component: resolve => require(["@/components/moreInfo"], resolve)
+        },
+        {
+          path: "sign/:token",
+          name: "updateSign",
+          meta: {
+            title: "活动报名"
+          },
+          component: resolve => require(["@/components/sign"], resolve)
+        },
+        {
+          path: "sign",
+          name: "sign",
+          meta: {
+            title: "活动报名"
+          },
+          component: resolve => require(["@/components/sign"], resolve)
         }
       ]
-    },
-    {
-      path: "/sign/:token",
-      name: "updateSign",
-      meta: {
-        title: "活动报名"
-      },
-      component: resolve => require(["@/components/sign"], resolve)
-    },
-    {
-      path: "/sign",
-      name: "sign",
-      meta: {
-        title: "活动报名"
-      },
-      component: resolve => require(["@/components/sign"], resolve)
     },
 
     {

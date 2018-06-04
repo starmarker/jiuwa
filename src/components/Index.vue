@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div class="hello" >
 <form action="/">
     <van-search
       v-model="user_name"
@@ -70,12 +70,11 @@ export default {
     };
   },
   components: { playerItem, GlobalFooter, FlowBlock, GameDetail, BulletWords },
-  // async created() {
-  //   await this.checkUser();
-  // },
+  created() {},
   mounted() {
     this.getIndex();
     this.getIndexData();
+    this.setJiuwa();
     // this.getBullet();
   },
   beforeUpdate() {},
@@ -96,14 +95,6 @@ export default {
       this.$go("/pick/" + user_token);
     },
     pick(user_token) {
-      // if (this.is_teacher) {
-      //   this.$err("灸疗师不能采摘");
-      //   return false;
-      // }
-      // if (!this.is_hasJiuwa) {
-      //   this.$err("领取小灸灸后方可采摘");
-      //   return false;
-      // }
       let module_token = this.$api_urls["pick"];
       let moxibustion_token = user_token;
       let plucking_type = 0;
@@ -115,6 +106,14 @@ export default {
         .then(res => {
           if (res.data.code == 1) {
             this.$suc("成功采摘1棵");
+          } else if (res.data.code == 0) {
+            this.$confirm_dlg(
+              res.data.msg + ",是否到小灸灸页面求助",
+              () => {
+                this.$go("/jiuwa");
+              },
+              () => {}
+            );
           } else {
             this.$err(res.data.msg);
           }
@@ -125,15 +124,11 @@ export default {
     },
     getInviter() {
       let module_token = this.$api_urls["inviter"];
-      this.getData("com_manage", { module_token })
-        .then(res => {
-          if (res.data) {
-            this.current_ther = res.data;
-          }
-        })
-        .catch(rej => {
-          this.$err(rej.msg);
-        });
+      this.getData("com_manage", { module_token }).then(res => {
+        if (res.data.code == 1) {
+          this.current_ther = res.data.data;
+        }
+      });
     },
     async getIndex() {
       let position = {};
@@ -178,8 +173,8 @@ export default {
           }
         })
         .catch(rej => {
-          this.$err(rej.msg);
-          // this.loading = false;
+          // this.$err(rej.msg);
+          this.loading = false;
         });
     },
     onLoad() {

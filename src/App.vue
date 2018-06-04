@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import Bus from "./libs/bus.js";
 export default {
   name: "App",
   data() {
@@ -25,17 +24,16 @@ export default {
       show: false,
       petname: "",
       id: "",
-      title: ""
+      title: "给小灸灸取一个名字"
     };
   },
   methods: {
     beforeClose(action, done) {
       if (action == "confirm") {
-        console.log("action :", action);
-        Bus.$emit("subname", this.petname, this.id);
-        this.petname = "";
-
         done();
+        this.$sendEvent("subname", this.petname, this.id);
+        this.petname = "";
+        // this.$offEvent("subname");
       } else {
         this.petname = "";
         done();
@@ -43,7 +41,7 @@ export default {
     }
   },
   mounted() {
-    Bus.$on("showConfirm", (petname, id) => {
+    this.$onEvent("showConfirm", (petname, id) => {
       this.show = true;
       if (id) {
         this.title = "给小灸灸换个好听的名字吧";

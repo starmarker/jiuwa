@@ -6,7 +6,7 @@ const api_urls = {
   is_teacher:
     "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enx6yZarm52pnmWTi7VorqJpdg",
   is_signed:
-    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enx6yZarm52pnmWTi7VouqOPp5KIhpbHz3pgw4-bqXqjYm0",
+    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enx6yZevnZOUnq2We62byX2lr5OZgso",
   getJiuwa:
     "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enyGyZi7qo7PiJ2UZq2erqJpdg", //inviter
   pick:
@@ -34,7 +34,7 @@ const api_urls = {
   is_hundred:
     "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K3xbmCosOPl6KUpIiayJmvnJO6mZx-dq19yGahpYqHsJbFqI6YxIC4oHqjYm0",
   isHasJiuwa:
-    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enx6yZfNoZK5a36Ti7l-xo6PjIuHhtLFuo6cq6SScQ",
+    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enx6yZevnZKUiKOWoLicvYd2dg",
   t_sign_update:
     "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enyGya23mZ2piHWLZrWjyaOlaZaGgtK-lKCqxoCsnJV-nqbIz6-V",
   rank:

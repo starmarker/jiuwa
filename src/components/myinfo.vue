@@ -96,6 +96,9 @@ export default {
         headimage: "",
         basescore: "",
         paiming: ""
+        // userfeil: {
+        //   avatar_src: ""
+        // }
       },
       isFirst: true,
       need_list: [],
@@ -164,6 +167,14 @@ export default {
         .then(res => {
           if (res.data.code == 1) {
             this.$suc("成功采摘3棵");
+          } else if (res.data.code == 0) {
+            this.$confirm_dlg(
+              res.data.msg + ",是否到小灸灸页面求助",
+              () => {
+                this.$go("/jiuwa");
+              },
+              () => {}
+            );
           } else {
             this.$err(res.data.msg);
           }
@@ -186,8 +197,12 @@ export default {
       let module_token = user_token
         ? this.$api_urls["t_info"]
         : this.$api_urls["myinfo"];
-
-      this.getData("com_manage", { module_token, user_token }).then(res => {
+      let user_token1 =
+        user_token == undefined ? this.user.user_token : user_token;
+      this.getData("com_manage", {
+        module_token,
+        user_token: user_token1
+      }).then(res => {
         if (res.data.code == 1) {
           this.userInfo = res.data.data;
         }
@@ -199,7 +214,7 @@ export default {
       this.$go("/my/" + user_token);
     },
     godetail() {
-      let user_token = this.$route.params.token || "";
+      let user_token = this.$route.params.token || this.user.user_token;
       this.$go("/my/" + user_token);
     },
     calc() {

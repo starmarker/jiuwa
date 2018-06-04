@@ -174,7 +174,7 @@ export default {
         this.sign_info.user_name == "" ||
         this.sign_info.user_name.length > 5
       ) {
-        this.$alert_dlg("用户名必填且长度为1-5个汉字");
+        this.$alert_dlg("参赛姓名必填且长度为1-5个汉字");
         return false;
       }
       let module_token = this.$route.params.token
@@ -201,7 +201,9 @@ export default {
             if (this.$route.params.token) {
               msg = "修改报名信息成功";
             }
-            this.$alert_dlg(msg, "", () => {});
+            this.$alert_dlg(msg, "", () => {
+              this.$go("/");
+            });
           } else {
             this.$err(res.data.msg);
           }

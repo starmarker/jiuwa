@@ -14,14 +14,14 @@
           
       </van-row>
     </div> -->
-    <top-jiuwa-bar :avatar="model.userfeil.avatar_src" :nickname="jiuwa.petname" :basescore="model.aicao_num" :experience="jiuwa.experience" @editJiuwa="edit" v-if="is_hasJiuwa" />
+    <top-jiuwa-bar :avatar="model.userfeil.avatar_src" :nickname="jiuwa.petname" :basescore="model.aicao_num" :experience="jiuwa.experience" @editJiuwa="edit"  />
     <div class="jiuwa-talk">
       <div class="talk-content" v-html="showInfo">       
       </div>
     </div>
-    <div class="help-btn" @click="help" v-if="jiuwa.health<100"></div>
-    <Jiuwa :model="jiuwa" @rescue="help" v-if="is_hasJiuwa"></Jiuwa>
-    <myFooter :isShowPick="true" @pick="$go('/')" @checkOrder="checkOrder" />
+    <div class="help-btn" @click="help" v-if="jiuwa.type!=0"></div>
+    <Jiuwa :model="jiuwa" @rescue="help"></Jiuwa>
+    <myFooter :isShowPick="true" @pick="gopick" @checkOrder="checkOrder" />
       <van-popup v-model="showHelpList" :close-on-click-overlay="true" :overlay-style="{height:'100vh'}" :lock-scroll="false" class="help-div">
         <van-nav-bar title="您附近的灸疗师" />
         <!-- <HelpList :list="teacher_list"  :loading="loading" @loadmore="getList" @rqhelp="rqhelp"></HelpList>  -->
@@ -67,8 +67,10 @@ export default {
         experience: 0,
         petname: "",
         health: 100,
-        ill_name: ""
+        ill_name: "",
+        type: 0
       },
+      ill_name: "",
       finish: false,
       loading: false,
       showHelpList: false,
@@ -83,20 +85,20 @@ export default {
       let result;
       if (this.jiuwa.experience <= 100) {
         result = `给我采摘艾草<br/>我要快快长大`;
+      }
+
+      if (this.jiuwa.type == 1) {
+        result = "我现在生病了，" + this.ill_name + ",找灸疗师救助我";
       } else {
-        if (this.jiuwa.health == 100) {
-          let now = new Date().getHours();
-          if (now < 11) {
-            result = "早上好";
-          } else if (now >= 11 && now < 13) {
-            result = "中午好";
-          } else if (now >= 13 && now < 17) {
-            result = "下午好";
-          } else {
-            result = "晚上好";
-          }
+        let now = new Date().getHours();
+        if (now < 11) {
+          result = "早上好";
+        } else if (now >= 11 && now < 13) {
+          result = "中午好";
+        } else if (now >= 13 && now < 17) {
+          result = "下午好";
         } else {
-          result = `我现在生病了，${this.jiuwa.ill_name} 找灸疗师救助我`;
+          result = "晚上好";
         }
       }
       return result;
@@ -104,28 +106,32 @@ export default {
   },
   created() {
     this.getInfo();
-    this.getList();
   },
   mounted() {
-    Bus.$on("reload", () => {
+    this.setJiuwa();
+    this.$onEvent("reload", () => {
       this.getInfo();
     });
   },
   methods: {
     getInfo() {
+      let user_token = this.$login_info().user_token;
       let module_token = this.$api_urls["myinfo"];
-      this.getData("com_manage", { module_token })
+      this.getData("com_manage", { module_token, user_token })
         .then(res => {
           if (res.data.code == 1) {
-            this.model = res.data.data;
-            this.jiuwa = res.data.data.xiaojiujiu;
-            if (this.jiuwa.health < 100) {
-              let m_t = this.$api_urls["illness"];
-              this.getData("com_manage", { module_token: m_t }).then(res1 => {
-                if (res1.data.code == 1) {
-                  this.jiuwa.ill_name = res1.data.data;
-                }
-              });
+            if (!res.data.data.code) {
+              this.is_hasJiuwa = true;
+              this.model = res.data.data;
+              this.jiuwa = res.data.data.xiaojiujiu;
+              if (this.jiuwa.type != 0) {
+                let m_t = this.$api_urls["illness"];
+                this.getData("com_manage", { module_token: m_t }).then(res1 => {
+                  if (res1.code == 1) {
+                    this.ill_name = res1.data.disease_name;
+                  }
+                });
+              }
             }
           } else {
             this.$alert_dlg(res.data.msg);
@@ -136,6 +142,7 @@ export default {
         });
     },
     help() {
+      this.getList();
       this.showHelpList = true;
     },
     reqhelp(item) {
@@ -149,6 +156,10 @@ export default {
       }).then(res => {
         if (res.data.code == 1) {
           this.$suc("成功求助");
+          item.disabled = true;
+          this.$forceUpdate();
+        } else if (res.data.code == 0) {
+          this.$err(res.data.msg);
           item.disabled = true;
           this.$forceUpdate();
         } else {
@@ -190,8 +201,8 @@ export default {
             this.teacher_list = this.teacher_list.concat(res.data.data.lists);
             this.cur_page++;
             this.finished = this.cur_page > res.data.data.page_info.last_page;
-            this.loading = false;
           }
+          this.loading = false;
         })
         .catch(rej => {
           this.$err(rej.msg);
@@ -199,14 +210,32 @@ export default {
         });
     },
     edit(petname) {
-      // Bus.$emit("showConfirm", petname);
-      if (this.is_teacher || !this.is_hasJiuwa) return false;
-      let jiujiu_id = this.jiuwa.id;
       console.log(petname);
-      this.showAlert(petname, jiujiu_id);
+      // Bus.$emit("showConfirm", petname);
+      if (!this.is_hasJiuwa) this.$sendEvent("showConfirm");
+      // let petname = this.jiuwa.petname;
+      let jiujiu_id = this.jiuwa.id;
+
+      //this.showAlert(petname, jiujiu_id);
+      this.$sendEvent("showConfirm", petname, jiujiu_id);
     },
     checkOrder() {
-      this.$alert_dlg("第二阶段加入此功能");
+      this.$alert_dlg("敬请期待第二阶段");
+    },
+    gopick() {
+      if (this.is_hasJiuwa) {
+        this.$go("/");
+      } else {
+        this.$confirm_dlg(
+          "先领个小灸灸再采吧",
+          () => {
+            this.edit();
+          },
+          () => {
+            this.$go("/");
+          }
+        );
+      }
     }
   }
 };

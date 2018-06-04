@@ -8,38 +8,36 @@ export default {
     return {
       user_token: "",
       a_token: undefined,
-      is_teacher: true,
+      // is_teacher: true,
       is_signed: false,
       is_hasJiuwa: false,
       // petname: "",
       // show: false
       wxPosition: null,
       a_token: undefined,
-      sub: false
+      sub: false,
+      is_showPage: false
     };
   },
   async created() {
-    // if (!this.user) {
-    //   if (this.$getBrowserType() == "weixin") {
-    //     this.$weixin_login(() => {});
-    //   } else {
-    //   }
-    // }
-
+    this.$show_loading("正在进入活动");
     await this.$cklogin(res => {
-      this.is_teacher = res.is_teacher == 1; // await this.getuser();
+      console.log("res :", res);
+      // await this.getuser();
+      // this.$nextTick(() => {
+      //   console.log("下一步");
+      //   this.$forceUpdate();
+      //   // Bus.$emit("isTeacher", this.is_teacher);
+      // });
+      // this.checkUser(() => {});
+      if (res != null) {
+        this.is_showPage = true;
+      }
+
+      this.$hide_loading();
     }, false);
 
-    this.is_teacher = this.$login_info().is_teacher == 1;
-    this.$nextTick(() => {
-      console.log("下一步");
-      Bus.$emit("isTeacher", this.is_teacher);
-    });
-    await this.checkUser();
-    await this.wxLocation();
-    // await this.isTeacher();
-    // await this.isHasJiuwa();
-    // await this.isSigned();
+    //await this.wxLocation();
   },
   beforeRouteEnter: (to, from, next) => {
     // ...
@@ -71,7 +69,17 @@ export default {
       );
     },
     user() {
-      return this.$login_info();
+      if (this.$login_info()) {
+        return this.$login_info();
+      } else {
+        return null;
+      }
+    },
+    is_teacher() {
+      if (this.$login_info()) {
+        return this.$login_info().is_teacher == 1;
+      }
+      return false;
     },
     // is_teacher() {
     //   let result;
@@ -86,13 +94,6 @@ export default {
     }
   },
   mounted() {
-    Bus.$on("subname", (resultname, id) => {
-      this.petname = resultname;
-      if (!this.sub) {
-        this.getJiuwa(this.petname, id);
-      }
-    });
-
     //this.is_teacher = this.user.is_teacher == 1 ? true : false;
     // console.log(this.$login_info());
   },
@@ -111,8 +112,38 @@ export default {
           name: name,
           params: obj1,
           callback: res => {
-            resolve(res);
             this.$hide_loading();
+            if (res.data && res.data.data && res.data.data.code) {
+              switch (res.data.data.code) {
+                case 888:
+                  this.$confirm_dlg(
+                    res.data.data.msg,
+                    () => {
+                      this.showAlert("");
+                    },
+                    () => {}
+                  );
+
+                  break;
+                case 999:
+                  if (this.$session("no_alert") != 1) {
+                    this.$confirm_dlg(
+                      res.data.data.msg,
+                      () => {
+                        this.$go("/sign");
+                      },
+                      () => {
+                        this.$session("no_alert", 1);
+                      }
+                    );
+                  }
+              }
+              this.$hide_loading();
+            }
+            // if (res.data && res.data.code == 0) {
+            //   this.$err(res.data.msg);
+            // }
+            resolve(res);
           },
           errcallback: rej => {
             reject(rej);
@@ -123,6 +154,14 @@ export default {
             this.$hide_loading();
           }
         });
+      });
+    },
+    setJiuwa() {
+      this.$onEvent("subname", (resultname, id) => {
+        this.petname = resultname;
+        if (!this.sub) {
+          this.getJiuwa(this.petname, id);
+        }
       });
     },
     getLocation() {
@@ -178,7 +217,7 @@ export default {
       return new Promise((resolve, reject) => {
         this.getData("com_manage", { module_token }).then(res => {
           this.is_hasJiuwa = res.data;
-          Bus.$emit("isHasJiuwa", res.data);
+          // Bus.$emit("isHasJiuwa", res.data);
           //Bus.$emit("isSigned", this.is_signed);
           //Bus.$emit("isTeacher", this.is_teacher);
           resolve(res.data);
@@ -189,11 +228,8 @@ export default {
       let module_token = this.$api_urls["is_signed"];
       return new Promise((resolve, reject) => {
         this.getData("com_manage", { module_token }).then(res => {
-          // Bus.$emit("isHasJiuwa", this.is_hasJiuwa);
-
-          //Bus.$emit("isTeacher", this.is_teacher);
           this.is_signed = res.data;
-          Bus.$emit("isSigned", res.data);
+          this.$sendEvent("isSigned", res.data);
           resolve(res.data);
         });
       });
@@ -209,38 +245,6 @@ export default {
     // async getStatus() {
     //   // await this.isTeacher();
     // },
-    async checkUser() {
-      // this.user = this.$login_info();
-      await this.isHasJiuwa();
-      await this.isSigned();
-      // await this.getStatus();
-      //console.log(this.is_teacher, this.is_signed, this.is_hasJiuwa);
-      if (this.is_teacher && !this.is_signed && !this.isAlert) {
-        this.$confirm_dlg(
-          "灸疗师" + this.user.nick_name + ",你还未报名参赛，是否报名参加活动",
-          () => {
-            this.$go("/sign");
-          },
-          () => {
-            console.log("不参加活动");
-            sessionStorage.setItem("no_alert", true);
-          }
-        );
-      }
-      if (!this.is_teacher && !this.is_hasJiuwa) {
-        this.$confirm_dlg(
-          this.user.nick_name + ",你还未领取小灸灸，是否领取",
-          () => {
-            // this.show = true;
-            this.showAlert();
-            //this.getJiuwa(inviter_token);
-          },
-          () => {
-            console.log("不领取");
-          }
-        );
-      }
-    },
     async getJiuwa(name, id) {
       this.sub = true;
       let position = {};
@@ -286,7 +290,8 @@ export default {
           if (res.data.code == 1) {
             this.$alert_dlg(j_msg, "", () => {
               this.petname = "";
-              Bus.$emit("reload");
+              this.$sendEvent("reload");
+              this.$go("/jiuwa");
             });
           } else {
             this.$err(res.data.msg);
@@ -300,7 +305,7 @@ export default {
     },
     showAlert(petname, id) {
       // this.show = true;
-      Bus.$emit("showConfirm", petname, id);
+      this.$sendEvent("showConfirm", petname, id);
     },
     wxLocation() {
       return new Promise((resolve, reject) => {
