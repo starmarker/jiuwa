@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="main" v-if="is_showPage">
     <!-- <div class="sign-header">
       <van-row>
           <van-col span="8">
@@ -15,12 +15,12 @@
       </van-row>
     </div> -->
     <top-jiuwa-bar :avatar="model.userfeil.avatar_src" :nickname="jiuwa.petname" :basescore="model.aicao_num" :experience="jiuwa.experience" @editJiuwa="edit"  />
-    <div class="jiuwa-talk">
+    <div class="jiuwa-talk" v-if="showTalk">
       <div class="talk-content" v-html="showInfo">       
       </div>
     </div>
-    <div class="help-btn" @click="help" v-if="jiuwa.type!=0"></div>
-    <Jiuwa :model="jiuwa" @rescue="help"></Jiuwa>
+    <div class="help-btn" @click="help" v-if="jiuwa.fall_type!=0"></div>
+    <Jiuwa :model="jiuwa" @rescue="help" :img="pic_src" v-if="showJiuwa"></Jiuwa>
     <myFooter :isShowPick="true" @pick="gopick" @checkOrder="checkOrder" />
       <van-popup v-model="showHelpList" :close-on-click-overlay="true" :overlay-style="{height:'100vh'}" :lock-scroll="false" class="help-div">
         <van-nav-bar title="您附近的灸疗师" />
@@ -68,39 +68,44 @@ export default {
         petname: "",
         health: 100,
         ill_name: "",
-        type: 0
+        type: 0,
+        fall_type: 0
       },
       ill_name: "",
+      pic_src: "",
       finish: false,
       loading: false,
       showHelpList: false,
       teacher_list: [],
       cur_page: 1,
       last_page: 1,
-      page_size: 6
+      page_size: 6,
+      showTalk: false,
+      showJiuwa: false
     };
   },
   computed: {
     showInfo() {
       let result;
-      if (this.jiuwa.experience <= 100) {
+      if (this.jiuwa.type != 1) {
         result = `给我采摘艾草<br/>我要快快长大`;
-      }
-
-      if (this.jiuwa.type == 1) {
-        result = "我现在生病了，" + this.ill_name + ",找灸疗师救助我";
       } else {
-        let now = new Date().getHours();
-        if (now < 11) {
-          result = "早上好";
-        } else if (now >= 11 && now < 13) {
-          result = "中午好";
-        } else if (now >= 13 && now < 17) {
-          result = "下午好";
+        if (this.jiuwa.fall_type == 1) {
+          result = "我生病了，" + this.ill_name + ",找灸疗师救助我";
         } else {
-          result = "晚上好";
+          let now = new Date().getHours();
+          if (now < 11) {
+            result = "早上好";
+          } else if (now >= 11 && now < 13) {
+            result = "中午好";
+          } else if (now >= 13 && now < 17) {
+            result = "下午好";
+          } else {
+            result = "晚上好";
+          }
         }
       }
+
       return result;
     }
   },
@@ -112,7 +117,12 @@ export default {
     this.$onEvent("reload", () => {
       this.getInfo();
     });
+    setTimeout(() => {
+      this.showTalk = true;
+    }, 3000);
+    this.showJiuwa = true;
   },
+
   methods: {
     getInfo() {
       let user_token = this.$login_info().user_token;
@@ -129,6 +139,7 @@ export default {
                 this.getData("com_manage", { module_token: m_t }).then(res1 => {
                   if (res1.code == 1) {
                     this.ill_name = res1.data.disease_name;
+                    this.pic_src = res1.data.pic_src;
                   }
                 });
               }
@@ -155,7 +166,7 @@ export default {
         moxibustion_token
       }).then(res => {
         if (res.data.code == 1) {
-          this.$suc("成功求助");
+          this.$suc(res.data.msg);
           item.disabled = true;
           this.$forceUpdate();
         } else if (res.data.code == 0) {
@@ -198,6 +209,9 @@ export default {
             res.data.data.lists.forEach(item => {
               item.type = "danger";
             });
+            if (this.cur_page == 1) {
+              this.teacher_list = [];
+            }
             this.teacher_list = this.teacher_list.concat(res.data.data.lists);
             this.cur_page++;
             this.finished = this.cur_page > res.data.data.page_info.last_page;
@@ -223,19 +237,19 @@ export default {
       this.$alert_dlg("敬请期待第二阶段");
     },
     gopick() {
-      if (this.is_hasJiuwa) {
-        this.$go("/");
-      } else {
-        this.$confirm_dlg(
-          "先领个小灸灸再采吧",
-          () => {
-            this.edit();
-          },
-          () => {
-            this.$go("/");
-          }
-        );
-      }
+      // if (this.is_hasJiuwa) {
+      this.$go("/");
+      // } else {
+      //   this.$confirm_dlg(
+      //     "先领个小灸灸再采吧",
+      //     () => {
+      //       this.edit();
+      //     },
+      //     () => {
+      //       this.$go("/");
+      //     }
+      //   );
+      // }
     }
   }
 };
@@ -252,13 +266,14 @@ export default {
   background-size: 100% 100%;
   .jiuwa-talk {
     position: absolute;
-    right: 10vw;
-    bottom: 40%;
+    right: 8vw;
+    bottom: 45%;
     width: 40vw;
     height: 41vw;
     background-image: url("../assets/xjj_talk.png");
     background-repeat: no-repeat;
     background-size: contain;
+    z-index: 4;
     .talk-content {
       width: 75%;
       position: absolute;
@@ -277,6 +292,7 @@ export default {
     bottom: 25vw;
     background: url(../assets/get_help_btn.png) no-repeat top left;
     background-size: contain;
+    z-index: 4;
   }
   .help-div {
     width: 80%;

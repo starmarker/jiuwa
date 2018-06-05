@@ -5,7 +5,7 @@
                 <div class="user">
                     <img :src="avatar" alt="">
                     <div class="level">
-                      LV1
+                      成长值
                       <van-progress :percentage="percentage" color="#db4e56" :show-pivot="false"/>
                     </div>
                     

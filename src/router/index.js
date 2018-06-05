@@ -102,7 +102,7 @@ export default new Router({
       path: "/jiuwa",
       name: "jiuwa",
       meta: {
-        title: "灸娃信息"
+        title: "小灸灸信息"
       },
       component: resolve => require(["@/components/jiuwa"], resolve)
     },

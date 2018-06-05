@@ -56,7 +56,7 @@ export default {
   text-align: left;
   font-size: 14px;
   margin: 1vw auto;
-  // padding: 5px;
+  padding: 4px 4px 0px 4px;
   background-color: #fff;
   padding-bottom: 0;
   border-radius: 10px;
@@ -64,11 +64,15 @@ export default {
     text-align: center;
     position: relative;
     height: 60vw;
+    border: 1px solid #f3f3f3;
+    box-sizing: border-box;
+    // border-bottom: 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    overflow: hidden;
     img {
       width: 100%;
       height: 100%;
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
     }
   }
   .item-intro {

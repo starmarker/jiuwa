@@ -105,7 +105,7 @@ export default {
       })
         .then(res => {
           if (res.data.code == 1) {
-            this.$suc("成功采摘1棵");
+            this.$suc(res.data.msg);
           } else if (res.data.code == 0) {
             this.$confirm_dlg(
               res.data.msg + ",是否到小灸灸页面求助",

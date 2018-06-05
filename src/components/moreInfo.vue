@@ -37,19 +37,19 @@
             <van-row>
               <van-col span="8">
                 <p>艾草成绩</p>
-                <p class="score">{{moreInfo.aicao_num}}</p>
+                <p class="score">{{moreInfo.aicao_sum}}</p>
               </van-col>
               <van-col span="8">
                 <p>下单成绩</p>
-                <p class="score">{{moreInfo.order_num}}</p>
+                <p class="score">{{moreInfo.order_sum}}</p>
               </van-col>
               <van-col span="8">
                 <p>出货成绩</p>
-                <p class="score">68</p>
+                <p class="score">{{moreInfo.shipments}}</p>
               </van-col>
               <van-col span="12">
                 <p>总成绩</p>
-                <p class="score">{{moreInfo.basescore}}</p>
+                <p class="score">{{moreInfo.total}}</p>
               </van-col>
               <van-col span="12">
                 <p>个人排名</p>
@@ -78,7 +78,7 @@
       <div class="container">
         <div class="field-title van-hairline--bottom"> <i class="iconfont icon-members"></i>Ta的队友</div>
         
-          <teamMember :members="members" @avatar_click="goPage"></teamMember>
+          <teamMember :members="members" @avatar_click="goPage" :showNav="true" style="margin-top:5px;margin-bottom:5px;"></teamMember>
         
       </div>
        <div class="container">
@@ -88,23 +88,23 @@
             <van-row>
               <van-col span="8">
                 <p>艾草成绩</p>
-                <p class="score">68</p>
+                <p class="score">{{moreInfo.team.aicao_sum}}</p>
               </van-col>
               <van-col span="8">
                 <p>下单成绩</p>
-                <p class="score">68</p>
+                <p class="score">{{moreInfo.team.order_sum}}</p>
               </van-col>
               <van-col span="8">
                 <p>出货成绩</p>
-                <p class="score">68</p>
+                <p class="score">{{moreInfo.team.shipments}}</p>
               </van-col>
               <van-col span="12">
                 <p>总成绩</p>
-                <p class="score">68</p>
+                <p class="score">{{moreInfo.team.total}}</p>
               </van-col>
               <van-col span="12">
                 <p>团队排名</p>
-                <p class="score">68</p>
+                <p class="score">{{moreInfo.team.teamranking}}</p>
               </van-col>
             </van-row>
           </div>
@@ -149,6 +149,13 @@ export default {
         store_name: {
           shop_title: "",
           shop_tel: ""
+        },
+        team: {
+          aicao_sum: 0,
+          order_sum: 0,
+          shipments: 0,
+          teamranking: 0,
+          total: 0
         }
       },
       // showEdit: false,

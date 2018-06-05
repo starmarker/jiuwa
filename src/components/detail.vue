@@ -21,11 +21,9 @@ export default {
   extends: Base,
   data() {
     return {
-      title: "活动标题",
-      img_src:
-        "http://test.z9168.com:3200/home_uploads/images/20180526/c9dafebf39eec4fd9b8c75da068dda7e.jpg",
-      detail:
-        "这里应该是活动详情的相关介绍的内容,这里应该是活动详情的相关介绍的内容,这里应该是活动详情的相关介绍的内容,这里应该是活动详情的相关介绍的内容,这里应该是活动详情的相关介绍的内容,这里应该是活动详情的相关介绍的内容,这里应该是活动详情的相关介绍的内容,这里应该是活动详情的相关介绍的内容,这里应该是活动详情的相关介绍的内容"
+      title: "",
+      img_src: "",
+      detail: ""
     };
   },
   mounted() {

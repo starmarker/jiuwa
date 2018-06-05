@@ -2,7 +2,7 @@
     <div class="team">
         <a href="javascript:;" @click="prev" class="prev"><van-icon name="arrow-left" v-if="showNav && members.length>shownumber"/></a>
         <a href="javascript:;" @click="next" class="next"><van-icon name="arrow"  v-if="showNav && members.length>shownumber" /></a>
-        <van-row>
+        <van-row >
           <van-col span="5" v-for="el in showArray" :key="el.user_token">
             <img :src="el.headimage" alt="" srcset=""  @click="click(el.user_token)">
           </van-col>
@@ -63,6 +63,12 @@ export default {
     },
     lastPage() {
       return Math.ceil(this.members.length / this.shownumber);
+    },
+    showBtnStyle() {
+      let result = {};
+      if (this.showBtn) {
+        result = { "min-width": "30vw", "max-width": "70%" };
+      }
     }
   },
   methods: {
@@ -96,8 +102,8 @@ export default {
 </script>
 <style lang="less" scoped>
 .team {
-  max-width: 70vw;
-  display: table;
+  width: 100%;
+  // display: table;
   white-space: nowrap;
   position: relative;
   min-height: 40px;

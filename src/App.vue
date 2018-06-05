@@ -11,7 +11,7 @@
     <van-field
       v-model="petname"
       placeholder="给小灸灸取一个名字"
-    />
+    class="jiujiu" />
   </van-dialog>
   </div>
 </template>
@@ -70,5 +70,10 @@ export default {
   background-attachment: fixed;
   background-size: 100% 100%;
   z-index: -1;
+}
+.jiujiu .van-field__control {
+  border-bottom: 1px solid #eee;
+  box-sizing: border-box;
+  padding-left: 5px;
 }
 </style>

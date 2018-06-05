@@ -4,7 +4,7 @@
       <div class="info-pic2"></div>
       <div class="info-pic3"></div>
       <div class="info-pic4"></div>
-      <info-top-bar :nickname="userInfo.user_name" :avatar="userInfo.headimage" :basescore="userInfo.basescore" :rank="userInfo.paiming"  @clickuser="godetail" class="topbar"/>
+      <info-top-bar :nickname="userInfo.user_name" :avatar="userInfo.headimage" :basescore="userInfo.total" :rank="userInfo.paiming"  @clickuser="godetail" class="topbar"/>
       <team-member :members="members" :showNumber="4" :showBtn="true" class="member" @avatar_click="godetail1"/>
         <!-- <div class="sign-header">
           <van-row>
@@ -94,7 +94,7 @@ export default {
       userInfo: {
         user_name: "",
         headimage: "",
-        basescore: "",
+        total: "",
         paiming: ""
         // userfeil: {
         //   avatar_src: ""
@@ -166,7 +166,7 @@ export default {
       })
         .then(res => {
           if (res.data.code == 1) {
-            this.$suc("成功采摘3棵");
+            this.$suc(res.data.msg);
           } else if (res.data.code == 0) {
             this.$confirm_dlg(
               res.data.msg + ",是否到小灸灸页面求助",
@@ -245,11 +245,17 @@ export default {
               item.type = "danger";
             });
             if (this.showType == 0) {
+              if (this.cur_need_page == 1) {
+                this.need_list = [];
+              }
               this.need_list = this.need_list.concat(res.data.data.lists);
               this.cur_need_page++;
               this.need_finish =
                 this.cur_need_page > res.data.data.page_info.last_page;
             } else {
+              if (this.cur_rescued_page == 1) {
+                this.rescued_list = [];
+              }
               this.rescued_list = this.rescued_list.concat(res.data.data.lists);
               this.cur_rescued_page++;
               this.recued_finish =
@@ -272,6 +278,9 @@ export default {
       this.getData("com_manage", { module_token, page })
         .then(res => {
           if (res.data.code == 1) {
+            if (this.cur_pick_page == 1) {
+              this.pick_recourd = [];
+            }
             this.pick_recourd = this.pick_recourd.concat(res.data.data.lists);
             this.cur_pick_page++;
             this.pick_finish =
@@ -366,6 +375,8 @@ export default {
     position: absolute;
     top: 80px;
     right: 10px;
+    max-width: 70vw;
+    padding-top: 5px;
   }
   .backhome,
   .pick,

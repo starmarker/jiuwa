@@ -177,6 +177,7 @@ export default {
       display: table;
       position: absolute;
       right: 0;
+      box-sizing: border-box;
       color: #ca0e33;
       padding: 3px 8px;
       background-color: rgba(255, 255, 255, 0.3);
@@ -190,7 +191,7 @@ export default {
         transform: translateX(100%);
       }
       to {
-        transform: translateX(-100%);
+        transform: translateX(-110%);
       }
     }
     @keyframes mymove {
@@ -198,7 +199,7 @@ export default {
         transform: translateX(100%);
       }
       to {
-        transform: translateX(-100%);
+        transform: translateX(-110%);
       }
     }
   }

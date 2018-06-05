@@ -64,9 +64,19 @@ export default {
       return result;
     },
     inviter_code() {
-      return (
-        this.$route.query.inviter_code || "33359507b753485b6f47490383a47aa8"
-      );
+      let result;
+      if (this.$route.query.inviter_code) {
+        result = this.$route.query.inviter_code;
+        this.$session("inviter_code", this.$route.query.inviter_code);
+      } else if (
+        this.$login_info() != null &&
+        this.$session("activity_token")
+      ) {
+        result = this.$session("activity_token");
+      } else {
+        result = "33359507b753485b6f47490383a47aa8";
+      }
+      return result;
     },
     user() {
       if (this.$login_info()) {
@@ -270,7 +280,9 @@ export default {
       }
       if (petname.trim() == "" || petname.length > 6) {
         this.$alert_dlg("小灸灸名字长度应介于1-6之间");
+        this.$offEvent("subname", null);
         this.showAlert(petname);
+        this.setJiuwa();
         this.sub = false;
         return false;
       }

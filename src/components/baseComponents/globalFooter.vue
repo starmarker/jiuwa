@@ -65,7 +65,7 @@ export default {
       let params = {
         activity_token: "263764d167ee33343036fb1510a58503"
       };
-      if (!this.is_techer) {
+      if (this.userInfo.is_teacher != 1) {
         let module_token = this.$api_urls["isHasJiuwa"];
         let obj = Object.assign({}, params, { module_token });
         this.$api({
@@ -85,6 +85,8 @@ export default {
             }
           }
         });
+      } else {
+        this.$go(url);
       }
     },
     updateAct() {
