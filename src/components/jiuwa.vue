@@ -25,10 +25,13 @@
       <van-popup v-model="showHelpList" :close-on-click-overlay="true" :overlay-style="{height:'100vh'}" :lock-scroll="false" class="help-div">
         <van-nav-bar title="您附近的灸疗师" />
         <!-- <HelpList :list="teacher_list"  :loading="loading" @loadmore="getList" @rqhelp="rqhelp"></HelpList>  -->
-        <van-list  :finished="finish" v-model="loading"  @loadmore="getList" :immediate-check="false" :offset="50">
-          <user-list-item v-for="item in teacher_list" :key="item.id" @btnClick="()=>{reqhelp(item)}" :disabled="item.disabled" :avatar="item.headimage" :title="item.nickname"/> 
+        
+          <div class="wraper list2" @scroll="scroll($event)">
+              <div class="van-list" v-if="teacher_list.length>0">
+                <user-list-item v-for="item in teacher_list" :key="item.id" @btnClick="()=>{reqhelp(item)}" :disabled="item.disabled" :avatar="item.headimage" :title="item.nickname" disText="已求助"/> 
+              </div>
             <p v-if="teacher_list.length<1">没有附近灸疗师数据</p>
-          </van-list>  
+          </div>  
               
       </van-popup>
   </div>
@@ -40,7 +43,7 @@ import myFooter from "./baseComponents/myFooter";
 import TopJiuwaBar from "./baseComponents/top_jiuwa_bar";
 import HelpList from "./baseComponents/helplist";
 import userListItem from "./baseComponents/user_list_item";
-import Bus from "../libs/bus.js";
+
 // import Bus from "../libs/bus.js";
 export default {
   name: "jiuwa",
@@ -153,6 +156,7 @@ export default {
         });
     },
     help() {
+      this.cur_page = 1;
       this.getList();
       this.showHelpList = true;
     },
@@ -190,7 +194,7 @@ export default {
             latitude: "30.5465175160"
           };
         });
-      let module_token = this.$api_urls["index"],
+      let module_token = this.$api_urls["teacher_list"],
         search = this.search;
       console.log("module_token :", module_token);
       this.loading = true;
@@ -208,15 +212,24 @@ export default {
           if (res.data.code == 1) {
             res.data.data.lists.forEach(item => {
               item.type = "danger";
+              if (item.help == "已求助") {
+                item.disabled = true;
+              }
             });
             if (this.cur_page == 1) {
               this.teacher_list = [];
             }
             this.teacher_list = this.teacher_list.concat(res.data.data.lists);
+
             this.cur_page++;
+
             this.finished = this.cur_page > res.data.data.page_info.last_page;
+          } else {
+            this.$err(res.data.msg);
           }
-          this.loading = false;
+          this.$nextTick(() => {
+            this.loading = false;
+          });
         })
         .catch(rej => {
           this.$err(rej.msg);
@@ -250,6 +263,21 @@ export default {
       //     }
       //   );
       // }
+    },
+    scroll(e) {
+      let ele = e.target;
+      let et = ele.offsetHeight,
+        sh = ele.scrollHeight,
+        st = ele.scrollTop;
+      // console.log({ et, st, sh });
+      //resolve();
+      if (et + st > sh - 5) {
+        if (!this.loading && !this.finish) {
+          this.List();
+        } else {
+          return false;
+        }
+      }
     }
   }
 };
@@ -304,11 +332,20 @@ export default {
       color: #45a50e;
       font-size: 18px;
     }
+    .wraper {
+      min-height: 10vh;
+      max-height: calc(70vh - 120px);
+      overflow-y: scroll;
+      > p {
+        font-size: 14px;
+        color: #666;
+        text-align: center;
+      }
+    }
   }
-  .van-list {
-    max-height: 80%;
-    overflow-y: auto;
-  }
+  // .van-list {
+  //   // max-height: 80%;
+  // }
 }
 // .sign-header {
 //   width: 100%;

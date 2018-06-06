@@ -238,9 +238,9 @@ export default {
         }
         &.user-rank {
           padding-left: 2vw;
-          .van-cell-text {
-            max-width: 100%;
-          }
+          // .van-cell-text {
+          //   max-width: 100%;
+          // }
         }
       }
     }

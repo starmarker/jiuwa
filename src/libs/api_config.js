@@ -35,6 +35,8 @@ const api_urls = {
     "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K3xbmCosOPl6KUpIiayJmvnJO6mZx-dq19yGahpYqHsJbFqI6YxIC4oHqjYm0",
   isHasJiuwa:
     "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enx6yZevnZKUiKOWoLicvYd2dg",
+  teacher_list:
+    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K3vrqGnMd7q6d6oqqgyZm3gZPOdKKXi7Gjx2mLqIuIgs7HqaCqxoCvnYmIb20",
   t_sign_update:
     "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enyGya23mZ2piHWLZrWjyaOlaZaGgtK-lKCqxoCsnJV-nqbIz6-V",
   rank:

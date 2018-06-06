@@ -45,18 +45,23 @@
         <van-tabs type="card" v-model="showType" @click="checkType">
           <van-tab title="待救助">
             <!-- 内容 {{ index }} -->
-            <van-list :finished="need_finish" @loadmore="getNeedList" v-model="loading" :immediate-check="false" :offset="50" v-if="need_list.length>0">
-              <user-list-item v-for="(item,index) in need_list" :disabled="item.disabled" :key="index" :avatar="item.headimage" :title="item.nickname" @btnClick="()=>{helpJiuwa(item)}" mormalText="给TA救治" disText="已救治" />
-              
-            </van-list>
-            <p v-else>没有相关数据</p>
+            <div class="wraper list2" @scroll="scroll($event,1)">
+              <div class="van-list" v-if="need_list.length>0">            
+               <user-list-item v-for="(item,index) in need_list" :disabled="item.disabled" :key="index" :avatar="item.headimage" :title="item.nickname" @btnClick="()=>{helpJiuwa(item)}" mormalText="给TA救治" disText="已救治" /> 
+              </div>              
+              <p v-if="this.finish">没有更多数据</p>
+            </div>
+            
             <!-- <HelpList :list="need_list"  :loading=""  @rqhelp="helpJiuwa"></HelpList> -->
           </van-tab>
           <van-tab title="已救助">
-            <van-list :finished="rescued_finish" @loadmore="getNeedList" v-model="loading" :immediate-check="false" :offset="50" v-if="rescued_list.length>0">
-              <user-list-item v-for="(item ,index) in rescued_list" :disabled="true" :key="index" :avatar="item.headimage" :title="item.nickname" disText="已救治" />
-            </van-list>
-            <p v-else>没有相关数据</p>
+            <div class="wraper list2" @scroll="scroll($event,2)">
+              <div class="van-list" v-if="rescued_list.length>0">
+                <user-list-item v-for="(item ,index) in rescued_list" :disabled="true" :key="index" :avatar="item.headimage" :title="item.nickname" disText="已救治" />
+              </div>
+              <p v-if="this.rescued_finish">没有更多数据</p>             
+            </div>
+
             <!-- 内容 {{ index }} -->
             <!-- <HelpList :list="recued_list" :finished="rescued_finish" :loading="loading" @loadmore="getRecuedList"></HelpList> -->
           </van-tab>
@@ -65,10 +70,13 @@
       <!-- 艾草采摘记录 -->
        <van-popup v-model="showRecourd" :close-on-click-overlay="true" :overlay-style="{height:'100vh'}" :lock-scroll="true" class="help-div">
         <van-nav-bar title="你的艾草采摘情况" />
-        <van-list :finished="pick_finish" v-model="loading" @loadmore="getPickList" :immediate-check="false" :offset="50">
-          <user-list-item v-for="(item,index) in pick_recourd" :disabled="true" :key="index" :avatar="item.avatar_src" :title="item.nickname" :disText="item.sum+'棵'" v-if="pick_recourd.length>0"/>
-        </van-list>        
-      </van-popup> 
+            <div class="wraper " @scroll="scroll($event,3)">
+              <div class="van-list" v-if="pick_recourd.length>0">
+                <user-list-item v-for="(item,index) in pick_recourd" :disabled="true" :key="index" :avatar="item.avatar_src" :title="item.nickname" :disText="item.sum+'棵'" />
+              </div> 
+              <p v-if="this.pick_finish">没有更多数据</p>
+            </div>     
+        </van-popup> 
     </div>
 </template>
 <script>
@@ -100,21 +108,25 @@ export default {
         //   avatar_src: ""
         // }
       },
+      list: [],
+      finish: false,
       isFirst: true,
       need_list: [],
       cur_need_page: 1,
-      need_finish: true,
+      need_finish: false,
       rescued_list: [],
       cur_rescued_page: 1,
-      rescued_finish: true,
+      rescued_finish: false,
       loading: false,
+      r_loading: false,
+      p_loading: false,
       showneed: false,
       showType: 0,
       showRecourd: false,
       count: 0,
       pick_recourd: [],
       cur_pick_page: 1,
-      pick_finish: true,
+      pick_finish: false,
       members: []
     };
   },
@@ -136,6 +148,7 @@ export default {
     this.getNeedList();
     this.getPickList();
     this.getTeamWorker();
+    // this.getRescuedList();
   },
   mounted() {
     this.calc();
@@ -228,51 +241,70 @@ export default {
       }
     },
     getNeedList() {
-      if (!this.is_teacher) return;
-      let module_token, page;
-      this.loading = true;
-      if (this.showType == 0) {
-        module_token = this.$api_urls["need_rescue"];
+      if (!this.is_teacher || this.finish) return;
+      let module_token = this.$api_urls["need_rescue"],
         page = this.cur_need_page;
-      } else {
-        module_token = this.$api_urls["rescued_list"];
-        page = this.cur_rescued_page;
-      }
+      this.loading = true;
+
       this.getData("com_manage", { module_token, page })
         .then(res => {
           if (res.data.code == 1) {
             res.data.data.lists.forEach(item => {
               item.type = "danger";
             });
-            if (this.showType == 0) {
-              if (this.cur_need_page == 1) {
-                this.need_list = [];
-              }
-              this.need_list = this.need_list.concat(res.data.data.lists);
-              this.cur_need_page++;
-              this.need_finish =
-                this.cur_need_page > res.data.data.page_info.last_page;
-            } else {
-              if (this.cur_rescued_page == 1) {
-                this.rescued_list = [];
-              }
-              this.rescued_list = this.rescued_list.concat(res.data.data.lists);
-              this.cur_rescued_page++;
-              this.recued_finish =
-                this.cur_rescued_page > res.data.data.page_info.last_page;
+
+            if (this.cur_need_page == 1) {
+              this.need_list = [];
             }
+            this.need_list = this.need_list.concat(res.data.data.lists);
+            this.cur_need_page++;
+            this.finish =
+              this.cur_need_page > res.data.data.page_info.last_page;
+            this.$nextTick(() => {
+              this.loading = false;
+            });
           } else {
             this.$err(res.data.msg);
+            this.loading = false;
           }
-          this.loading = false;
         })
         .catch(() => {
           this.loading = false;
         });
     },
+    getRescuedList() {
+      let module_token = this.$api_urls["rescued_list"];
+      let page = this.cur_rescued_page;
+      if (this.rescued_finish) return false;
+      this.r_loading = true;
+      this.getData("com_manage", { module_token, page })
+        .then(res => {
+          if (res.data.code == 1) {
+            res.data.data.lists.forEach(item => {
+              item.type = "danger";
+            });
+            if (this.cur_rescued_page == 1) {
+              this.rescued_list = [];
+            }
+            this.rescued_list = this.rescued_list.concat(res.data.data.lists);
+            this.cur_rescued_page++;
+            this.rescued_finish =
+              this.cur_rescued_page > res.data.data.page_info.last_page;
+            this.$nextTick(() => {
+              this.r_loading = false;
+            });
+          } else {
+            this.$err(res.data.msg);
+            this.r_loading = false;
+          }
+        })
+        .catch(() => {
+          this.r_loading = false;
+        });
+    },
     getPickList() {
-      if (!this.is_teacher) return;
-      this.loading = true;
+      if (!this.is_teacher || this.pick_finish) return;
+      // this.loading = true;
       let module_token = this.$api_urls["picked_recourd"];
       let page = this.cur_pick_page;
       this.getData("com_manage", { module_token, page })
@@ -285,13 +317,16 @@ export default {
             this.cur_pick_page++;
             this.pick_finish =
               this.cur_pick_page > res.data.data.page_info.last_page;
-            this.loading = false;
+            this.$nextTick(() => {
+              this.p_loading = false;
+            });
           } else {
             this.$err(res.data.msg);
+            this.p_loading = false;
           }
         })
         .catch(rej => {
-          this.loading = false;
+          this.p_loading = false;
         });
     },
     helpJiuwa(item) {
@@ -316,9 +351,38 @@ export default {
         });
     },
     checkType(index, title) {
-      console.log("this.showType :", this.showType);
+      // console.log("this.showType :", this.showType);
       if (index == 1 && this.cur_rescued_page == 1) {
-        this.getNeedList();
+        this.getRescuedList();
+      }
+    },
+    onLoad() {
+      setTimeout(() => {
+        for (let i = 0; i < 10; i++) {
+          this.list.push(this.list.length + 1);
+        }
+        this.loading = false;
+
+        if (this.list.length >= 40) {
+          this.finish = true;
+        }
+      }, 500);
+    },
+    scroll(e, type) {
+      let ele = e.target;
+      let et = ele.offsetHeight,
+        sh = ele.scrollHeight,
+        st = ele.scrollTop;
+      // console.log({ et, st, sh });
+      //resolve();
+      if (et + st > sh - 5) {
+        if (type == 2 && !this.r_loading && !this.rescued_finish) {
+          this.getRescuedList();
+        } else if (type == 1 && !this.loading && !this.finish) {
+          this.getNeedList();
+        } else if (type == 3 && !this.p_loading && !this.pick_finish) {
+          this.getPickList();
+        }
       }
     }
   }
@@ -406,6 +470,10 @@ export default {
     background-color: rgba(255, 255, 255, 0.6);
     border-radius: 7vw;
     overflow-y: auto;
+    // .van-list {
+    //   max-height: calc(100% - 60px);
+    //   overflow-y: auto;
+    // }
     .van-nav-bar {
       background-color: transparent;
       color: #45a50e;
@@ -417,7 +485,21 @@ export default {
     .van-tab__pane {
       padding: 15px;
       padding-top: 3px;
+      overflow: hidden;
       box-sizing: border-box;
+      .wraper {
+        min-height: 10vh;
+        max-height: calc(70vh - 120px);
+        overflow-y: scroll;
+        > p {
+          font-size: 14px;
+          color: #666;
+          text-align: center;
+        }
+      }
+      // .van-list {
+
+      // }
     }
   }
 }

@@ -6,9 +6,10 @@
               <p class="match-no">编号:{{item.id}} <span class="user-name">{{item.user_name}}</span></p>
               <!-- <p class="user-name">{{item.nickname}}</p> -->          
           </div>
+          <span class="user-score">得分:{{Number(item.basescore).toFixed(0)}}</span>
       </div>
       <div class="item-oper">
-          <span class="user-score">得分:{{Number(item.basescore).toFixed(0)}}</span>    
+              
           <a href="javascript:;" @click="pick">采TA的艾草</a>    
           
       </div>
@@ -74,11 +75,24 @@ export default {
       width: 100%;
       height: 100%;
     }
+    .user-score {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      text-align: left;
+      width: 100%;
+      box-sizing: border-box;
+      padding-left: 5px;
+      background-color: rgba(209, 31, 64, 0.5);
+      color: #fff;
+      font-size: 16px;
+    }
   }
   .item-intro {
     width: 100%;
     box-sizing: border-box;
     padding: 5px;
+    // background-color: rgba(159, 194, 138, 0.4);
     background-color: rgba(209, 31, 64, 0.5);
     color: #fff;
     overflow: hidden;
@@ -108,20 +122,19 @@ export default {
     overflow: hidden;
     padding: 5px 1px;
     box-sizing: border-box;
-    .user-score,
+
     a {
       // line-height: 36px;
-      padding: 0px 3px;
+      width: 100%;
       display: inline-block;
       color: rgb(203, 23, 58);
       font-weight: 700;
-    }
-    a {
       background-color: rgba(159, 194, 138, 1);
       position: relative;
-      float: right;
+      box-sizing: border-box;
+      text-align: center;
       color: #fff;
-      padding: 2px 5px;
+      padding: 4px 5px;
       border-radius: 4px;
     }
     .van-button {
