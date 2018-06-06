@@ -26,11 +26,12 @@
         <van-nav-bar title="您附近的灸疗师" />
         <!-- <HelpList :list="teacher_list"  :loading="loading" @loadmore="getList" @rqhelp="rqhelp"></HelpList>  -->
         
-          <div class="wraper list2" @scroll="scroll($event)">
+          <div class="wraper list2">
               <div class="van-list" v-if="teacher_list.length>0">
                 <user-list-item v-for="item in teacher_list" :key="item.id" @btnClick="()=>{reqhelp(item)}" :disabled="item.disabled" :avatar="item.headimage" :title="item.nickname" disText="已求助"/> 
               </div>
             <p v-if="teacher_list.length<1">没有附近灸疗师数据</p>
+            <van-button type="primary" size="small" @click="getList">加载更多</van-button>
           </div>  
               
       </van-popup>
@@ -221,9 +222,9 @@ export default {
             }
             this.teacher_list = this.teacher_list.concat(res.data.data.lists);
 
-            this.cur_page++;
+            //this.cur_page++;
 
-            this.finished = this.cur_page > res.data.data.page_info.last_page;
+            //this.finished = this.cur_page > res.data.data.page_info.last_page;
           } else {
             this.$err(res.data.msg);
           }
@@ -263,22 +264,22 @@ export default {
       //     }
       //   );
       // }
-    },
-    scroll(e) {
-      let ele = e.target;
-      let et = ele.offsetHeight,
-        sh = ele.scrollHeight,
-        st = ele.scrollTop;
-      // console.log({ et, st, sh });
-      //resolve();
-      if (et + st > sh - 5) {
-        if (!this.loading && !this.finish) {
-          this.List();
-        } else {
-          return false;
-        }
-      }
     }
+    // scroll(e) {
+    //   let ele = e.target;
+    //   let et = ele.offsetHeight,
+    //     sh = ele.scrollHeight,
+    //     st = ele.scrollTop;
+    //   // console.log({ et, st, sh });
+    //   //resolve();
+    //   if (et + st > sh - 5) {
+    //     if (!this.loading && !this.finish) {
+    //       this.List();
+    //     } else {
+    //       return false;
+    //     }
+    //   }
+    // }
   }
 };
 </script>

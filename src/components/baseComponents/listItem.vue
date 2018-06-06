@@ -125,8 +125,9 @@ export default {
 
     a {
       // line-height: 36px;
-      width: 100%;
-      display: inline-block;
+      width: 70%;
+      margin: auto;
+      display: block;
       color: rgb(203, 23, 58);
       font-weight: 700;
       background-color: rgba(159, 194, 138, 1);
