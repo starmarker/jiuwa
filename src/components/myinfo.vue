@@ -1,9 +1,10 @@
 <template>
     <div class="main">
-      <div class="info-pic1"></div>
-      <div class="info-pic2"></div>
-      <div class="info-pic3"></div>
-      <div class="info-pic4"></div>
+      <div class="cloud-left"></div>
+      <div class="cloud-right"></div>
+      <div class="mountain"></div>
+      <div class="zhalan"></div>
+      <div class="grass-field"  @click="pick"></div>
       <info-top-bar :nickname="userInfo.user_name" :avatar="userInfo.headimage" :basescore="userInfo.total" :rank="userInfo.paiming"  @clickuser="godetail" class="topbar"/>
       <team-member :members="members" :showNumber="4" :showBtn="true" class="member" @avatar_click="godetail1"/>
         <!-- <div class="sign-header">
@@ -397,32 +398,77 @@ export default {
   width: 100vw;
   height: 100vh;
   text-align: left;
-  .info-pic1,
-  .info-pic2,
-  .info-pic3,
-  .info-pic4 {
-    position: fixed;
-    width: 50%;
-    height: 50vh;
-    top: 0;
-    left: 0;
-    background-image: url("../assets/home_01.jpg");
+  background: url("../assets/aicao_bg.jpg") no-repeat top left;
+  background-size: 100% 100%;
+  .cloud-left,
+  .cloud-right,
+  .mountain,
+  .zhalan,
+  .grass-field {
+    position: absolute;
     background-size: 100% 100%;
     background-repeat: no-repeat;
   }
-  .info-pic2 {
-    left: 50%;
-    background-image: url("../assets/home_02.jpg");
+  .cloud-left {
+    width: 40vw;
+    height: 22vw;
+    background-image: url("../assets/cloud_left.png");
+    top: 26vw;
   }
-  .info-pic3 {
-    top: 50vh;
-    background-image: url("../assets/home_03.jpg");
+  .cloud-right {
+    width: 30vw;
+    height: 15vw;
+    top: 24vw;
+    right: 3vw;
+    background-image: url("../assets/cloud_right.png");
   }
-  .info-pic4 {
-    top: 50vh;
-    left: 50%;
-    background-image: url("../assets/home_04.jpg");
+  .mountain {
+    width: 100%;
+    height: 33vw;
+    top: 27.5vh;
+    left: 0;
+    background-image: url("../assets/mountais.png");
   }
+  .zhalan {
+    width: 100%;
+    height: 50vw;
+    bottom: 23vh;
+    left: 0;
+    background-image: url("../assets/zhalan.png");
+  }
+  .grass-field {
+    width: 90vw;
+    height: 60vw;
+    left: 6vw;
+    bottom: 16vh;
+    background-image: url("../assets/aicao.png");
+  }
+  // .info-pic1,
+  // .info-pic2,
+  // .info-pic3,
+  // .info-pic4 {
+  //   position: fixed;
+  //   width: 50%;
+  //   height: 50vh;
+  //   top: 0;
+  //   left: 0;
+  //   background-image: url("../assets/home_01.jpg");
+  //   background-size: 100% 100%;
+  //   background-repeat: no-repeat;
+  // }
+  // .info-pic2 {
+  //   left: 50%;
+  //   background-image: url("../assets/home_02.jpg");
+  // }
+  // .info-pic3 {
+  //   top: 50vh;
+  //   background-image: url("../assets/home_03.jpg");
+  // }
+  // .info-pic4 {
+  //   top: 50vh;
+  //   left: 50%;
+  //   background-image: url("../assets/home_04.jpg");
+  // }
   & > img {
     display: block;
     width: 50vw;
