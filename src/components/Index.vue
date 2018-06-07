@@ -30,7 +30,7 @@
         v-model="loading"
         :finished="finished"
         @load="getIndex"
-        :immediate-check="false"
+       :offset="30"
       >
   <!-- <van-cell v-for="item in list" :key="item" :title="item + ''" /> -->
         <van-row>
@@ -72,7 +72,7 @@ export default {
   components: { playerItem, GlobalFooter, FlowBlock, GameDetail, BulletWords },
   created() {},
   mounted() {
-    this.getIndex();
+    // this.getIndex();
     this.getIndexData();
     this.setJiuwa();
     // this.getBullet();
@@ -107,13 +107,9 @@ export default {
           if (res.data.code == 1) {
             this.$suc(res.data.msg);
           } else if (res.data.code == 0) {
-            this.$confirm_dlg(
-              res.data.msg + ",是否到小灸灸页面求助",
-              () => {
-                this.$go("/jiuwa");
-              },
-              () => {}
-            );
+            this.$alert_dlg(res.data.msg, "", () => {
+              this.$go("/jiuwa");
+            });
           } else {
             this.$err(res.data.msg);
           }
@@ -131,6 +127,7 @@ export default {
       });
     },
     async getIndex() {
+      console.log(this.finished);
       let position = {};
       await this.getInviter();
       await this.getLocation()
@@ -144,8 +141,7 @@ export default {
           };
         });
       let module_token = this.$api_urls["index"];
-      console.log("module_token :", module_token);
-      this.loading = true;
+
       let obj = Object.assign(
         {},
         {
@@ -169,8 +165,12 @@ export default {
             this.all_ther = this.all_ther.concat(arr);
             this.cur_page++;
             this.finished = this.cur_page > res.data.data.page_info.last_page;
-            this.loading = false;
+          } else {
+            this.finished = true;
           }
+          this.$nextTick(() => {
+            this.loading = false;
+          });
         })
         .catch(rej => {
           // this.$err(rej.msg);

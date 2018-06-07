@@ -46,22 +46,25 @@
         <van-tabs type="card" v-model="showType" @click="checkType">
           <van-tab title="待救助">
             <!-- 内容 {{ index }} -->
-            <div class="wraper list2" @scroll="scroll($event,1)">
-              <div class="van-list" v-if="need_list.length>0">            
-               <user-list-item v-for="(item,index) in need_list" :disabled="item.disabled" :key="index" :avatar="item.headimage" :title="item.nickname" @btnClick="()=>{helpJiuwa(item)}" mormalText="给TA救治" disText="已救治" /> 
-              </div>              
+            <!-- <van-list class="wraper list2" @scroll="scroll($event,1)"> -->
+              <div class="wraper list2" >
+              <van-list v-model="loading" :finished="finish" :immediate-check="false" @onLoad="getNeedList" v-if="need_list.length>0">            
+               <user-list-item v-for="(item,index) in need_list" :disabled="item.disabled" :key="index" :avatar="item.headimage" :title="item.nickname" @btnClick="()=>{helpJiuwa(item)}" mormalText="给TA救治" disText="已救治" :tel="item.mobile" /> 
+              </van-list>              
               <p v-if="this.finish">没有更多数据</p>
             </div>
             
             <!-- <HelpList :list="need_list"  :loading=""  @rqhelp="helpJiuwa"></HelpList> -->
           </van-tab>
           <van-tab title="已救助">
-            <div class="wraper list2" @scroll="scroll($event,2)">
-              <div class="van-list" v-if="rescued_list.length>0">
+            <div class="wraper list2"> 
+              <!-- <div class="van-list" v-if="rescued_list.length>0"> -->
+                <van-list v-model="r_loading" :finished="rescued_finish" @onLoad="getRescuedList" :offset="30">
                 <user-list-item v-for="(item ,index) in rescued_list" :disabled="true" :key="index" :avatar="item.headimage" :title="item.nickname" disText="已救治" />
-              </div>
+              <!-- </div> -->
+                </van-list>
               <p v-if="this.rescued_finish">没有更多数据</p>             
-            </div>
+            </div> 
 
             <!-- 内容 {{ index }} -->
             <!-- <HelpList :list="recued_list" :finished="rescued_finish" :loading="loading" @loadmore="getRecuedList"></HelpList> -->
@@ -182,13 +185,9 @@ export default {
           if (res.data.code == 1) {
             this.$suc(res.data.msg);
           } else if (res.data.code == 0) {
-            this.$confirm_dlg(
-              res.data.msg + ",是否到小灸灸页面求助",
-              () => {
-                this.$go("/jiuwa");
-              },
-              () => {}
-            );
+            this.$alert_dlg(res.data.msg, "", () => {
+              this.$go("/jiuwa");
+            });
           } else {
             this.$err(res.data.msg);
           }
@@ -245,7 +244,7 @@ export default {
       if (!this.is_teacher || this.finish) return;
       let module_token = this.$api_urls["need_rescue"],
         page = this.cur_need_page;
-      this.loading = true;
+      //this.loading = true;
 
       this.getData("com_manage", { module_token, page })
         .then(res => {
@@ -276,8 +275,8 @@ export default {
     getRescuedList() {
       let module_token = this.$api_urls["rescued_list"];
       let page = this.cur_rescued_page;
-      if (this.rescued_finish) return false;
-      this.r_loading = true;
+      // if (this.rescued_finish) return false;
+      // this.r_loading = true;
       this.getData("com_manage", { module_token, page })
         .then(res => {
           if (res.data.code == 1) {

@@ -10,6 +10,7 @@
 
             <van-tab  title="灸疗师排行">
                 <div class="page-body">
+                  <van-list v-model="loading" :finished="aicao_finish" @onLoad="getRank" :offset="30">
                     <table class="table van-hairline--bottom">
                         <thead>
                             <tr class="van-hairline--bottom">
@@ -41,10 +42,12 @@
                           </tr>
                         </tbody>
                     </table>
+                  </van-list>
                 </div> 
             </van-tab>
             <van-tab  title="团队排行">
                 <div class="page-body">
+                  <van-list v-model="s_loading" :finished="shop_finish" @onLoad="getShopRank" :offset="30">
                     <table class="table van-hairline--bottom">
                         <thead>
                             <tr class="van-hairline--bottom">
@@ -76,10 +79,12 @@
                           </tr>
                         </tbody>
                     </table>
+                  </van-list>
                 </div> 
             </van-tab>
             <van-tab  title="采摘排行">
                 <div class="page-body">
+                  <van-list v-model="j_loading" :finished="jiuwa_finish" @onLoad="getJiuwaRank" :offset="30">
                     <table class="table van-hairline--bottom">
                         <thead>
                             <tr class="van-hairline--bottom">
@@ -107,6 +112,7 @@
                           </tr>
                         </tbody>
                     </table>
+                  </van-list>
                 </div>
             </van-tab>
             <!-- <van-tab  title="团队排行">
@@ -128,10 +134,10 @@
     </div>
 </template>
 <script>
-//import Base from "./baseComponents/base";
+import Base from "./baseComponents/base";
 // import GlobalFooter from "./baseComponents/globalFooter";
 export default {
-  // extends: Base,
+  extends: Base,
   //   components: { GlobalFooter },
   data() {
     return {
@@ -139,64 +145,97 @@ export default {
       aicao_rank: [],
       jiuwa_rank: [],
       shop_rank: [],
+      loading: false,
+      cur_aicao_page: 1,
+      j_loading: false,
+      aicao_finish: false,
+      s_loading: false,
+      cur_jiuwa_page: 1,
+      jiuwa_finish: false,
+      cur_shop_page: 1,
+      shop_finish: false,
       u_arr: [1, 2, 0]
     };
   },
   created() {
     this.getRank();
+    this.getJiuwaRank();
+    this.getShopRank();
   },
   watch: {
-    activeTab: function(newValue) {
-      this.getRank();
-    }
+    // activeTab: function(newValue) {
+    //   this.getRank();
+    // }
   },
   methods: {
-    getData(name, obj) {
-      this.$show_loading();
-      let activity_token = this.activity_token;
-      let obj1 = Object.assign({}, obj, {
-        activity_token
-      });
-      return new Promise((resolve, reject) => {
-        this.$api({
-          name: name,
-          params: obj1,
-          callback: res => {
-            resolve(res);
-            this.$hide_loading();
-          },
-          errcallback: rej => {
-            reject(rej);
-            this.$hide_loading();
-          },
-          catchcallback: rej => {
-            reject(rej);
-            this.$hide_loading();
+    getShopRank() {
+      let user_type = 2;
+      let module_token = this.$api_urls["rank"];
+      let page = this.cur_shop_page;
+      this.getData("com_manage", { user_type, module_token, page })
+        .then(res => {
+          if (res.data.code == 1) {
+            this.shop_rank = this.shop_rank.concat(res.data.data.lists);
+            this.cur_shop_page++;
+            this.shop_finish =
+              this.cur_shop_page > res.data.data.page_info.last_page;
+            this.$nextTick(() => {
+              this.s_loading = false;
+            });
+          } else {
+            this.s_loading = false;
           }
+        })
+        .catch(rej => {
+          this.s_loading = false;
         });
-      });
+    },
+    getJiuwaRank() {
+      let user_type = 0;
+      let module_token = this.$api_urls["rank"];
+      let page = this.cur_jiuwa_page;
+      this.getData("com_manage", { user_type, module_token, page })
+        .then(res => {
+          if (res.data.code == 1) {
+            this.jiuwa_rank = this.jiuwa_rank.concat(res.data.data.lists);
+            this.cur_jiuwa_page++;
+            this.jiuwa_finish =
+              this.cur_jiuwa_page > res.data.data.page_info.last_page;
+            this.$nextTick(() => {
+              this.j_loading = false;
+            });
+          } else {
+            this.j_loading = false;
+          }
+        })
+        .catch(rej => {
+          this.j_loading = false;
+        });
     },
     getRank() {
-      let user_type = this.u_arr[this.activeTab];
+      let user_type = 1;
       let module_token = this.$api_urls["rank"];
-      this.getData("com_manage", { user_type, module_token }).then(res => {
-        // console.log(res.data);
-        //this.aicao_rank = res.data.aicao;
+      let page = this.cur_aicao_page;
 
-        if (user_type == 0) {
+      this.getData("com_manage", { user_type, module_token, page })
+        .then(res => {
+          // console.log(res.data);
+          //this.aicao_rank = res.data.aicao;
           if (res.data.code == 1) {
-            this.jiuwa_rank = res.data.data;
+            this.aicao_rank = this.aicao_rank.concat(res.data.data.lists);
+            this.cur_aicao_page++;
+            this.aicao_finish =
+              this.cur_aicao_page > res.data.data.page_info.last_page;
+            this.$nextTick(() => {
+              this.loading = false;
+            });
+          } else {
+            this.loading = false;
           }
-        } else if (user_type == 1) {
-          if (res.data.code == 1) {
-            this.aicao_rank = res.data.data;
-          }
-        } else {
-          if (res.data.code == 1) {
-            this.shop_rank = res.data.data;
-          }
-        }
-      });
+        })
+        .catch(rej => {
+          this.loading = false;
+        });
     }
   }
 };
@@ -208,6 +247,11 @@ export default {
   height: calc(100vh - 150px);
   text-align: left;
   overflow-y: auto;
+  .van-list {
+    min-height: 20vh;
+    max-height: calc(100vh - 80px);
+    overflow-y: scroll;
+  }
   .table {
     width: 100%;
     table-layout: fixed;

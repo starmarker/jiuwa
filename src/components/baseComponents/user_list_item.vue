@@ -1,7 +1,7 @@
 <template>
     <van-cell>
         <img :src="avatar" alt="" slot="icon" v-if="!!avatar">
-        <span slot="title">{{title}}</span> 
+        <span slot="title" :class="{hastel:tel1!=''}">{{title}}<br/><small v-if="tel1!=''">{{tel1}}</small>  </span> 
         <van-button :type="cur_type" size="small" slot="right-icon" @click="btn_click">{{cur_text}}</van-button>        
     </van-cell>
 </template>
@@ -20,7 +20,13 @@ export default {
     disType: { default: "disabled" },
     mormalText: { default: "向TA求助" },
     disText: { default: "已发送请求" },
-    disabled: { default: false }
+    disabled: { default: false },
+    tel: {
+      type: Array,
+      default() {
+        return [];
+      }
+    }
   },
   computed: {
     cur_type() {
@@ -30,6 +36,9 @@ export default {
     cur_text() {
       let result = !this.disabled ? this.mormalText : this.disText;
       return result;
+    },
+    tel1() {
+      return this.tel[0] || "";
     }
   },
   methods: {
@@ -61,6 +70,9 @@ export default {
   .van-button--disabled {
     background-color: #666;
     color: #fff;
+  }
+  .hastel {
+    line-height: 4vw;
   }
 }
 </style>
