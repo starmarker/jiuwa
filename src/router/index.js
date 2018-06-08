@@ -26,7 +26,8 @@ export default new Router({
       path: "/",
       name: "index",
       meta: {
-        title: "活动首页"
+        title: "活动首页",
+        keepAlive: true
       },
       redirect: "index",
       component: resolve => require(["@/components/main"], resolve),
@@ -36,7 +37,8 @@ export default new Router({
           name: "home",
           meta: {
             title: "活动首页",
-            ck_bind_phone: true
+            ck_bind_phone: true,
+            keepAlive: true
           },
           component: Index
         },

@@ -20,14 +20,19 @@ export default {
     speed: {
       type: Number,
       default: 30 //弹幕速度，默认100px/s
+    },
+    words: {
+      type: Array,
+      default() {
+        return [];
+      }
     }
   },
   data() {
     return {
       ws_url: "ws://test.z9168.com:7272",
       lineContent: [],
-      count: 0,
-      words: []
+      count: 0
     };
   },
   created() {},
@@ -49,22 +54,7 @@ export default {
       return {};
     }
   },
-  async mounted() {
-    await this.getBullet();
-    this.$nextTick(() => {
-      let i = 0;
-      setInterval(() => {
-        if (i > this.words.length - 1) {
-          i = 0;
-        }
-        if (this.words[i]) {
-          this.joinWord(this.words[i]);
-        }
-        i++;
-      }, 3000);
-    });
-    //this.create_link();
-  },
+  mounted() {},
   beforeCreate() {},
   // deactivated() {
   //   // this.$destroy(true);
@@ -74,14 +64,7 @@ export default {
   //   this.getBullet();
   // },
   created() {
-    let arr = [];
-    for (let i = 0; i < this.lines; i++) {
-      arr.push({
-        addable: true,
-        list: []
-      });
-    }
-    this.lineContent = arr;
+    this.creatArr();
     // console.log("this.lineContent :", this.lineContent);
   },
   methods: {
@@ -106,6 +89,16 @@ export default {
           }
         });
       });
+    },
+    creatArr() {
+      let arr = [];
+      for (let i = 0; i < this.lines; i++) {
+        arr.push({
+          addable: true,
+          list: []
+        });
+      }
+      this.lineContent = arr;
     },
     create_link() {
       if (this.ws) {
@@ -153,12 +146,18 @@ export default {
       //   //   Array.push.call(cur.list, content);
       //   console.log("cur :", cur);
     },
-    getBullet() {
-      let module_token = this.$api_urls["bullet"];
-      this.getData("com_manage", { module_token }).then(res => {
-        if (res.data.code == 1 && res.data.data.length > 0) {
-          this.words = res.data.data;
-        }
+    addWords() {
+      this.$nextTick(() => {
+        let i = 0;
+        setInterval(() => {
+          if (i > this.words.length - 1) {
+            i = 0;
+          }
+          if (this.words[i]) {
+            this.joinWord(this.words[i]);
+          }
+          i++;
+        }, 3000);
       });
     }
   }

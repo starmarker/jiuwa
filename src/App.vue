@@ -2,7 +2,9 @@
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
     <div class="g-bg"></div>
-    <router-view/>
+    
+      <router-view />
+  
   <van-dialog v-model="show"
     show-cancel-button
     :before-close="beforeClose"

@@ -1,6 +1,10 @@
 <template>
     <div class="main-body" v-if="is_showPage">
-        <router-view />
+      <keep-alive>
+        <router-view  v-if="$route.meta.keepAlive" />
+      </keep-alive>
+        <router-view v-if="!$route.meta.keepAlive"/>
+             
         <global-footer ref="gfooter"></global-footer>
     </div>
 </template>

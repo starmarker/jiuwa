@@ -1,5 +1,5 @@
 <template>
-  <div class="hello" >
+  <div class="hello" @scroll="savePy">
 <form action="/">
     <van-search
       v-model="user_name"
@@ -9,9 +9,9 @@
       @cancel="onCancel"
     />
   </form>
-  <div class="banner">
+  <div class="banner" id="banner">
     <img src="../assets/index_banner1.jpg" alt="" srcset="">
-    <bullet-words :maxheight="80" style="position:absolute;top:0;height:80%"/>
+    <bullet-words :maxheight="80" style="position:absolute;top:0;height:80%" ref="bullet" :words="bullets"/>
   </div>
   <div class="container">
     <flow-block />
@@ -66,7 +66,9 @@ export default {
       cur_page: 1,
       user_name: "",
       isSearch: false,
-      gameData: null
+      gameData: null,
+      scrollHeight: 0,
+      bullets: []
     };
   },
   components: { playerItem, GlobalFooter, FlowBlock, GameDetail, BulletWords },
@@ -75,9 +77,15 @@ export default {
     // this.getIndex();
     this.getIndexData();
     this.setJiuwa();
+    this.getBullet();
     // this.getBullet();
   },
   beforeUpdate() {},
+
+  activated() {
+    console.log(this.scrollHeight);
+    document.querySelector(".hello").scrollTop = this.scrollHeight;
+  },
   methods: {
     alert1() {
       this.$confirm_dlg(
@@ -231,6 +239,18 @@ export default {
           this.gameData = res.data.data;
         }
       });
+    },
+    savePy(e) {
+      console.log(e.target.scrollTop);
+      this.scrollHeight = e.target.scrollTop;
+    },
+    getBullet() {
+      let module_token = this.$api_urls["bullet"];
+      this.getData("com_manage", { module_token }).then(res => {
+        if (res.data.code == 1 && res.data.data.length > 0) {
+          this.bullets = res.data.data;
+        }
+      });
     }
   }
 };
@@ -240,6 +260,8 @@ export default {
 <style scoped lang="less">
 @import "../assets/css/base.less";
 .hello {
+  height: 100vh;
+  overflow-y: scroll;
   .banner {
     .box-shadow();
     //box-shadow: 0 3px 0px 3px #aaa;
