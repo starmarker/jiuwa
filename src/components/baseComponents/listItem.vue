@@ -6,7 +6,7 @@
               <p class="match-no">编号:{{item.id}} <span class="user-name">{{item.user_name}}</span></p>
               <!-- <p class="user-name">{{item.nickname}}</p> -->          
           </div>
-          <span class="user-score">得分:{{Number(item.basescore).toFixed(0)}}</span>
+          <span class="user-score">得分:{{item.aicao_num}}</span>
       </div>
       <div class="item-oper">
               
@@ -26,7 +26,8 @@ export default {
           id: "",
           user_token: "",
           user_name: "",
-          basescore: ""
+          basescore: "",
+          aicao_num: NaN
         };
       }
     }

@@ -18,12 +18,10 @@ const notice = {
       Toast.fail("失败");
     }
   },
-  $show_loading(msg) {
-    if (msg) {
-      Toast.loading(msg);
-    } else {
-      Toast.loading("加载中");
-    }
+  $show_loading(msg, time) {
+    let message = msg || "加载中";
+    let duration = time == undefined ? 3000 : time;
+    Toast.loading({ message, duration });
   },
   $hide_loading(msg) {
     Toast.clear(true);

@@ -110,6 +110,10 @@ export default {
   updated() {
     // this.$hide_loading();
   },
+  beforeRouteLeave(to, from, next) {
+    // 导航离开该组件的对应路由时调用
+    this.ckRoute(to, from, next);
+  },
   methods: {
     getData(name, obj) {
       this.$show_loading();
@@ -212,16 +216,7 @@ export default {
       });
     },
 
-    isTeacher() {
-      // let module_token = this.$api_urls["is_teacher"];
-      // return new Promise((resolve, reject) => {
-      //   this.getData("com_manage", { module_token }).then(res => {
-      //     this.is_teacher = res.data;
-      //     Bus.$emit("isTeacher", this.is_teacher);
-      //     resolve(res.data);
-      //   });
-      // });
-    },
+    isTeacher() {},
     isHasJiuwa() {
       let module_token = this.$api_urls["isHasJiuwa"];
       return new Promise((resolve, reject) => {
@@ -244,18 +239,16 @@ export default {
         });
       });
     },
-    // async getuser() {
-    //   //let user_token;
-    //   await this.test();
-
-    //   //this.user_token = this.$login_info()["user_token"];
-    //   // this.is_teacher = await this.isTeacher();
-    //   // console.log("user_token :", this.user_token);
-    // },
-    // async getStatus() {
-    //   // await this.isTeacher();
-    // },
+    ckRoute(to, from, next) {
+      const _this_v = this;
+      if (to.meta && to.meta.ck_bind_phone && to.meta.ck_bind_phone === true) {
+        _this_v.$ckBindPhone(next);
+      } else {
+        next();
+      }
+    },
     async getJiuwa(name, id) {
+      if (this.sub) return false;
       this.sub = true;
       let position = {};
       let jiujiu_id = id;

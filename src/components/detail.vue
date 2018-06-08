@@ -70,8 +70,8 @@ export default {
     line-height: 2;
   }
   p {
-    -webkit-margin-before: 0.2em;
-    -webkit-margin-after: 0.2em;
+    -webkit-margin-before: 0.2em !important;
+    -webkit-margin-after: 0.2em !important;
   }
 }
 </style>

@@ -178,7 +178,7 @@ export default {
             this.shop_rank = this.shop_rank.concat(res.data.data.lists);
             this.cur_shop_page++;
             this.shop_finish =
-              this.cur_shop_page > res.data.data.page_info.last_page;
+              this.cur_shop_page > res.data.data.page_info.nextpage;
             this.$nextTick(() => {
               this.s_loading = false;
             });

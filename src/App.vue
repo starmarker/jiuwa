@@ -13,18 +13,25 @@
       placeholder="给小灸灸取一个名字"
     class="jiujiu" />
   </van-dialog>
+  <bindTel v-model="bindTelShow" @bindok="bindok" :showclose="show_close"></bindTel>
   </div>
 </template>
 
 <script>
+import bindTel from "./components/baseComponents/bindTel";
 export default {
   name: "App",
+  components: { bindTel },
   data() {
     return {
       show: false,
       petname: "",
       id: "",
-      title: "给小灸灸取一个名字"
+      title: "给小灸灸取一个名字",
+      bindTelShow: false,
+      //是否显示取消按钮
+      show_close: false,
+      bindok_topath: function() {}
     };
   },
   methods: {
@@ -38,6 +45,15 @@ export default {
         this.petname = "";
         done();
       }
+    },
+    bindPhone(show_close, topath) {
+      console.log("触发了绑定手机号");
+      this.bindTelShow = true;
+      this.show_close = show_close;
+      this.bindok_topath = topath;
+    },
+    bindok() {
+      this.$go(this.bindok_topath);
     }
   },
   mounted() {
@@ -49,6 +65,7 @@ export default {
       this.petname = petname;
       this.id = id;
     });
+    this.$onEvent("bindPhone", this.bindPhone);
   }
 };
 </script>

@@ -58,6 +58,13 @@ const api_urls = {
   act_detail:
     "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K8x5SKqbyQyZ19enyewL63f5K6fKWMi7Wjx6Ode4pjitbIz6Bgw4-4roSOZ53I36-V",
   editJiuwa:
-    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K3vrqGnMd7q6d6omOmwK3Rnpq5gJuWes-px6KHrYqHsNm4uW1kw4-sZZRqhKDImJmakbNvcA"
+    "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K3vrqGnMd7q6d6omOmwK3Rnpq5gJuWes-px6KHrYqHsNm4uW1kw4-sZZRqhKDImJmakbNvcA",
+  bindphone: {
+    url: "MDAwMDAwMDAwMMvT1ZeSunSjfmXLqceNjnY",
+    params: {
+      module_token:
+        "MDAwMDAwMDAwMLW60ZOCz6qqima5rb-Og7N6ma_PuamcpsSluKCWenujr9OvoZvPhISTepyov4mDnQ"
+    }
+  }
 };
 export default api_urls;

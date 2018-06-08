@@ -85,7 +85,7 @@ export default {
         autoCropHeight: 300,
         fixed: true,
         fixedNumber: [5, 6],
-        full: true,
+        full: false,
         fixedBox: true
       },
       baseImg: ""
@@ -119,7 +119,13 @@ export default {
       }
       _this.show = true;
       // _this.$refs.cropper.startCrop();
-      console.log("_this.photo :", _this.photo);
+      this.$show_loading("图片读取中", 0);
+      let img = document.querySelector(".cropper-box img");
+      img.onload = () => {
+        this.$hide_loading();
+      };
+      // this.$hide_loading();
+      // this.$hide_loading();
     },
     upload(dataUrl) {
       // let params = new FormData();
@@ -132,6 +138,7 @@ export default {
       // params.append("from", "base64");
       // params.append("module", "album"); // 头像填写 avatar，相册上传写 album
       // params.append("name", "uploadImage");
+      this.$show_loading("图片上传中", 0);
       let params = {
         file: dataUrl,
         //module_token: module_token,
@@ -156,16 +163,20 @@ export default {
             _this.sign_info.liliao_image = res.data.id;
             // console.log("success", res.data.id);
             // _this.editAvatar(res.data.id);
+            _this.$hide_loading();
           } else {
             // 失败提示
-            _this.$err(res.data.msg);
+            _this.$alert_dlg(res.data.msg, () => {});
+            _this.$hide_loading();
           }
         },
         errcallback: function(err) {
           console.log("图片上传失败", err);
+          _this.$hide_loading();
         },
         uploadProgressCallBack: function(e) {
           console.log("图片上传中", e);
+          _this.$hide_loading();
         }
       });
     },
@@ -177,6 +188,7 @@ export default {
         this.$alert_dlg("参赛姓名必填且长度为1-5个汉字");
         return false;
       }
+      this.$show_loading();
       let module_token = this.$route.params.token
         ? this.$api_urls["t_sign_update"]
         : this.$api_urls["sign"];
@@ -197,6 +209,7 @@ export default {
       this.getData("com_manage", obj)
         .then(res => {
           if (res.data.code == 1) {
+            this.$hide_loading();
             let msg = "报名成功";
             if (this.$route.params.token) {
               msg = "修改报名信息成功";
@@ -209,6 +222,7 @@ export default {
           }
         })
         .catch(rej => {
+          this.$hide_loading();
           this.$alert_dlg("失败，异常错误", "", () => {});
         });
     },
@@ -216,11 +230,11 @@ export default {
       await this.isSigned();
       //await this.getStatus();
       // console.log("is_teacher :", this.is_teacher);
-      if (!this.is_teacher) {
-        this.$alert_dlg("你不是灸疗师,无须报名", "", () => {
-          this.$router.back();
-        });
-      }
+      // if (!this.is_teacher) {
+      //   this.$alert_dlg("你不是灸疗师,无须报名", "", () => {
+      //     this.$router.back();
+      //   });
+      // }
     },
     getInfo() {
       let user_token = this.$route.params.token;
@@ -241,7 +255,6 @@ export default {
     },
     fixedImg() {
       this.$refs.cropper.stopCrop();
-
       this.$refs.cropper.getCropData(data => {
         let old = this.photo.content;
         // console.log("old :", old);
@@ -256,10 +269,11 @@ export default {
         this.photo.file = data;
       });
       this.show = false;
+      this.$refs.cropper.rotate = 0;
       // console.log("this.photo :", this.photo);
     },
     cancelFixed() {
-      this.$refs.cropper.rotate += 90;
+      this.$refs.cropper.rotateRight();
     }
   }
 };

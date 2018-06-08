@@ -15,10 +15,11 @@
       </van-row>
     </div> -->
     <top-jiuwa-bar :avatar="model.userfeil.avatar_src" :nickname="jiuwa.petname" :basescore="model.aicao_num" :experience="jiuwa.experience" @editJiuwa="edit"  />
+    
     <div class="jiuwa-talk" v-if="showTalk">
       <div class="talk-content" v-html="showInfo">       
       </div>
-    </div>
+    </div>    
     <div class="help-btn" @click="help" v-if="jiuwa.fall_type!=0"></div>
     <Jiuwa :model="jiuwa" @rescue="help" :img="pic_src" v-if="showJiuwa"></Jiuwa>
     <myFooter :isShowPick="true" @pick="gopick" @checkOrder="checkOrder" />
@@ -123,7 +124,7 @@ export default {
     });
     setTimeout(() => {
       this.showTalk = true;
-    }, 3000);
+    }, 1000);
     this.showJiuwa = true;
   },
 
@@ -295,8 +296,8 @@ export default {
   background-size: 100% 100%;
   .jiuwa-talk {
     position: absolute;
-    right: 8vw;
-    bottom: 45%;
+    right: 2vw;
+    bottom: 50%;
     width: 40vw;
     height: 41vw;
     background-image: url("../assets/xjj_talk.png");

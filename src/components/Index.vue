@@ -10,7 +10,7 @@
     />
   </form>
   <div class="banner">
-    <img src="../assets/index_banner.jpg" alt="" srcset="">
+    <img src="../assets/index_banner1.jpg" alt="" srcset="">
     <bullet-words :maxheight="80" style="position:absolute;top:0;height:80%"/>
   </div>
   <div class="container">

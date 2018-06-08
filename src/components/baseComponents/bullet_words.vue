@@ -86,7 +86,8 @@ export default {
   },
   methods: {
     getData(name, obj) {
-      let activity_token = this.activity_token || 0;
+      let activity_token =
+        this.activity_token || "263764d167ee33343036fb1510a58503";
       let obj1 = Object.assign({}, obj, {
         activity_token
       });

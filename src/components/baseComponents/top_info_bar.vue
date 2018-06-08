@@ -74,12 +74,22 @@ export default {
         }
         span {
           //   .box-shadow(-2px);
+          position: absolute;
+          left: 40px;
+          top: 10px;
+          display: block;
           box-shadow: 0px -1px 1px #666;
           color: #fff;
           font-size: 14px;
+          padding: 2px 8px 2px 8px;
           border-top-right-radius: 3px;
           border-bottom-right-radius: 3px;
-          padding: 5px;
+          height: 24px;
+          line-height: 24px;
+          max-width: 90%;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: clip;
           z-index: 1;
           background-color: rgba(255, 255, 255, 0.5);
         }
@@ -92,7 +102,7 @@ export default {
           border-radius: 0;
         }
         span {
-          padding: 5px 12px;
+          left: 28px;
         }
       }
     }

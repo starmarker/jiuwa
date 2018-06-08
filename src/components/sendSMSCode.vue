@@ -1,5 +1,5 @@
 <template>
-	<van-button :loading="btn_sendcode.loading" :disabled="btn_sendcode.disabled" icon="message" @click="send_phone_code">{{btn_sendcode.title}}</van-button>
+	<van-button :loading="btn_sendcode.loading" :disabled="btn_sendcode.disabled" icon="message" @click="send_phone_code" size="small" type="primary">{{btn_sendcode.title}}</van-button>
 </template>
 <script>
 export default {

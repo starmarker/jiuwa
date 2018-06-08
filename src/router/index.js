@@ -35,7 +35,8 @@ export default new Router({
           path: "index",
           name: "home",
           meta: {
-            title: "活动首页"
+            title: "活动首页",
+            ck_bind_phone: true
           },
           component: Index
         },
@@ -51,7 +52,8 @@ export default new Router({
           path: "my/:token",
           name: "myinfo",
           meta: {
-            title: "个人信息"
+            title: "个人信息",
+            ck_bind_phone: true
           },
           component: resolve => require(["@/components/moreInfo"], resolve)
         },
@@ -59,7 +61,8 @@ export default new Router({
           path: "my",
           name: "myinfo1",
           meta: {
-            title: "个人信息"
+            title: "个人信息",
+            ck_bind_phone: true
           },
           component: resolve => require(["@/components/moreInfo"], resolve)
         },
@@ -67,7 +70,8 @@ export default new Router({
           path: "sign/:token",
           name: "updateSign",
           meta: {
-            title: "活动报名"
+            title: "活动报名",
+            ck_bind_phone: true
           },
           component: resolve => require(["@/components/sign"], resolve)
         },
@@ -75,7 +79,8 @@ export default new Router({
           path: "sign",
           name: "sign",
           meta: {
-            title: "活动报名"
+            title: "活动报名",
+            ck_bind_phone: true
           },
           component: resolve => require(["@/components/sign"], resolve)
         }
@@ -86,7 +91,8 @@ export default new Router({
       path: "/pick/:token",
       name: "pick",
       meta: {
-        title: "采摘页面"
+        title: "采摘页面",
+        ck_bind_phone: true
       },
       component: resolve => require(["@/components/myinfo"], resolve)
     },
@@ -94,7 +100,8 @@ export default new Router({
       path: "/pick",
       name: "mypick",
       meta: {
-        title: "采摘页面"
+        title: "采摘页面",
+        ck_bind_phone: true
       },
       component: resolve => require(["@/components/myinfo"], resolve)
     },
@@ -102,7 +109,8 @@ export default new Router({
       path: "/jiuwa",
       name: "jiuwa",
       meta: {
-        title: "小灸灸信息"
+        title: "小灸灸信息",
+        ck_bind_phone: true
       },
       component: resolve => require(["@/components/jiuwa"], resolve)
     },
