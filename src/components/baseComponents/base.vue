@@ -16,7 +16,10 @@ export default {
       wxPosition: null,
       a_token: undefined,
       sub: false,
-      is_showPage: false
+      is_showPage: false,
+      wxconfig: {},
+      dtd: null,
+      initSdkSuccess: false
     };
   },
   async created() {
@@ -37,7 +40,7 @@ export default {
       this.$hide_loading();
     }, false);
 
-    //await this.wxLocation();
+    await this.wxLocation();
   },
   beforeRouteEnter: (to, from, next) => {
     // ...
@@ -180,10 +183,12 @@ export default {
         }
       });
     },
-    getLocation() {
+    async getLocation() {
       let position = {};
+
+      this.wxLocation();
       return new Promise((resolve, reject) => {
-        if (this.wxPosition) {
+        if (this.wxPosition != null) {
           resolve(this.wxPosition);
         } else {
           if (navigator.geolocation) {
@@ -315,13 +320,14 @@ export default {
       this.$sendEvent("showConfirm", petname, id);
     },
     wxLocation() {
+      const _this = this;
       return new Promise((resolve, reject) => {
         wx.getLocation({
           type: "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
           success: function(res) {
-            var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-            var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-            this.wxPosition = { latitude, longitude };
+            let latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+            let longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+            _this.wxPosition = { latitude, longitude };
             resolve(position);
           },
           cancel: function(rej) {
@@ -333,10 +339,24 @@ export default {
         });
       });
     },
-    getWxConfig() {
+    getWxConfig(page_name) {
+      let token = this.activity_token;
       let module_token = this.$api_urls["wxconfig"];
-      this.getData("com_manage", { module_token }).then(res => {
-        console.log(res);
+      this.getData("com_manage", {
+        module_token,
+        page_name,
+        token,
+        isdebug: false,
+        wx_token
+      }).then(res => {
+        if (res.code == 1) {
+          let config = res.data.jssdk;
+          console.log("success");
+          // wx.config({ ...config });
+          // wx.ready(() => {
+          //   this.wxLocation();
+          // });
+        }
       });
     }
   }

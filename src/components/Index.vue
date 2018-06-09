@@ -1,5 +1,5 @@
 <template>
-  <div class="hello" @scroll="savePt">
+  <div class="hello">
 <form action="/">
     <van-search
       v-model="user_name"
@@ -11,7 +11,7 @@
   </form>
   <div class="banner" id="banner">
     <img src="../assets/index_banner1.jpg" alt="" srcset="">
-    <bullet-words :maxheight="80" style="position:absolute;top:0;height:80%" ref="bullet" :words="bullets" v-if="showBullet"/>
+    <bullet-words :maxheight="80" style="position:absolute;top:0;height:80%" ref="bullet" v-if="showBullet"/>
   </div>
   <div class="container">
     <flow-block />
@@ -68,27 +68,41 @@ export default {
       isSearch: false,
       gameData: null,
       scrollHeight: 0,
-      showBullet: true
+      showBullet: true,
+      page_info: {}
     };
   },
   components: { playerItem, GlobalFooter, FlowBlock, GameDetail, BulletWords },
-  created() {},
+  async created() {
+    await this.getWxConfig("index");
+  },
   mounted() {
     // this.getIndex();
     this.getIndexData();
     this.setJiuwa();
     // this.getBullet();
     // this.getBullet();
+    window.addEventListener("scroll", e => {
+      this.scrollHeight = JSON.stringify(window.pageYOffset);
+    });
+
+    this.buildPageInfo();
+
+    console.log(this.page_info);
+    wx.onMenuShareAppMessage({ ...this.page_info });
+    wx.onMenuShareTimeline({ ...this.page_info });
+    wx.onMenuShareQQ({ ...this.page_info });
+    wx.onMenuShareQZone({ ...this.page_info });
   },
   beforeUpdate() {},
   deactivated() {
     this.showBullet = false;
-    // this.scrollHeight = document.querySelector(".hello").scrollTop;
-    // console.log(document.querySelector(".hello"));
+    this.$session("scrollY", this.scrollHeight);
   },
   activated() {
     this.showBullet = true;
-    document.querySelector(".hello").scrollTop = this.scrollHeight;
+    this.scrollHeight = this.$session("scrollY");
+    window.scroll(0, ~~this.scrollHeight);
   },
   computed: {
     // scrollHeight() {
@@ -96,6 +110,33 @@ export default {
     // }
   },
   methods: {
+    buildPageInfo() {
+      const _this = this;
+      let obj = {
+        title: "第三届灸正堂杯明星灸疗师风采大赛开幕啦",
+        desc: "第三届灸正堂杯明星灸疗师风采大赛开幕啦",
+        link: location.href + "&inviter_code=" + this.user.user_token,
+        imgUrl:
+          location.host +
+          "/web_app/jztwx/cj_accz/static/img/index_banner1.dd73ce2.jpg",
+        trigger: function(res) {
+          alert("用户点击分享");
+        },
+        complete: function(res) {
+          alert(JSON.stringify(res));
+        },
+        success: function(res) {
+          alert("已分享");
+        },
+        cancel: function(res) {
+          alert("已取消");
+        },
+        fail: function(res) {
+          alert(JSON.stringify(res));
+        }
+      };
+      this.page_info = obj;
+    },
     alert1() {
       this.$confirm_dlg(
         "弹窗测试",
@@ -260,9 +301,9 @@ export default {
 <style scoped lang="less">
 @import "../assets/css/base.less";
 .hello {
-  height: 100vh;
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: auto;
+  // height: 100vh;
+  // overflow-y: scroll;
+  // -webkit-overflow-scrolling: auto;
   .banner {
     .box-shadow();
     //box-shadow: 0 3px 0px 3px #aaa;

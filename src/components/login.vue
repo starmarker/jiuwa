@@ -70,7 +70,7 @@ export default {
         autoLogin: true,
         login_device: "weixin",
         type: "0",
-        company_token: "6be1a0da74f875d42a80e1dfec92e28e",
+        company_token: company_token,
         client_version: "1.2.8",
         m_type: this.$route.params.m_type || 4
       },

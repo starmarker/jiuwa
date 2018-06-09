@@ -37,7 +37,7 @@
       <div class="container" style="min-height:30vh">
         <div class="field-title van-hairline--bottom">我的照片</div>
         <img :src="avatar_src" alt="" srcset="" class="cur-img" v-if="this.avatar_src">
-            <van-uploader :after-read="onRead" accept="image/gif, image/jpeg,image/png" result-type="dataUrl">
+            <van-uploader :after-read="onRead" :before-read="beforeRead" accept="image/*" result-type="dataUrl">
             <div class="upload-icon">
               <van-icon name="photograph" /> 
             </div>
@@ -107,19 +107,23 @@ export default {
     this.getInfo();
   },
   methods: {
+    beforeRead() {
+      return true;
+    },
     onRead(files) {
       const _this = this;
-      if (files instanceof Array) {
-        _this.photo = files.shift();
-        if (!_this.photo) {
-          return;
-        }
-      } else {
-        _this.photo = files;
-      }
+      _this.$show_loading("图片读取中", 0);
+      // if (files instanceof Array) {
+      //   _this.photo = files.shift();
+      //   if (!_this.photo) {
+      //     return;
+      //   }
+      // } else {
+      _this.photo = files;
+      // }
       _this.show = true;
       // _this.$refs.cropper.startCrop();
-      this.$show_loading("图片读取中", 0);
+
       let img = document.querySelector(".cropper-box img");
       img.onload = () => {
         this.$hide_loading();
@@ -176,7 +180,6 @@ export default {
         },
         uploadProgressCallBack: function(e) {
           console.log("图片上传中", e);
-          _this.$hide_loading();
         }
       });
     },
@@ -188,7 +191,7 @@ export default {
         this.$alert_dlg("参赛姓名必填且长度为1-5个汉字");
         return false;
       }
-      this.$show_loading();
+      this.$show_loading("上传中", 0);
       let module_token = this.$route.params.token
         ? this.$api_urls["t_sign_update"]
         : this.$api_urls["sign"];

@@ -1,7 +1,7 @@
 <template>
     <van-cell>
         <img :src="avatar" alt="" slot="icon" v-if="!!avatar">
-        <span slot="title" :class="{'hastel':tel1!=''}">{{title}}<br/><small v-if="tel1!=''">{{tel1}}</small>  </span> 
+        <div slot="title" :class="{'hastel':tel1!=''}">{{title}}<br/><small v-if="tel1!=''">{{tel1}}</small>  </div> 
         <van-button :type="cur_type" size="small" slot="right-icon" @click="btn_click">{{cur_text}}</van-button>        
     </van-cell>
 </template>
@@ -56,7 +56,7 @@ export default {
   line-height: 10vw;
   padding: 5px;
   background-color: rgba(255, 255, 255, 0.6);
-  .van-cell__title span {
+  .van-cell__title div {
     padding-left: 5px;
   }
   img {
@@ -72,7 +72,7 @@ export default {
     color: #fff;
   }
   .hastel {
-    line-height: 4vw !important;
+    line-height: 5vw !important;
   }
 }
 </style>

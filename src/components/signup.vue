@@ -66,7 +66,7 @@ export default {
           user_gps_lat: 0,
           user_gps_lng: 0,
           user_gps_city: "",
-          company_token: "6be1a0da74f875d42a80e1dfec92e28e",
+          company_token: company_token,
           m_type: this.$route.params.m_type || 4
         },
         hangye: "",

@@ -60,7 +60,7 @@ const api_urls = {
   editJiuwa:
     "MDAwMDAwMDAwMLW60ZOCz4CkimWpnb5pqKJ9c4K3vrqGnMd7q6d6omOmwK3Rnpq5gJuWes-px6KHrYqHsNm4uW1kw4-sZZRqhKDImJmakbNvcA",
   wxconfig:
-    "MDAwMDAwMDAwMLW60ZOC0KKkimWUm8ijraWVd6Tbvtt9o6ujk5yTpHiewL27ZYLLqZyMZbljun1_p4uFhtzGz46gvLGsmA",
+    "MDAwMDAwMDAwMLW60ZOC0KKkimWUm8ijraWVd6Tbvtt9o6ujk5yTpHiewL27ZYLLqZyMZbljuY1_spJijpbFuWmetaSwiIN8pZm-t6Ju",
   bindphone: {
     url: "MDAwMDAwMDAwMMvT1ZeSunSjfmXLqceNjnY",
     params: {

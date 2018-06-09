@@ -39,21 +39,20 @@
                 <div class="page-body">
                   <van-list v-model="s_loading" :finished="shop_finish" @onLoad="getShopRank" :offset="30">
                       <van-row class="van-hairline--bottom">
-                        <van-col span="2">排名</van-col>
+                        <van-col span="2" class="odd">排名</van-col>
                         <van-col span="8">团队</van-col>
                         <van-col span="4" class="odd">艾草</van-col>
                         <van-col span="5">下单</van-col>
                         <van-col span="5"  class="odd">总成绩</van-col>
                       </van-row>                  
-                      <van-row class="van-hairline--bottom" v-for="(item,index) in shop_rank" :key="item.store_name">
-                        <van-col span="2">
+                      <van-row class="van-hairline--bottom" v-for="(item,index) in shop_rank" :key="item.stroe_name">
+                        <van-col span="2" class="odd">
                           <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
 
                         </van-col>
-                        <van-col span="8">
-                          <img :src="item.headimage" alt="">
-                          <span class="van-cell-text">
-                              {{item.user_name}}
+                        <van-col span="8" class="first-column">                         
+                          <span class="van-cell-text" style="max-width:90%;padding-left:5px;">
+                              {{item.stroe_name}}
                           </span>                          
                         </van-col>
                         <van-col span="4" class="odd">{{item.aicao_sum}}</van-col>
@@ -99,15 +98,15 @@
                 <div class="page-body">
                   <van-list v-model="j_loading" :finished="jiuwa_finish" @onLoad="getJiuwaRank" :offset="30">
                       <van-row class="van-hairline--bottom">
-                        <van-col span="3">名次</van-col>
-                        <van-col span="13" class="odd">顾客</van-col>
+                        <van-col span="5">名次</van-col>
+                        <van-col span="11" class="odd">顾客</van-col>
                         <van-col span="8">总成绩</van-col>
                       </van-row>                  
                       <van-row class="van-hairline--bottom" v-for="(item,index) in jiuwa_rank" :key="item.user_token">
-                        <van-col span="3">
+                        <van-col span="5">
                           <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
                         </van-col>
-                        <van-col span="13" class="first-column">
+                        <van-col span="11" class="first-column odd">
                           
                           <img :src="item.headimage" alt="">
                           <span class="van-cell-text">
@@ -191,6 +190,7 @@ export default {
     };
   },
   created() {
+    this.getWxConfig("rank");
     this.getRank();
     this.getJiuwaRank();
     this.getShopRank();
@@ -200,7 +200,42 @@ export default {
     //   this.getRank();
     // }
   },
+  mounted() {
+    this.buildPageInfo();
+    wx.onMenuShareAppMessage({ ...this.page_info });
+    wx.onMenuShareTimeline({ ...this.page_info });
+    wx.onMenuShareQQ({ ...this.page_info });
+    wx.onMenuShareQZone({ ...this.page_info });
+  },
+
   methods: {
+    buildPageInfo() {
+      const _this = this;
+      let obj = {
+        title: "第三届灸正堂杯明星灸疗师风采大赛开幕啦",
+        desc: "第三届灸正堂杯明星灸疗师风采大赛开幕啦",
+        link: location.href + "&inviter_code=" + _this.user.user_token,
+        imgUrl:
+          location.host +
+          "/web_app/jztwx/cj_accz/static/img/index_banner1.dd73ce2.jpg",
+        trigger: function(res) {
+          alert("用户点击分享");
+        },
+        complete: function(res) {
+          alert(JSON.stringify(res));
+        },
+        success: function(res) {
+          alert("已分享");
+        },
+        cancel: function(res) {
+          alert("已取消");
+        },
+        fail: function(res) {
+          alert(JSON.stringify(res));
+        }
+      };
+      this.page_info = obj;
+    },
     getShopRank() {
       let user_type = 2;
       let module_token = this.$api_urls["rank"];
@@ -277,14 +312,14 @@ export default {
 .page-body {
   width: 100%;
   box-sizing: border-box;
-  height: calc(100vh - 150px);
+  // height: calc(100vh - 150px);
   text-align: left;
-  overflow-y: auto;
+  // overflow-y: auto;
   .van-list {
     min-height: 20vh;
-    max-height: calc(100vh - 80px);
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
+    // max-height: calc(100vh - 80px);
+    // overflow-y: scroll;
+    // -webkit-overflow-scrolling: touch;
   }
   .van-row {
     width: 100%;
@@ -300,8 +335,12 @@ export default {
       &.odd {
         background-color: rgba(255, 255, 255, 0.4);
       }
+      .van-tag {
+        top: -5px;
+      }
       &.first-column {
         text-align: left;
+        padding-left: 3px;
         .van-cell-text {
           white-space: nowrap;
           max-width: calc(100% - 60px);
@@ -309,6 +348,9 @@ export default {
           text-overflow: clip;
           overflow: hidden;
           color: #666;
+        }
+        .van-tag {
+          top: -15px;
         }
       }
       &.user-rank {
@@ -320,9 +362,6 @@ export default {
     }
   }
 
-  .van-tag {
-    top: -15px;
-  }
   .first-column img,
   .page-body img {
     width: 30px;
