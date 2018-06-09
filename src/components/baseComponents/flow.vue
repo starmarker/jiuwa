@@ -9,7 +9,7 @@
                 <p>采摘艾草</p>
             </van-step>
         </van-steps> -->
-        <router-link to="/detail">查看详情 <van-icon name="arrow" size="14px" /></router-link>
+        <router-link to="/detail">活动介绍 <van-icon name="arrow" size="14px" /></router-link>
         <!-- <a href="">查看详情</a> -->
     </div>
 </template>

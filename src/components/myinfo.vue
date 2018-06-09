@@ -514,7 +514,7 @@ export default {
     max-height: 80%;
     background-color: rgba(255, 255, 255, 0.6);
     border-radius: 7vw;
-    overflow-y: auto;
+    // overflow-y: auto;
     // .van-list {
     //   max-height: calc(100% - 60px);
     //   overflow-y: auto;
@@ -533,18 +533,18 @@ export default {
       overflow: hidden;
       box-sizing: border-box;
       .wraper {
-        min-height: 10vh;
-        max-height: calc(70vh - 120px);
-        overflow-y: scroll;
         > p {
           font-size: 14px;
           color: #666;
           text-align: center;
         }
+        .van-list {
+          min-height: 10vh;
+          max-height: calc(70vh - 120px);
+          overflow-y: scroll;
+          -webkit-overflow-scrolling: touch;
+        }
       }
-      // .van-list {
-
-      // }
     }
   }
 }

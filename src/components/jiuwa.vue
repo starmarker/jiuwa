@@ -21,7 +21,7 @@
       </div>
     </div>    
     <div class="help-btn" @click="help" v-if="jiuwa.fall_type!=0"></div>
-    <Jiuwa :model="jiuwa" @rescue="help" :img="pic_src" v-if="showJiuwa"></Jiuwa>
+    <Jiuwa :model="jiuwa" @rescue="help" :img="pic_src" v-cloak v-show="showJiuwa"></Jiuwa>
     <myFooter :isShowPick="true" @pick="gopick" @checkOrder="checkOrder" />
       <van-popup v-model="showHelpList" :close-on-click-overlay="true" :overlay-style="{height:'100vh'}" :lock-scroll="false" class="help-div">
         <van-nav-bar title="您附近的灸疗师" />
@@ -32,7 +32,7 @@
                 <user-list-item v-for="item in teacher_list" :key="item.id" @btnClick="()=>{reqhelp(item)}" :disabled="item.disabled" :avatar="item.headimage" :title="item.nickname" disText="已求助"/> 
               </div>
             <p v-if="teacher_list.length<1">没有附近灸疗师数据</p>
-            <van-button type="primary" size="small" @click="getList">加载更多</van-button>
+            <van-button type="primary" size="small" @click="getList" style="margin:10px auto;">刷新</van-button>
           </div>  
               
       </van-popup>
@@ -124,8 +124,8 @@ export default {
     });
     setTimeout(() => {
       this.showTalk = true;
+      this.showJiuwa = true;
     }, 1000);
-    this.showJiuwa = true;
   },
 
   methods: {
@@ -296,8 +296,8 @@ export default {
   background-size: 100% 100%;
   .jiuwa-talk {
     position: absolute;
-    right: 2vw;
-    bottom: 50%;
+    right: 5vw;
+    bottom: 45%;
     width: 40vw;
     height: 41vw;
     background-image: url("../assets/xjj_talk.png");
@@ -384,6 +384,9 @@ export default {
 //     }
 //   }
 // }
+[v-cloak] {
+  display: none;
+}
 </style>
 
 

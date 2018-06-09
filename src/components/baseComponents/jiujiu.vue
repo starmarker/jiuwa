@@ -56,6 +56,7 @@ export default {
 }
 .baby {
   background-image: url("../../assets/xjj_baby.gif");
+  background-size: 80% 80%;
 }
 .illness {
   background-image: url("../../assets/xjj_illness.png");

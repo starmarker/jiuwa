@@ -47,11 +47,11 @@ export default {
   computed: {
     activity_token() {
       let result;
-      if (this.$route.query.activity_token) {
-        result = this.$route.query.activity_token;
+      if (this.$route.query.token) {
+        result = this.$route.query.token;
         window.sessionStorage.setItem(
           "activity_token",
-          this.$route.query.activity_token
+          this.$route.query.token
         );
       } else if (
         this.$login_info() != null &&
@@ -68,13 +68,10 @@ export default {
       if (this.$route.query.inviter_code) {
         result = this.$route.query.inviter_code;
         this.$session("inviter_code", this.$route.query.inviter_code);
-      } else if (
-        this.$login_info() != null &&
-        this.$session("activity_token")
-      ) {
-        result = this.$session("activity_token");
+      } else if (this.$login_info() != null && this.$session("inviter_code")) {
+        result = this.$session("inviter_code");
       } else {
-        result = "33359507b753485b6f47490383a47aa8";
+        result = "";
       }
       return result;
     },
@@ -151,6 +148,11 @@ export default {
                       }
                     );
                   }
+                  break;
+                case "555":
+                  this.$alert_dlg(res.data.data.msg, "", () => {
+                    window.location = res.data.data.url;
+                  });
               }
               this.$hide_loading();
             }
@@ -329,6 +331,12 @@ export default {
             reject(err);
           }
         });
+      });
+    },
+    getWxConfig() {
+      let module_token = this.$api_urls["wxconfig"];
+      this.getData("com_manage", { module_token }).then(res => {
+        console.log(res);
       });
     }
   }

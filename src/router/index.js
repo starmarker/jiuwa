@@ -85,37 +85,46 @@ export default new Router({
             ck_bind_phone: true
           },
           component: resolve => require(["@/components/sign"], resolve)
+        },
+        {
+          path: "pick/:token",
+          name: "pick",
+          meta: {
+            title: "采摘页面",
+            ck_bind_phone: true
+          },
+          component: resolve => require(["@/components/myinfo"], resolve)
+        },
+        {
+          path: "pick",
+          name: "mypick",
+          meta: {
+            title: "采摘页面",
+            ck_bind_phone: true
+          },
+          component: resolve => require(["@/components/myinfo"], resolve)
+        },
+        {
+          path: "jiuwa",
+          name: "jiuwa",
+          meta: {
+            title: "小灸灸信息",
+            ck_bind_phone: true
+          },
+          component: resolve => require(["@/components/jiuwa"], resolve)
+        },
+        {
+          path: "detail",
+          name: "detail",
+          meta: {
+            title: "活动介绍"
+          },
+          component: resolve => require(["@/components/detail"], resolve),
+          props: true
         }
       ]
     },
 
-    {
-      path: "/pick/:token",
-      name: "pick",
-      meta: {
-        title: "采摘页面",
-        ck_bind_phone: true
-      },
-      component: resolve => require(["@/components/myinfo"], resolve)
-    },
-    {
-      path: "/pick",
-      name: "mypick",
-      meta: {
-        title: "采摘页面",
-        ck_bind_phone: true
-      },
-      component: resolve => require(["@/components/myinfo"], resolve)
-    },
-    {
-      path: "/jiuwa",
-      name: "jiuwa",
-      meta: {
-        title: "小灸灸信息",
-        ck_bind_phone: true
-      },
-      component: resolve => require(["@/components/jiuwa"], resolve)
-    },
     {
       path: "/result/:type",
       name: "result",
@@ -123,15 +132,6 @@ export default new Router({
         title: "提交结果"
       },
       component: resolve => require(["@/components/result"], resolve),
-      props: true
-    },
-    {
-      path: "/detail",
-      name: "detail",
-      meta: {
-        title: "活动介绍"
-      },
-      component: resolve => require(["@/components/detail"], resolve),
       props: true
     }
   ]

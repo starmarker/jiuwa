@@ -20,19 +20,14 @@ export default {
     speed: {
       type: Number,
       default: 30 //弹幕速度，默认100px/s
-    },
-    words: {
-      type: Array,
-      default() {
-        return [];
-      }
     }
   },
   data() {
     return {
       ws_url: "ws://test.z9168.com:7272",
       lineContent: [],
-      count: 0
+      count: 0,
+      words: []
     };
   },
   created() {},
@@ -54,7 +49,9 @@ export default {
       return {};
     }
   },
-  mounted() {},
+  mounted() {
+    this.getBullet();
+  },
   beforeCreate() {},
   // deactivated() {
   //   // this.$destroy(true);
@@ -158,6 +155,15 @@ export default {
           }
           i++;
         }, 3000);
+      });
+    },
+    getBullet() {
+      let module_token = this.$api_urls["bullet"];
+      this.getData("com_manage", { module_token }).then(res => {
+        if (res.data.code == 1 && res.data.data.length > 0) {
+          this.words = res.data.data;
+          this.addWords();
+        }
       });
     }
   }

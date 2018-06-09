@@ -5,7 +5,7 @@
       </keep-alive>
         <router-view v-if="!$route.meta.keepAlive"/>
              
-        <global-footer ref="gfooter"></global-footer>
+        <global-footer ref="gfooter" v-if="!noFooter"></global-footer>
     </div>
 </template>
 <script>
@@ -28,6 +28,13 @@ export default {
       if (oldvalue.name == "sign") {
         this.$refs.gfooter.updateAct();
       }
+    }
+  },
+  computed: {
+    noFooter() {
+      let noShowArr = ["myinfo", "myinfo1", "pick", "mypick", "jiuwa"];
+      let cur_name = this.$route.name;
+      return noShowArr.indexOf(cur_name) > -1;
     }
   },
   methods: {

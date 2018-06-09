@@ -10,45 +10,58 @@
 
             <van-tab  title="灸疗师排行">
                 <div class="page-body">
-                  <van-list v-model="loading" :finished="aicao_finish" @onLoad="getRank" :offset="30">
-                    <table class="table van-hairline--bottom">
-                        <thead>
-                            <tr class="van-hairline--bottom">
-                                <th style="width:30%;">灸疗师</th>
-                                <th class="odd" style="width:18%;">艾草</th>
-                                <th style="width:18%;">下单</th>
-                                <th class="odd" style="width:18%;">出货</th>
-                                <th style="width:17%;">总成绩</th>
-                            </tr>
-                        </thead>
-                        <tbody v-if="aicao_rank.length>0">
-                            <tr v-for="(item,index) in aicao_rank" :key="item.user_token">
-                                <td class="first-column">
-                                    <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
-                                    <img :src="item.headimage" alt="">
-                                    <span class="van-cell-text">
-                                        {{item.user_name}}
-                                    </span>
-                                </td>
-                                <td class="odd">{{item.aicao_sum}}</td>
-                                <td>{{item.order_sum}}</td>
-                                <td class="odd">{{item.shipments}}</td>
-                                <td>{{item.total}}</td>
-                            </tr>
-                        </tbody>
-                        <tbody v-else>
-                          <tr >
-                            <td colspan="5">没有相关数据</td>
-                          </tr>
-                        </tbody>
-                    </table>
+                  <van-list v-model="loading" :finished="aicao_finish" @onLoad="getRank" :offset="30">                    
+                      <van-row class="van-hairline--bottom">
+                        <van-col span="6">灸疗师</van-col>
+                        <van-col span="4" class="odd">艾草</van-col>
+                        <van-col span="5">下单</van-col>
+                        <van-col span="4" class="odd">出货</van-col>
+                        <van-col span="5">总成绩</van-col>
+                      </van-row>                  
+                      <van-row class="van-hairline--bottom" v-for="(item,index) in aicao_rank" :key="item.user_token">
+                        <van-col span="6" class="first-column">
+                          <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
+                          <img :src="item.headimage" alt="">
+                          <span class="van-cell-text">
+                              {{item.user_name}}
+                          </span>
+                        </van-col>
+                        <van-col span="4" class="odd">{{item.aicao_sum}}</van-col>
+                        <van-col span="5">{{item.order_sum}}</van-col>
+                        <van-col span="4" class="odd">{{item.shipments}}</van-col>
+                        <van-col span="5">{{item.total}}</van-col>
+                      </van-row> 
+                      <p v-if="aicao_rank.length==0" v-cloak>{{nodataText}}</p>                   
                   </van-list>
                 </div> 
             </van-tab>
             <van-tab  title="团队排行">
                 <div class="page-body">
                   <van-list v-model="s_loading" :finished="shop_finish" @onLoad="getShopRank" :offset="30">
-                    <table class="table van-hairline--bottom">
+                      <van-row class="van-hairline--bottom">
+                        <van-col span="2">排名</van-col>
+                        <van-col span="8">团队</van-col>
+                        <van-col span="4" class="odd">艾草</van-col>
+                        <van-col span="5">下单</van-col>
+                        <van-col span="5"  class="odd">总成绩</van-col>
+                      </van-row>                  
+                      <van-row class="van-hairline--bottom" v-for="(item,index) in shop_rank" :key="item.store_name">
+                        <van-col span="2">
+                          <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
+
+                        </van-col>
+                        <van-col span="8">
+                          <img :src="item.headimage" alt="">
+                          <span class="van-cell-text">
+                              {{item.user_name}}
+                          </span>                          
+                        </van-col>
+                        <van-col span="4" class="odd">{{item.aicao_sum}}</van-col>
+                        <van-col span="5">{{item.place_order}}</van-col>
+                        <van-col span="5" class="odd">{{item.total_achievement}}</van-col>
+                      </van-row> 
+                      <p v-if="aicao_rank.length==0" v-cloak>{{nodataText}}</p> 
+                    <!-- <table class="table van-hairline--bottom">
                         <thead>
                             <tr class="van-hairline--bottom">
                                 <th style="width:10%;">排名</th>
@@ -78,14 +91,33 @@
                             <td colspan="5">没有相关数据</td>
                           </tr>
                         </tbody>
-                    </table>
+                    </table> -->
                   </van-list>
                 </div> 
             </van-tab>
             <van-tab  title="采摘排行">
                 <div class="page-body">
                   <van-list v-model="j_loading" :finished="jiuwa_finish" @onLoad="getJiuwaRank" :offset="30">
-                    <table class="table van-hairline--bottom">
+                      <van-row class="van-hairline--bottom">
+                        <van-col span="3">名次</van-col>
+                        <van-col span="13" class="odd">顾客</van-col>
+                        <van-col span="8">总成绩</van-col>
+                      </van-row>                  
+                      <van-row class="van-hairline--bottom" v-for="(item,index) in jiuwa_rank" :key="item.user_token">
+                        <van-col span="3">
+                          <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
+                        </van-col>
+                        <van-col span="13" class="first-column">
+                          
+                          <img :src="item.headimage" alt="">
+                          <span class="van-cell-text">
+                              {{item.nickname}}
+                          </span>
+                        </van-col>
+                        <van-col span="8">{{item.total}}</van-col>
+                      </van-row> 
+                      <p v-if="jiuwa_rank.length==0" v-cloak>{{nodataText}}</p>  
+                    <!-- <table class="table van-hairline--bottom">
                         <thead>
                             <tr class="van-hairline--bottom">
                                 <th style="width:30%;">名次</th>
@@ -111,7 +143,7 @@
                             <td colspan="5">没有相关数据</td>
                           </tr>
                         </tbody>
-                    </table>
+                    </table> -->
                   </van-list>
                 </div>
             </van-tab>
@@ -154,7 +186,8 @@ export default {
       jiuwa_finish: false,
       cur_shop_page: 1,
       shop_finish: false,
-      u_arr: [1, 2, 0]
+      u_arr: [1, 2, 0],
+      nodataText: "没有相关数据"
     };
   },
   created() {
@@ -251,54 +284,55 @@ export default {
     min-height: 20vh;
     max-height: calc(100vh - 80px);
     overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
   }
-  .table {
+  .van-row {
     width: 100%;
-    table-layout: fixed;
-    border-collapse: collapse;
-    tr {
-      border-bottom: 1px solid #f0e3d6;
-      th,
-      td {
-        color: #666;
-        font-weight: normal;
-        height: 40px;
-        background-color: transparent;
-        text-align: center;
-        font-size: 14px;
-        &.odd {
-          background-color: rgba(255, 255, 255, 0.4);
+    height: 40px;
+    line-height: 40px;
+    .van-col {
+      color: #666;
+      font-weight: normal;
+      height: 40px;
+      background-color: transparent;
+      text-align: center;
+      font-size: 14px;
+      &.odd {
+        background-color: rgba(255, 255, 255, 0.4);
+      }
+      &.first-column {
+        text-align: left;
+        .van-cell-text {
+          white-space: nowrap;
+          max-width: calc(100% - 60px);
+          display: inline-block;
+          text-overflow: clip;
+          overflow: hidden;
+          color: #666;
         }
-        &.first-column {
-          text-align: left;
-          .van-cell-text {
-            white-space: nowrap;
-            max-width: calc(100% - 60px);
-            display: inline-block;
-            text-overflow: clip;
-            overflow: hidden;
-            color: #666;
-          }
-        }
-        &.user-rank {
-          padding-left: 2vw;
-          // .van-cell-text {
-          //   max-width: 100%;
-          // }
-        }
+      }
+      &.user-rank {
+        padding-left: 2vw;
+        // .van-cell-text {
+        //   max-width: 100%;
+        // }
       }
     }
   }
+
   .van-tag {
-    top: -5px;
+    top: -15px;
   }
   .first-column img,
   .page-body img {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    vertical-align: text-bottom;
+    vertical-align: super;
   }
+}
+[v-cloak] {
+  display: none;
 }
 </style>
 

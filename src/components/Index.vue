@@ -1,5 +1,5 @@
 <template>
-  <div class="hello" @scroll="savePy">
+  <div class="hello" @scroll="savePt">
 <form action="/">
     <van-search
       v-model="user_name"
@@ -11,7 +11,7 @@
   </form>
   <div class="banner" id="banner">
     <img src="../assets/index_banner1.jpg" alt="" srcset="">
-    <bullet-words :maxheight="80" style="position:absolute;top:0;height:80%" ref="bullet" :words="bullets"/>
+    <bullet-words :maxheight="80" style="position:absolute;top:0;height:80%" ref="bullet" :words="bullets" v-if="showBullet"/>
   </div>
   <div class="container">
     <flow-block />
@@ -68,7 +68,7 @@ export default {
       isSearch: false,
       gameData: null,
       scrollHeight: 0,
-      bullets: []
+      showBullet: true
     };
   },
   components: { playerItem, GlobalFooter, FlowBlock, GameDetail, BulletWords },
@@ -77,14 +77,23 @@ export default {
     // this.getIndex();
     this.getIndexData();
     this.setJiuwa();
-    this.getBullet();
+    // this.getBullet();
     // this.getBullet();
   },
   beforeUpdate() {},
-
+  deactivated() {
+    this.showBullet = false;
+    // this.scrollHeight = document.querySelector(".hello").scrollTop;
+    // console.log(document.querySelector(".hello"));
+  },
   activated() {
-    console.log(this.scrollHeight);
+    this.showBullet = true;
     document.querySelector(".hello").scrollTop = this.scrollHeight;
+  },
+  computed: {
+    // scrollHeight() {
+    //   return document.querySelector(".hello").scrollTop;
+    // }
   },
   methods: {
     alert1() {
@@ -240,17 +249,8 @@ export default {
         }
       });
     },
-    savePy(e) {
-      console.log(e.target.scrollTop);
+    savePt(e) {
       this.scrollHeight = e.target.scrollTop;
-    },
-    getBullet() {
-      let module_token = this.$api_urls["bullet"];
-      this.getData("com_manage", { module_token }).then(res => {
-        if (res.data.code == 1 && res.data.data.length > 0) {
-          this.bullets = res.data.data;
-        }
-      });
     }
   }
 };
@@ -262,6 +262,7 @@ export default {
 .hello {
   height: 100vh;
   overflow-y: scroll;
+  -webkit-overflow-scrolling: auto;
   .banner {
     .box-shadow();
     //box-shadow: 0 3px 0px 3px #aaa;
