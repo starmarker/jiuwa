@@ -29,6 +29,10 @@ export default {
     this.setActive();
   },
   computed: {
+  	activity_token() {
+      let result=this.getQueryString('token');
+      return result;
+    },
     userInfo() {
       return this.$login_info();
     },
@@ -63,7 +67,7 @@ export default {
     },
     button_click(url) {
       let params = {
-        activity_token: "263764d167ee33343036fb1510a58503"
+        activity_token: this.activity_token
       };
       if (this.userInfo.is_teacher != 1) {
         let module_token = this.$api_urls["isHasJiuwa"];
@@ -91,7 +95,7 @@ export default {
     },
     updateAct() {
       let params = {
-        activity_token: "263764d167ee33343036fb1510a58503"
+        activity_token: this.activity_token
       };
       let module_token = this.$api_urls["is_signed"];
       let obj = Object.assign({}, params, { module_token });

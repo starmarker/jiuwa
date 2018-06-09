@@ -11,15 +11,27 @@ import "vant/lib/vant-css/index.css";
 import apis from "./libs/api_config";
 Vue.use(Vant);
 Vue.config.productionTip = false;
-Vue.use(Zj, { api_lists, notices: notice, wxtoken: "MDAwMDAwMDAwMLW60Ks" });
+Vue.use(Zj, {
+	api_lists,
+	notices: notice,
+	wxtoken: "MDAwMDAwMDAwMLW60Ks"
+});
 /* eslint-disable no-new */
 // require("./libs/mock");
-//Vue.prototype.$api_urls = Object.assign({}, Vue.prototype.$api_urls, apis);
+Vue.prototype.getQueryString = function(name) {
 
+	let reg = new RegExp("(^|&|#)" + name + "=([^&]*)(&|#|$)", "i");
+	let r = window.location.search.substr(1).match(reg);
+	if(r != null) return unescape(r[2]);
+	return null;
+
+}
 const vm = new Vue({
-  el: "#app",
-  router,
-  components: { App },
-  template: "<App/>"
+	el: "#app",
+	router,
+	components: {
+		App
+	},
+	template: "<App/>"
 });
 window.vm = vm;
