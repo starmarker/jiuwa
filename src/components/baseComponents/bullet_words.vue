@@ -178,7 +178,7 @@ export default {
   .lines {
     width: 100%;
     position: relative;
-    min-height: 25px;
+    min-height: 30px;
     .word {
       display: table;
       position: absolute;
