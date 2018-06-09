@@ -26,13 +26,6 @@ export default {
     this.$show_loading("正在进入活动");
     await this.$cklogin(res => {
       console.log("res :", res);
-      // await this.getuser();
-      // this.$nextTick(() => {
-      //   console.log("下一步");
-      //   this.$forceUpdate();
-      //   // Bus.$emit("isTeacher", this.is_teacher);
-      // });
-      // this.checkUser(() => {});
       if (res != null) {
         this.is_showPage = true;
       }
@@ -49,33 +42,12 @@ export default {
   },
   computed: {
     activity_token() {
-      let result;
-      if (this.$route.query.token) {
-        result = this.$route.query.token;
-        window.sessionStorage.setItem(
-          "activity_token",
-          this.$route.query.token
-        );
-      } else if (
-        this.$login_info() != null &&
-        sessionStorage.getItem("activity_token")
-      ) {
-        result = sessionStorage.getItem("activity_token");
-      } else {
-        result = "263764d167ee33343036fb1510a58503";
-      }
+      let result=this.getQueryString('token');
       return result;
     },
     inviter_code() {
-      let result;
-      if (this.$route.query.inviter_code) {
-        result = this.$route.query.inviter_code;
-        this.$session("inviter_code", this.$route.query.inviter_code);
-      } else if (this.$login_info() != null && this.$session("inviter_code")) {
-        result = this.$session("inviter_code");
-      } else {
-        result = "";
-      }
+      let result=this.getQueryString('inviter_code');
+      
       return result;
     },
     user() {
@@ -320,45 +292,51 @@ export default {
       this.$sendEvent("showConfirm", petname, id);
     },
     wxLocation() {
-      const _this = this;
-      return new Promise((resolve, reject) => {
-        wx.getLocation({
-          type: "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-          success: function(res) {
-            let latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
-            let longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
-            _this.wxPosition = { latitude, longitude };
-            resolve(position);
-          },
-          cancel: function(rej) {
-            reject(rej);
-          },
-          fail: function(err) {
-            reject(err);
-          }
-        });
-      });
+      // const _this = this;
+      // return new Promise((resolve, reject) => {
+      //   wx.getLocation({
+      //     type: "wgs84", // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+      //     success: function(res) {
+      //       let latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+      //       let longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+      //       _this.wxPosition = { latitude, longitude };
+      //       resolve(position);
+      //     },
+      //     cancel: function(rej) {
+      //       reject(rej);
+      //     },
+      //     fail: function(err) {
+      //       reject(err);
+      //     }
+      //   });
+      // });
     },
     getWxConfig(page_name) {
-      let token = this.activity_token;
-      let module_token = this.$api_urls["wxconfig"];
-      this.getData("com_manage", {
-        module_token,
-        page_name,
-        token,
-        isdebug: false,
-        wx_token
-      }).then(res => {
-        if (res.code == 1) {
-          let config = res.data.jssdk;
-          console.log("success");
-          // wx.config({ ...config });
-          // wx.ready(() => {
-          //   this.wxLocation();
-          // });
-        }
-      });
-    }
+      // let token = this.activity_token;
+      // let module_token = this.$api_urls["wxconfig"];
+      // this.getData("com_manage", {
+      //   module_token,
+      //   page_name,
+      //   token,
+      //   isdebug: false,
+      //   wx_token
+      // }).then(res => {
+      //   if (res.code == 1) {
+      //     let config = res.data.jssdk;
+      //     console.log("success");
+      //     // wx.config({ ...config });
+      //     // wx.ready(() => {
+      //     //   this.wxLocation();
+      //     // });
+      //   }
+      // });
+    },
+    getQueryString(name) { 
+      let reg = new RegExp("(^|&|#)" + name + "=([^&]*)(&|#|$)", "i"); 
+      let r = window.location.search.substr(1).match(reg); 
+      if (r != null) return unescape(r[2]); return null; 
+      }
+ 
   }
 };
 </script>

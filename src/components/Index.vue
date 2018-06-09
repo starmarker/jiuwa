@@ -31,6 +31,7 @@
         :finished="finished"
         @load="getIndex"
        :offset="30"
+       :immediate-check="false"
       >
   <!-- <van-cell v-for="item in list" :key="item" :title="item + ''" /> -->
         <van-row>
@@ -77,7 +78,7 @@ export default {
     await this.getWxConfig("index");
   },
   mounted() {
-    // this.getIndex();
+    this.getIndex();
     this.getIndexData();
     this.setJiuwa();
     // this.getBullet();
@@ -88,7 +89,7 @@ export default {
 
     this.buildPageInfo();
 
-    console.log(this.page_info);
+    console.log(this.$route);
     wx.onMenuShareAppMessage({ ...this.page_info });
     wx.onMenuShareTimeline({ ...this.page_info });
     wx.onMenuShareQQ({ ...this.page_info });

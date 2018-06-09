@@ -47,7 +47,11 @@ export default {
     curStyle() {
       // return { animationDuration: this.duration + "s" };
       return {};
-    }
+    },
+    activity_token() {     
+      let result=this.getQueryString('token');
+      return result;
+    },   
   },
   mounted() {
     this.getBullet();
