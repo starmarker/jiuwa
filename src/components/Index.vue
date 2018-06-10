@@ -32,7 +32,7 @@
         @load="getIndex"
        :offset="30"
        :immediate-check="false"
-      >
+      v-if="!isSearch">
   <!-- <van-cell v-for="item in list" :key="item" :title="item + ''" /> -->
         <van-row>
           <van-col span="12" v-for="item in all_ther" :key="item.user_token" style="margin-top:1vh">
@@ -40,7 +40,12 @@
           </van-col>      
         </van-row>
     </van-list>
-    
+        <van-row v-else>
+          <van-col span="12" v-for="item in search_list" :key="item.user_token" style="margin-top:1vh">
+            <player-item :item="item" @pick="pick" @jumpPage="goPage" />
+          </van-col> 
+          <p v-if="search_list.length<1 && showSearch">搜索结果为空</p>     
+        </van-row>   
     <!-- <globalFooter :teacher="is_teacher"></globalFooter> -->
   </div>
 </template>
@@ -70,7 +75,9 @@ export default {
       gameData: null,
       scrollHeight: 0,
       showBullet: true,
-      page_info: {}
+      page_info: {},
+      search_list:[],//搜索结果数组
+      showSearch:false,//搜索结果为空的情况展示
     };
   },
   components: { playerItem, GlobalFooter, FlowBlock, GameDetail, BulletWords },
@@ -252,25 +259,25 @@ export default {
 
       let module_token = this.$api_urls["search"],
         user_name = this.user_name;
-      this.cur_page = 1;
+      
       this.list = [];
       this.getData("com_manage", {
         module_token,
-        page: this.cur_page,
         user_name
       })
         .then(res => {
           if (res.data.code == 1) {
             let arr = res.data.data;
-            if (this.cur_page == 1) {
-              this.all_ther = [];
-            }
-            this.all_ther = this.all_ther.concat(arr);
+            this.search_list = arr;
+
+          }else{
+            this.search_list = [];
           }
 
           // this.cur_page++;
           // this.finished = this.cur_page > res.data.page_info.last_page;
           // this.loading = false;
+          this.showSearch=true;
         })
         .catch(rej => {
           this.$err(rej.msg);
