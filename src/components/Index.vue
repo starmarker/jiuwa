@@ -260,7 +260,7 @@ export default {
       let module_token = this.$api_urls["search"],
         user_name = this.user_name;
       
-      this.list = [];
+      this.search_list = [];
       this.getData("com_manage", {
         module_token,
         user_name
