@@ -5,7 +5,7 @@
       <i class="iconfont icon-paihang" slot="icon"></i>
       排行榜</van-tabbar-item>
       <van-tabbar-item icon="contact" @click="button_click(buttonObejct.url)">{{buttonObejct.text}}</van-tabbar-item>
-      <van-tabbar-item icon="upgrade" @click.native="toggleUser">切换</van-tabbar-item>
+      <van-tabbar-item icon="upgrade" @click.native="toggleUser" v-if="userInfo.is_teacher!=1">切换</van-tabbar-item>
     </van-tabbar>
 </template>
 <script>
