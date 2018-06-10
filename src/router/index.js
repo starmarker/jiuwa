@@ -25,7 +25,7 @@ const routes= [
     name: "index",
     meta: {
       title: "活动首页",
-      keepAlive: true
+      keepAlive: false
     },
     redirect: "index",
     component: resolve => require(["@/components/main"], resolve),
@@ -36,7 +36,7 @@ const routes= [
         meta: {
           title: "活动首页",
           ck_bind_phone: true,
-          keepAlive: true
+          keepAlive: false
         },
         component: Index
       },

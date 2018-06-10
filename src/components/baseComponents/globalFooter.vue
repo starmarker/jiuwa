@@ -5,6 +5,7 @@
       <i class="iconfont icon-paihang" slot="icon"></i>
       排行榜</van-tabbar-item>
       <van-tabbar-item icon="contact" @click="button_click(buttonObejct.url)">{{buttonObejct.text}}</van-tabbar-item>
+      <van-tabbar-item icon="upgrade" @click.native="toggleUser">切换</van-tabbar-item>
     </van-tabbar>
 </template>
 <script>
@@ -110,6 +111,12 @@ export default {
           }
         }
       });
+    },
+    toggleUser(){
+      this.$loginOut(()=>{
+        //wx.closeWindow();//微信关闭窗口
+        window.location.reload();//原生刷新页面
+      })
     }
   }
 };
