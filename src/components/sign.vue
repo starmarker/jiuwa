@@ -46,7 +46,7 @@
       </div>
 
         <van-button type="primary" size="large" @click="submit" class="submit">提交</van-button>
-        <van-popup v-model="show" :overlay="true" style="width:80%;height:70%;background-color:#fff">
+        <van-popup v-model="show" :overlay="true" style="width:80%;height:70%;background-color:#fff" :close-on-click-overlay="false"	>
           <vue-cropper ref="cropper" :img="photo.content" :fixed="option.fixed" :fixedNumber="option.fixedNumber" 	:autoCrop="option.autoCrop" :autoCropWidth="option.autoCropWidth" :autoCropHeight="option.autoCropHeight" :full="option.full" :fixedBox="option.fixedBox"/>
           <van-button type="danger" @click="cancelFixed" >
              旋转
@@ -261,11 +261,12 @@ export default {
       this.$refs.cropper.getCropData(data => {
         let old = this.photo.content;
         // console.log("old :", old);
-        this.baseImg = data;
+        // this.baseImg = data;
         // this.photo.content = data;
+        this.avatar_src = data;
         this.upload(data);
         //console.log("this.photo.content :", this.baseImg);
-        this.avatar_src = data;
+        
         //console.log("object :", this.baseImg, this.photo.content);
       });
       this.$refs.cropper.getCropBlob(data => {
@@ -330,10 +331,8 @@ export default {
     position: absolute;
     margin: auto;
     width: 100%;
-    padding: 20px 0;
-    z-index: 4;
-    top: 50%;
     transform: translateY(-50%);
+    top: 50%;   
     left: 0;
     .upload-icon {
       z-index: 5;

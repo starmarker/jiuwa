@@ -10,16 +10,16 @@
 
             <van-tab  title="灸疗师排行">
                 <div class="page-body">
-                  <van-list v-model="loading" :finished="aicao_finish" @onLoad="getRank" :offset="30">                    
+                  <van-list v-model="loading" :finished="aicao_finish" :immediate-check="false"	 @onLoad="getRank" :offset="30">                    
                       <van-row class="van-hairline--bottom">
-                        <van-col span="6">灸疗师</van-col>
+                        <van-col span="8">灸疗师</van-col>
                         <van-col span="4" class="odd">艾草</van-col>
-                        <van-col span="5">下单</van-col>
+                        <van-col span="4">下单</van-col>
                         <van-col span="4" class="odd">出货</van-col>
-                        <van-col span="5">总成绩</van-col>
+                        <van-col span="4">总成绩</van-col>
                       </van-row>                  
                       <van-row class="van-hairline--bottom" v-for="(item,index) in aicao_rank" :key="item.user_token">
-                        <van-col span="6" class="first-column">
+                        <van-col span="8" class="first-column">
                           <van-tag :type="index==0?'danger':(index==1?'primary':(index==2?'success':''))">{{index+1}}</van-tag>
                           <img :src="item.headimage" alt="">
                           <span class="van-cell-text">
@@ -27,9 +27,9 @@
                           </span>
                         </van-col>
                         <van-col span="4" class="odd">{{item.aicao_sum}}</van-col>
-                        <van-col span="5">{{item.order_sum}}</van-col>
+                        <van-col span="4">{{item.order_sum}}</van-col>
                         <van-col span="4" class="odd">{{item.shipments}}</van-col>
-                        <van-col span="5">{{item.total}}</van-col>
+                        <van-col span="4">{{item.total}}</van-col>
                       </van-row> 
                       <p v-if="aicao_rank.length==0" v-cloak>{{nodataText}}</p>                   
                   </van-list>
@@ -37,7 +37,7 @@
             </van-tab>
             <van-tab  title="团队排行">
                 <div class="page-body">
-                  <van-list v-model="s_loading" :finished="shop_finish" @onLoad="getShopRank" :offset="30">
+                  <van-list v-model="s_loading" :finished="shop_finish" :immediate-check="false" @onLoad="getShopRank" :offset="30">
                       <van-row class="van-hairline--bottom">
                         <van-col span="2" class="odd">排名</van-col>
                         <van-col span="8">团队</van-col>
@@ -96,7 +96,7 @@
             </van-tab>
             <van-tab  title="采摘排行">
                 <div class="page-body">
-                  <van-list v-model="j_loading" :finished="jiuwa_finish" @onLoad="getJiuwaRank" :offset="30">
+                  <van-list v-model="j_loading" :finished="jiuwa_finish" :immediate-check="false" @onLoad="getJiuwaRank" :offset="30">
                       <van-row class="van-hairline--bottom">
                         <van-col span="5">名次</van-col>
                         <van-col span="11" class="odd">顾客</van-col>
@@ -190,15 +190,19 @@ export default {
     };
   },
   created() {
-    this.getWxConfig("rank");
+    // this.getWxConfig("rank");
     this.getRank();
-    this.getJiuwaRank();
-    this.getShopRank();
+    // this.getJiuwaRank();
+    // this.getShopRank();
   },
   watch: {
-    // activeTab: function(newValue) {
-    //   this.getRank();
-    // }
+    activeTab: function(newValue) {
+      if(newValue==1 && this.cur_shop_page==1){
+        this.getShopRank()
+      }else if(newValue==2 && this.cur_jiuwa_page==1){
+        this.getJiuwaRank();
+      }
+    }
   },
   mounted() {
     this.buildPageInfo();
