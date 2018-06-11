@@ -42,12 +42,12 @@ export default {
   },
   computed: {
     activity_token() {
-      let result=this.getQueryString('token');
+      let result = this.getQueryString("token");
       return result;
     },
     inviter_code() {
-      let result=this.getQueryString('inviter_code');
-      
+      let result = this.getQueryString("inviter_code");
+
       return result;
     },
     user() {
@@ -88,7 +88,7 @@ export default {
   },
   methods: {
     getData(name, obj) {
-      this.$show_loading();
+      this.$show_loading("", 0);
       let activity_token = this.activity_token;
       let obj1 = Object.assign({}, obj, {
         activity_token
@@ -124,10 +124,6 @@ export default {
                     );
                   }
                   break;
-                case "555":
-                  this.$alert_dlg(res.data.data.msg, "", () => {
-                    window.location = res.data.data.url;
-                  });
               }
               this.$hide_loading();
             }
@@ -137,6 +133,12 @@ export default {
             resolve(res);
           },
           errcallback: rej => {
+            if (rej.data.code == "555") {
+              // window.location.href = rej.data.url;
+              this.$alert_dlg(rej.data.msg, "", () => {
+                window.location = rej.data.url;
+              });
+            }
             reject(rej);
             this.$hide_loading();
           },
@@ -331,8 +333,6 @@ export default {
       //   }
       // });
     }
-   
- 
   }
 };
 </script>

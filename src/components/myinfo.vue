@@ -74,10 +74,10 @@
       <!-- 艾草采摘记录 -->
        <van-popup v-model="showRecourd" :close-on-click-overlay="true" :overlay-style="{height:'100vh'}" :lock-scroll="true" class="help-div">
         <van-nav-bar title="你的艾草采摘情况" />
-            <div class="wraper " @scroll="scroll($event,3)">
-              <div class="van-list" v-if="pick_recourd.length>0">
+            <div class="wraper">
+              <van-list v-model="p_loading" :finished="pick_finish" @onLoad="getPickList" :offset="30">
                 <user-list-item v-for="(item,index) in pick_recourd" :disabled="true" :key="index" :avatar="item.avatar_src" :title="item.nickname" :disText="item.sum+'棵'" />
-              </div> 
+              </van-list> 
               <p v-if="this.pick_finish">没有更多数据</p>
             </div>     
         </van-popup> 
@@ -131,36 +131,36 @@ export default {
       pick_recourd: [],
       cur_pick_page: 1,
       pick_finish: false,
-      members: []
+      members: [],
+      isSelf: !this.$route.params.token
     };
   },
   computed: {
-    isSelf: {
-      get: function() {
-        return this.userInfo.user_token == this.user.user_token;
-      },
-      set: function(value) {
-        // this.showneed = value;
-      }
-    }
+    // isSelf: {
+    //   get: function() {
+    //     return this.userInfo.user_token == this.user.user_token;
+    //   },
+    //   set: function(value) {
+    //     // this.showneed = value;
+    //   }
+    // }
   },
   async created() {
     await this.isTeacher();
     await this.getInfo();
-
+    console.log(this.isSelf);
     // this.getTeamWorker();
+    this.getTeamWorker();
     this.getNeedList();
     this.getPickList();
-    this.getTeamWorker();
     // this.getRescuedList();
   },
   mounted() {
     this.calc();
   },
   beforeUpdate() {
-    if (this.isFirst && this.isSelf && this.need_list.length > 0) {
+    if (this.count == 0 && this.need_list.length > 0) {
       this.showneed = true;
-      this.isFirst = false;
     }
   },
   methods: {
@@ -218,6 +218,7 @@ export default {
       }).then(res => {
         if (res.data.code == 1) {
           this.userInfo = res.data.data;
+          this.isSelf = user_token1 == this.user.user_token;
         }
 
         //console.log("res :", res.data);
@@ -231,17 +232,20 @@ export default {
       this.$go("/my/" + user_token);
     },
     calc() {
+      console.log(this.count);
       if (this.isSelf) {
-        this.count++;
-        if (this.count % 2 == 1) {
-          this.showRecourd = true;
-        } else {
-          this.showneed = true;
+        if (this.count > 0) {
+          if (this.count % 2 == 0) {
+            this.showRecourd = true;
+          } else {
+            this.showneed = true;
+          }
         }
+        this.count++;
       }
     },
     getNeedList() {
-      if (!this.is_teacher || this.finish) return;
+      if (!this.isSelf) return;
       let module_token = this.$api_urls["need_rescue"],
         page = this.cur_need_page;
       //this.loading = true;
@@ -273,6 +277,7 @@ export default {
         });
     },
     getRescuedList() {
+      if (!this.isSelf) return;
       let module_token = this.$api_urls["rescued_list"];
       let page = this.cur_rescued_page;
       // if (this.rescued_finish) return false;
@@ -303,7 +308,7 @@ export default {
         });
     },
     getPickList() {
-      if (!this.is_teacher || this.pick_finish) return;
+      if (!this.isSelf) return;
       // this.loading = true;
       let module_token = this.$api_urls["picked_recourd"];
       let page = this.cur_pick_page;

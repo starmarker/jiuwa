@@ -42,11 +42,11 @@ export default {
         done();
         this.$sendEvent("subname", this.petname, this.id);
         this.petname = "";
-        // this.$offEvent("subname");
       } else {
         this.petname = "";
         done();
       }
+      this.$offEvent("subname");
     },
     bindPhone(show_close, topath) {
       console.log("触发了绑定手机号");

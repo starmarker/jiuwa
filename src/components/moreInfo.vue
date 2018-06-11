@@ -27,7 +27,7 @@
               </van-col>
           </van-row> -->
           <img :src="moreInfo.headimage" alt="" srcset="">
-          <p class="user-name">{{moreInfo.user_name}} <van-icon name="edit-data" v-if="showEdit" @click="$go('/sign/'+moreInfo.user_token)"/></p>
+          <p class="user-name">{{moreInfo.user_name}} <a href="javascript:;" v-if="showEdit" @click="$go('/sign/'+$route.params.token)">修改报名</a></p>
           <div class="user-intro">{{moreInfo.declaration}}</div>
       </div>
        <div class="container">
@@ -165,7 +165,7 @@ export default {
   computed: {
     showEdit() {
       return (
-        this.is_teacher && this.user.user_token == this.moreInfo.user_token
+        this.is_teacher && this.user.user_token == this.$route.params.token
       );
     }
   },
@@ -234,6 +234,14 @@ export default {
       width: 100px;
       height: 100px;
       border-radius: 50px;
+    }
+    .user-name {
+      a {
+        font-size: 12px;
+        color: #666;
+        text-decoration: underline;
+        margin-left: 10px;
+      }
     }
     .user-intro {
       width: 80%;
