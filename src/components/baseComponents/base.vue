@@ -255,7 +255,7 @@ export default {
       if (petname.trim() == "" || petname.length > 6) {
         this.$alert_dlg("小灸灸名字长度应介于1-6之间");
         this.$offEvent("subname", null);
-        this.showAlert(petname);
+        this.showAlert(petname, id);
         this.setJiuwa();
         this.sub = false;
         return false;
