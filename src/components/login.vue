@@ -131,7 +131,7 @@ export default {
 
             //如果不具备my_info则不允许登录(未注册app,权限较高)
             if (json_result.data.my_info === false) {
-              _this.$err("未注册APP");
+              _this.$err("无登录权限");
               return false;
             }
             // 保存login_info

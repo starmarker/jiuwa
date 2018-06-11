@@ -48,7 +48,7 @@
             <!-- 内容 {{ index }} -->
             <!-- <van-list class="wraper list2" @scroll="scroll($event,1)"> -->
               <div class="wraper list2" >
-              <van-list v-model="loading" :finished="finish" :immediate-check="false" @onLoad="getNeedList" v-if="need_list.length>0">            
+              <van-list v-model="loading" :finished="finish" :immediate-check="false" @load="getNeedList" v-if="need_list.length>0">            
                <user-list-item v-for="(item,index) in need_list" :disabled="item.disabled" :key="index" :avatar="item.headimage" :title="item.nickname" @btnClick="()=>{helpJiuwa(item)}" mormalText="给TA救治" disText="已救治" :tel="item.mobile" /> 
               </van-list>              
               <p v-if="this.finish">没有更多数据</p>
@@ -59,7 +59,7 @@
           <van-tab title="已救助">
             <div class="wraper list2"> 
               <!-- <div class="van-list" v-if="rescued_list.length>0"> -->
-                <van-list v-model="r_loading" :finished="rescued_finish" @onLoad="getRescuedList" :offset="30">
+                <van-list v-model="r_loading" :finished="rescued_finish" @load="getRescuedList" :offset="30">
                 <user-list-item v-for="(item ,index) in rescued_list" :disabled="true" :key="index" :avatar="item.headimage" :title="item.nickname" disText="已救治" />
               <!-- </div> -->
                 </van-list>
@@ -75,7 +75,7 @@
        <van-popup v-model="showRecourd" :close-on-click-overlay="true" :overlay-style="{height:'100vh'}" :lock-scroll="true" class="help-div">
         <van-nav-bar title="你的艾草采摘情况" />
             <div class="wraper">
-              <van-list v-model="p_loading" :finished="pick_finish" @onLoad="getPickList" :offset="30">
+              <van-list v-model="p_loading" :finished="pick_finish" @load="getPickList" :offset="30">
                 <user-list-item v-for="(item,index) in pick_recourd" :disabled="true" :key="index" :avatar="item.avatar_src" :title="item.nickname" :disText="item.sum+' 棵'" />
               </van-list> 
               <p v-if="this.pick_finish" class="nomore">没有更多数据</p>
@@ -132,7 +132,8 @@ export default {
       cur_pick_page: 1,
       pick_finish: false,
       members: [],
-      isSelf: !this.$route.params.token
+      isSelf: !this.$route.params.token,
+      isPicking: false //正在采摘，防止重复采摘
     };
   },
   computed: {
@@ -150,9 +151,10 @@ export default {
     await this.getInfo();
     console.log(this.isSelf);
     // this.getTeamWorker();
-    this.getTeamWorker();
+
     this.getNeedList();
     this.getPickList();
+    this.getTeamWorker();
     // this.getRescuedList();
   },
   mounted() {
@@ -173,6 +175,11 @@ export default {
       //   this.$err("领取小灸灸后方可采摘");
       //   return false;
       // }
+      if (this.isPicking) {
+        this.$err("不要频繁采集");
+        return false;
+      }
+      this.isPicking = true;
       let module_token = this.$api_urls["pick"];
       let moxibustion_token = this.$route.params.token;
       let plucking_type = 1;
@@ -191,9 +198,11 @@ export default {
           } else {
             this.$err(res.data.msg);
           }
+          this.isPicking = false;
         })
         .catch(rej => {
           this.$err(rej.msg);
+          this.isPicking = false;
         });
     },
     getTeamWorker() {
@@ -207,9 +216,7 @@ export default {
     },
     getInfo() {
       let user_token = this.$route.params.token;
-      let module_token = user_token
-        ? this.$api_urls["t_info"]
-        : this.$api_urls["myinfo"];
+      let module_token = this.$api_urls["t_info"];
       let user_token1 =
         user_token == undefined ? this.user.user_token : user_token;
       this.getData("com_manage", {

@@ -159,7 +159,8 @@ export default {
         //   "Content-Type": "multipart/form-data"
         // },
         callback: function(res) {
-          console.log("图片上传成功", res);
+          _this.$hide_loading();
+          _this.$suc("上传成功", 1000);
           // 成功
           if (res.data.code == 1) {
             _this.avatar_id = res.data.id;
@@ -167,7 +168,6 @@ export default {
             _this.sign_info.liliao_image = res.data.id;
             // console.log("success", res.data.id);
             // _this.editAvatar(res.data.id);
-            _this.$hide_loading();
           } else {
             // 失败提示
             _this.$alert_dlg(res.data.msg, () => {});
@@ -175,8 +175,9 @@ export default {
           }
         },
         errcallback: function(err) {
-          console.log("图片上传失败", err);
           _this.$hide_loading();
+          _this.$err(err.msg, 1000);
+          console.log("图片上传失败", err);
         },
         uploadProgressCallBack: function(e) {
           console.log("图片上传中", e);
@@ -263,10 +264,10 @@ export default {
         // console.log("old :", old);
         // this.baseImg = data;
         // this.photo.content = data;
-        this.avatar_src = data;
+        // this.avatar_src = data;
         this.upload(data);
         //console.log("this.photo.content :", this.baseImg);
-        
+
         //console.log("object :", this.baseImg, this.photo.content);
       });
       this.$refs.cropper.getCropBlob(data => {
@@ -332,7 +333,7 @@ export default {
     margin: auto;
     width: 100%;
     transform: translateY(-50%);
-    top: 50%;   
+    top: 50%;
     left: 0;
     .upload-icon {
       z-index: 5;

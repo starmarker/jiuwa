@@ -1,6 +1,6 @@
 <template>
-  <div class="hello">
-<form action="/">
+  <div class="hello" style="margin-top:45px;">
+<form action="/" style="position:fixed;top:0;left:0;width:100%;background-color:#fff;z-index:10;">
     <van-search
       v-model="user_name"
       placeholder="请输入理疗师名字"
@@ -76,8 +76,8 @@ export default {
       scrollHeight: 0,
       showBullet: true,
       page_info: {},
-      search_list:[],//搜索结果数组
-      showSearch:false,//搜索结果为空的情况展示
+      search_list: [], //搜索结果数组
+      showSearch: false //搜索结果为空的情况展示
     };
   },
   components: { playerItem, GlobalFooter, FlowBlock, GameDetail, BulletWords },
@@ -259,7 +259,7 @@ export default {
 
       let module_token = this.$api_urls["search"],
         user_name = this.user_name;
-      
+
       this.search_list = [];
       this.getData("com_manage", {
         module_token,
@@ -269,15 +269,14 @@ export default {
           if (res.data.code == 1) {
             let arr = res.data.data;
             this.search_list = arr;
-
-          }else{
+          } else {
             this.search_list = [];
           }
 
           // this.cur_page++;
           // this.finished = this.cur_page > res.data.page_info.last_page;
           // this.loading = false;
-          this.showSearch=true;
+          this.showSearch = true;
         })
         .catch(rej => {
           this.$err(rej.msg);
