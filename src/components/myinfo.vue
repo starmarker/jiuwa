@@ -76,9 +76,9 @@
         <van-nav-bar title="你的艾草采摘情况" />
             <div class="wraper">
               <van-list v-model="p_loading" :finished="pick_finish" @onLoad="getPickList" :offset="30">
-                <user-list-item v-for="(item,index) in pick_recourd" :disabled="true" :key="index" :avatar="item.avatar_src" :title="item.nickname" :disText="item.sum+'棵'" />
+                <user-list-item v-for="(item,index) in pick_recourd" :disabled="true" :key="index" :avatar="item.avatar_src" :title="item.nickname" :disText="item.sum+' 棵'" />
               </van-list> 
-              <p v-if="this.pick_finish">没有更多数据</p>
+              <p v-if="this.pick_finish" class="nomore">没有更多数据</p>
             </div>     
         </van-popup> 
     </div>
@@ -538,7 +538,9 @@ export default {
       overflow: hidden;
       box-sizing: border-box;
       .wraper {
-        > p {
+        min-height: 10vh;
+        p,
+        .nomore {
           font-size: 14px;
           color: #666;
           text-align: center;
@@ -551,6 +553,11 @@ export default {
         }
       }
     }
+  }
+  .nomore {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
   }
 }
 </style>
