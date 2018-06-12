@@ -234,18 +234,13 @@ export default {
       let user_type = 1;
       let module_token = this.$api_urls["rank"];
       let page = this.cur_aicao_page;
-      console.log(1);
       this.getData("com_manage", { user_type, module_token, page })
         .then(res => {
           if (res.data.code == 1) {
             this.aicao_rank = this.aicao_rank.concat(res.data.data.lists);
-
             this.cur_aicao_page++;
             this.aicao_finish =
               this.cur_aicao_page > res.data.data.page_info.last_page;
-            this.$nextTick(() => {
-              this.loading = false;
-            });
           }
           this.loading = false;
         })
