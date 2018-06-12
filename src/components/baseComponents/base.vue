@@ -52,7 +52,7 @@
 				if(res != null) {
 					this.is_showPage = true;
 				} else {
-					this.$alert_dlg("请在微信中打开!");
+					
 				}
 
 			}, false);
