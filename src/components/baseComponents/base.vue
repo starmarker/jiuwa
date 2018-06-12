@@ -19,7 +19,31 @@ export default {
       is_showPage: false,
       wxconfig: {},
       dtd: null,
-      initSdkSuccess: false
+      initSdkSuccess: false,
+      wxLoading: false,
+      page_info: {
+        title: "第三届灸正堂杯明星灸疗师风采大赛开幕啦",
+        desc: "第三届灸正堂杯明星灸疗师风采大赛开幕啦",
+        link: "",
+        imgUrl:
+          location.host +
+          "/web_app/jztwx/cj_accz/static/img/index_banner1.dd73ce2.jpg",
+        trigger: function(res) {
+          alert("用户点击分享");
+        },
+        complete: function(res) {
+          alert(JSON.stringify(res));
+        },
+        success: function(res) {
+          alert("已分享");
+        },
+        cancel: function(res) {
+          alert("已取消");
+        },
+        fail: function(res) {
+          alert(JSON.stringify(res));
+        }
+      }
     };
   },
   async created() {
@@ -33,22 +57,23 @@ export default {
       this.$hide_loading();
     }, false);
 
-    await this.wxLocation();
-  },
-  beforeRouteEnter: (to, from, next) => {
-    // ...
-    document.title = to.meta.title;
-    next();
+    // await this.wxLocation();
   },
   computed: {
     activity_token() {
       let result = this.getQueryString("token");
       return result;
     },
-    inviter_code() {
-      let result = this.getQueryString("inviter_code");
+    inviter_code: {
+      get() {
+        let result = this.getQueryString("inviter_code");
 
-      return result;
+        return result;
+      },
+      set() {
+        this.page_info.link =
+          location.href + this.getQueryString("inviter_code");
+      }
     },
     user() {
       if (this.$login_info()) {
@@ -78,6 +103,10 @@ export default {
   mounted() {
     //this.is_teacher = this.user.is_teacher == 1 ? true : false;
     // console.log(this.$login_info());
+    wx.onMenuShareAppMessage({ ...this.page_info });
+    wx.onMenuShareTimeline({ ...this.page_info });
+    wx.onMenuShareQQ({ ...this.page_info });
+    wx.onMenuShareQZone({ ...this.page_info });
   },
   updated() {
     // this.$hide_loading();
@@ -86,6 +115,7 @@ export default {
     // 导航离开该组件的对应路由时调用
     this.ckRoute(to, from, next);
   },
+
   methods: {
     getData(name, obj) {
       this.$show_loading("", 0);
@@ -314,6 +344,8 @@ export default {
       });
     },
     getWxConfig(page_name) {
+      if (this.wxLoading) return false;
+      this.wxLoading = true;
       let token = this.activity_token;
       let module_token = this.$api_urls["wxconfig"];
       this.getData("com_manage", {
@@ -327,9 +359,10 @@ export default {
           let config = res.data.jssdk;
           console.log("success");
           wx.config({ ...config });
-          wx.ready(() => {
-            this.wxLocation();
-          });
+          // wx.ready(() => {
+          //   this.wxLoading = false;
+          //   this.wxLocation();
+          // });
         }
       });
     }

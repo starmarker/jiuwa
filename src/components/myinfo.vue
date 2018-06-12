@@ -6,7 +6,7 @@
       <div class="zhalan"></div>
       <div class="grass-field"  @click="pick"></div>
       <info-top-bar :nickname="userInfo.user_name" :avatar="userInfo.headimage" :basescore="userInfo.total" :rank="userInfo.paiming"  @clickuser="godetail" class="topbar"/>
-      <team-member :members="members" :showNumber="4" :showBtn="true" class="member" @avatar_click="godetail1"/>
+      <team-member :members="members" :showNumber="4" :showBtn="true" class="member" @aClick="godetail1"/>
         <!-- <div class="sign-header">
           <van-row>
               <van-col span="8">
@@ -133,7 +133,8 @@ export default {
       pick_finish: false,
       members: [],
       isSelf: !this.$route.params.token,
-      isPicking: false //正在采摘，防止重复采摘
+      isPicking: false, //正在采摘，防止重复采摘
+      page_info: {} //分享页面信息
     };
   },
   computed: {
@@ -156,9 +157,15 @@ export default {
     this.getPickList();
     this.getTeamWorker();
     // this.getRescuedList();
+    this.getWxConfig("pick"); //微信分享授权
   },
   mounted() {
     this.calc();
+    this.buildPageInfo();
+    wx.onMenuShareAppMessage({ ...this.page_info });
+    wx.onMenuShareTimeline({ ...this.page_info });
+    wx.onMenuShareQQ({ ...this.page_info });
+    wx.onMenuShareQZone({ ...this.page_info });
   },
   beforeUpdate() {
     if (this.count == 0 && this.need_list.length > 0) {
@@ -166,15 +173,32 @@ export default {
     }
   },
   methods: {
+    buildPageInfo() {
+      const _this = this;
+      let obj = {
+        title: this.userInfo.user_name + "的艾草地",
+        desc: this.userInfo.user_name + "的艾草地",
+        link: location.href + "&inviter_code=" + _this.user.user_token,
+        imgUrl: _this.userInfo.headimage,
+        trigger: function(res) {
+          alert("用户点击分享");
+        },
+        complete: function(res) {
+          alert(JSON.stringify(res));
+        },
+        success: function(res) {
+          alert("已分享");
+        },
+        cancel: function(res) {
+          alert("已取消");
+        },
+        fail: function(res) {
+          alert(JSON.stringify(res));
+        }
+      };
+      this.page_info = obj;
+    },
     pick() {
-      // if (this.is_teacher) {
-      //   this.$err("灸疗师不能采摘");
-      //   return false;
-      // }
-      // if (!this.is_hasJiuwa) {
-      //   this.$err("领取小灸灸后方可采摘");
-      //   return false;
-      // }
       if (this.isPicking) {
         this.$err("不要频繁采集");
         return false;
@@ -226,6 +250,8 @@ export default {
         if (res.data.code == 1) {
           this.userInfo = res.data.data;
           this.isSelf = user_token1 == this.user.user_token;
+        } else {
+          this.$alert_dlg(res.data.msg, () => {});
         }
 
         //console.log("res :", res.data);
@@ -332,6 +358,9 @@ export default {
             this.$nextTick(() => {
               this.p_loading = false;
             });
+          } else if (res.data.code == 0) {
+            this.pick_finish = true;
+            this.p_loading = false;
           } else {
             this.$err(res.data.msg);
             this.p_loading = false;

@@ -29,11 +29,15 @@
 <script>
 export default {
   name: "jiuwa-top-bar",
-  props: ["nickname", "basescore", "avatar", "experience"],
+  props: ["nickname", "basescore", "avatar", "experience", "growthvalue"],
   computed: {
     percentage() {
-      let result = this.experience > 100 ? 100 : this.experience;
-      return result;
+      let total = Number(this.growthvalue);
+      let result =
+        this.experience > this.growthvalue
+          ? 100
+          : (this.experience / total * 100).toFixed(0);
+      return ~~result;
     }
   },
   methods: {

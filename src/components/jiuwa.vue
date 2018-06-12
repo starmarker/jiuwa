@@ -14,7 +14,7 @@
           
       </van-row>
     </div> -->
-    <top-jiuwa-bar :avatar="model.userfeil.avatar_src" :nickname="jiuwa.petname" :basescore="model.aicao_num" :experience="jiuwa.experience" @editJiuwa="edit"  />
+    <top-jiuwa-bar :avatar="model.userfeil.avatar_src" :nickname="jiuwa.petname" :basescore="model.aicao_num" :experience="jiuwa.experience" :growthvalue="jiuwa.growthvalue" @editJiuwa="edit"  />
     
     <div class="jiuwa-talk" v-if="showTalk">
       <div class="talk-content" v-html="showInfo">       
@@ -74,6 +74,7 @@ export default {
         health: 100,
         ill_name: "",
         type: 0,
+        growthvalue: 0,
         fall_type: 0
       },
       ill_name: "",

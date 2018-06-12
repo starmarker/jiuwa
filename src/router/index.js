@@ -3,7 +3,7 @@ import Router from "vue-router";
 import Index from "@/components/Index";
 
 Vue.use(Router);
-const routes= [
+const routes = [
   {
     path: "/login/:m_type",
     name: "login",
@@ -36,7 +36,7 @@ const routes= [
         meta: {
           title: "活动首页",
           ck_bind_phone: true,
-          keepAlive: false
+          keepAlive: true
         },
         component: Index
       },

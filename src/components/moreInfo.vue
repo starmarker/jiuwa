@@ -27,7 +27,7 @@
               </van-col>
           </van-row> -->
           <img :src="moreInfo.headimage" alt="" srcset="">
-          <p class="user-name">{{moreInfo.user_name}} <a href="javascript:;" v-if="showEdit" @click="$go('/sign/'+$route.params.token)">修改报名</a></p>
+          <p class="user-name">{{moreInfo.user_name}}<span>[编号:{{moreInfo.id}} ]</span> <a href="javascript:;" v-if="showEdit" @click="$go('/sign/'+$route.params.token)">修改报名</a></p>
           <div class="user-intro">{{moreInfo.declaration}}</div>
       </div>
        <div class="container">
@@ -78,7 +78,7 @@
       <div class="container">
         <div class="field-title van-hairline--bottom"> <i class="iconfont icon-members"></i>Ta的队友</div>
         
-          <teamMember :members="members" @avatar_click="goPage" :showNav="true" style="margin-top:5px;margin-bottom:5px;"></teamMember>
+          <teamMember :members="members" @aClick="goPage" :showNav="true" style="margin-top:5px;margin-bottom:5px;"></teamMember>
         
       </div>
        <div class="container">
@@ -112,12 +112,12 @@
       </div>     
 
       <div class="container">
-        <div class="field-title van-hairline--bottom">比赛介绍</div>
-        <van-cell>
+        <div class="field-title van-hairline--bottom" @click="$go('/detail')">比赛介绍</div>
+        <!-- <van-cell>
           <div class="intro">
             <p>比赛介绍，这里是相关详情</p>
           </div>
-        </van-cell>
+        </van-cell> -->
       </div>
       
       <div class="picker" v-if="!is_teacher" @click="$go('/pick/'+$route.params.token)"></div>
@@ -138,6 +138,7 @@ export default {
   data() {
     return {
       moreInfo: {
+        id: NaN,
         avatar_src: "",
         nickname: "",
         headimage: "",
@@ -169,6 +170,11 @@ export default {
       );
     }
   },
+  watch: {
+    $route: function(to, from) {
+      this.getInfo();
+    }
+  },
   beforeMount() {
     this.getInfo();
     this.getTeamWorker();
@@ -194,7 +200,7 @@ export default {
       });
     },
     goPage(user_token) {
-      this.$go("/my/" + user_token);
+      this.$router.push("/my/" + user_token);
     },
     getTeamWorker() {
       let module_token = this.$api_urls["getTeam"];
@@ -236,11 +242,15 @@ export default {
       border-radius: 50px;
     }
     .user-name {
-      a {
+      a,
+      span {
         font-size: 12px;
         color: #666;
         text-decoration: underline;
         margin-left: 10px;
+      }
+      span {
+        text-decoration: none;
       }
     }
     .user-intro {

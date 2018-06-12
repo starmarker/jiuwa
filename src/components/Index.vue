@@ -81,8 +81,14 @@ export default {
     };
   },
   components: { playerItem, GlobalFooter, FlowBlock, GameDetail, BulletWords },
-  async created() {
-    await this.getWxConfig("index");
+  // async created() {
+  //   // await this.getWxConfig("index");
+  // },
+  beforeRouteEnter(to, from, next) {
+    document.title = to.meta.title;
+    next(vm => {
+      vm.getWxConfig(to.name);
+    });
   },
   mounted() {
     this.getIndex();
@@ -93,14 +99,6 @@ export default {
     window.addEventListener("scroll", e => {
       this.scrollHeight = JSON.stringify(window.pageYOffset);
     });
-
-    this.buildPageInfo();
-
-    console.log(this.$route);
-    wx.onMenuShareAppMessage({ ...this.page_info });
-    wx.onMenuShareTimeline({ ...this.page_info });
-    wx.onMenuShareQQ({ ...this.page_info });
-    wx.onMenuShareQZone({ ...this.page_info });
   },
   beforeUpdate() {},
   deactivated() {
@@ -118,33 +116,6 @@ export default {
     // }
   },
   methods: {
-    buildPageInfo() {
-      const _this = this;
-      let obj = {
-        title: "第三届灸正堂杯明星灸疗师风采大赛开幕啦",
-        desc: "第三届灸正堂杯明星灸疗师风采大赛开幕啦",
-        link: location.href + "&inviter_code=" + this.user.user_token,
-        imgUrl:
-          location.host +
-          "/web_app/jztwx/cj_accz/static/img/index_banner1.dd73ce2.jpg",
-        trigger: function(res) {
-          alert("用户点击分享");
-        },
-        complete: function(res) {
-          alert(JSON.stringify(res));
-        },
-        success: function(res) {
-          alert("已分享");
-        },
-        cancel: function(res) {
-          alert("已取消");
-        },
-        fail: function(res) {
-          alert(JSON.stringify(res));
-        }
-      };
-      this.page_info = obj;
-    },
     alert1() {
       this.$confirm_dlg(
         "弹窗测试",

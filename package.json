@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@npmprivate/vue-zjlibrary": "git+http://gitsvn.z9168.com:3000/npmprivate/vue-zjlibrary.git",
+    "alloycrop": "^1.0.4",
     "better-scroll": "^1.11.1",
     "vant": "^1.1.3",
     "vue": "^2.5.2",
@@ -32,6 +33,7 @@
     "babel-preset-stage-2": "^6.22.0",
     "chalk": "^2.0.1",
     "copy-webpack-plugin": "^4.0.1",
+    "core-js": "^2.5.7",
     "css-loader": "^0.28.11",
     "eslint": "^4.15.0",
     "eslint-config-standard": "^10.2.1",

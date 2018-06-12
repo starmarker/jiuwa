@@ -11,7 +11,7 @@
 
             <van-tab  title="灸疗师排行">
                 <div class="page-body">
-                    <van-list v-model="loading" :finished="aicao_finish" :immediate-check="false"	@load="getRank" :offset="30" ref="tab1">                 
+                    <van-list v-model="loading" :finished="aicao_finish" :immediate-check="true"	@load="getRank" :offset="30" ref="tab1">                 
                       <van-row class="van-hairline--bottom">
                         <van-col span="8">灸疗师</van-col>
                         <van-col span="4" class="odd">艾草</van-col>
@@ -122,8 +122,8 @@ export default {
     };
   },
   created() {
-    // this.getWxConfig("rank");
-    this.getRank();
+    this.getWxConfig("rank");
+    // this.getRank();
     // this.getJiuwaRank();
     // this.getShopRank();
   },
@@ -234,9 +234,13 @@ export default {
       let user_type = 1;
       let module_token = this.$api_urls["rank"];
       let page = this.cur_aicao_page;
+
       this.getData("com_manage", { user_type, module_token, page })
         .then(res => {
           if (res.data.code == 1) {
+            if (this.cur_aicao_page == 1) {
+              this.aicao_rank = [];
+            }
             this.aicao_rank = this.aicao_rank.concat(res.data.data.lists);
             this.cur_aicao_page++;
             this.aicao_finish =

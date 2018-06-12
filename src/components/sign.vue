@@ -46,13 +46,17 @@
       </div>
 
         <van-button type="primary" size="large" @click="submit" class="submit">提交</van-button>
-        <van-popup v-model="show" :overlay="true" style="width:80%;height:70%;background-color:#fff" :close-on-click-overlay="false"	>
-          <vue-cropper ref="cropper" :img="photo.content" :fixed="option.fixed" :fixedNumber="option.fixedNumber" 	:autoCrop="option.autoCrop" :autoCropWidth="option.autoCropWidth" :autoCropHeight="option.autoCropHeight" :full="option.full" :fixedBox="option.fixedBox"/>
+        <!-- <van-popup v-model="show" :overlay="true" style="width:80%;height:70%;background-color:#fff" :close-on-click-overlay="false"	> -->
+          <div class="box" style="position:fixed;width:100%;height:100%;background-color:rgba(0,0,0,0.1);z-index:11;top:0;" v-if="show"> 
+            
+          </div> 
+          <div class="crop-box"></div>
+          <!-- <vue-cropper ref="cropper" :img="photo.content" :fixed="option.fixed" :fixedNumber="option.fixedNumber" 	:autoCrop="option.autoCrop" :autoCropWidth="option.autoCropWidth" :autoCropHeight="option.autoCropHeight" :full="option.full" :fixedBox="option.fixedBox"/>
           <van-button type="danger" @click="cancelFixed" >
              旋转
           </van-button>
-          <van-button type="primary" @click="fixedImg">确定</van-button>
-        </van-popup>
+          <van-button type="primary" @click="fixedImg">确定</van-button> -->
+        <!-- </van-popup> -->
       
       <GlobalFooter :teacher="is_teacher" :isact="is_signed"></GlobalFooter>
     </div>
@@ -60,7 +64,8 @@
 <script>
 import Base from "./baseComponents/base";
 import GlobalFooter from "./baseComponents/globalFooter";
-import VueCropper from "vue-cropper";
+import AlloyCrop from "alloycrop";
+// import VueCropper from "vue-cropper";
 export default {
   extends: Base,
   data() {
@@ -78,22 +83,22 @@ export default {
         content: ""
       },
       show: false,
-      option: {
-        autoCrop: true,
-        // 只有自动截图开启 宽度高度才生效
-        autoCropWidth: 250,
-        autoCropHeight: 300,
-        fixed: true,
-        fixedNumber: [5, 6],
-        full: false,
-        fixedBox: true
-      },
+      // option: {
+      //   autoCrop: true,
+      //   // 只有自动截图开启 宽度高度才生效
+      //   autoCropWidth: 250,
+      //   autoCropHeight: 300,
+      //   fixed: true,
+      //   fixedNumber: [5, 6],
+      //   full: false,
+      //   fixedBox: true
+      // },
       baseImg: ""
     };
   },
   components: {
-    GlobalFooter,
-    VueCropper
+    GlobalFooter
+    // VueCropper
   },
   computed: {
     bgi() {
@@ -123,11 +128,25 @@ export default {
       // }
       _this.show = true;
       // _this.$refs.cropper.startCrop();
-
-      let img = document.querySelector(".cropper-box img");
-      img.onload = () => {
-        this.$hide_loading();
-      };
+      new AlloyCrop({
+        image_src: files.content,
+        className: "crop-box",
+        circle: false, // optional parameters , the default value is false
+        width: 240, // crop width
+        height: 300, // crop height
+        output: 1, // output resolution --> 400*200
+        ok: function(base64, canvas) {
+          console.log(_this.show);
+          _this.upload(base64);
+        },
+        cancel: function() {
+          // let ele = document.querySelector(".crop-box");
+        },
+        ok_text: "确定", // optional parameters , the default value is ok
+        cancel_text: "取消" // optional parameters , the default value is cancel
+      });
+      // let img = document.querySelector(".cropper-box img");
+      this.$hide_loading();
       // this.$hide_loading();
       // this.$hide_loading();
     },
@@ -159,6 +178,7 @@ export default {
         //   "Content-Type": "multipart/form-data"
         // },
         callback: function(res) {
+          _this.show = false;
           _this.$hide_loading();
           _this.$suc("上传成功", 1000);
           // 成功
@@ -175,9 +195,15 @@ export default {
           }
         },
         errcallback: function(err) {
+          _this.show = false;
           _this.$hide_loading();
           _this.$err(err.msg, 1000);
           console.log("图片上传失败", err);
+        },
+        catcallback: function(err) {
+          _this.show = false;
+          _this.$hide_loading();
+          _this.$err(err.msg, 1000);
         },
         uploadProgressCallBack: function(e) {
           console.log("图片上传中", e);
@@ -258,27 +284,26 @@ export default {
       }
     },
     fixedImg() {
-      this.$refs.cropper.stopCrop();
-      this.$refs.cropper.getCropData(data => {
-        let old = this.photo.content;
-        // console.log("old :", old);
-        // this.baseImg = data;
-        // this.photo.content = data;
-        // this.avatar_src = data;
-        this.upload(data);
-        //console.log("this.photo.content :", this.baseImg);
-
-        //console.log("object :", this.baseImg, this.photo.content);
-      });
-      this.$refs.cropper.getCropBlob(data => {
-        this.photo.file = data;
-      });
-      this.show = false;
-      this.$refs.cropper.rotate = 0;
-      // console.log("this.photo :", this.photo);
-    },
-    cancelFixed() {
-      this.$refs.cropper.rotateRight();
+      //   this.$refs.cropper.stopCrop();
+      //   this.$refs.cropper.getCropData(data => {
+      //     let old = this.photo.content;
+      //     // console.log("old :", old);
+      //     // this.baseImg = data;
+      //     // this.photo.content = data;
+      //     // this.avatar_src = data;
+      //     this.upload(data);
+      //     //console.log("this.photo.content :", this.baseImg);
+      //     //console.log("object :", this.baseImg, this.photo.content);
+      //   });
+      //   this.$refs.cropper.getCropBlob(data => {
+      //     this.photo.file = data;
+      //   });
+      //   this.show = false;
+      //   this.$refs.cropper.rotate = 0;
+      //   // console.log("this.photo :", this.photo);
+      // },
+      // cancelFixed() {
+      //   this.$refs.cropper.rotateRight();
     }
   }
 };

@@ -5,6 +5,7 @@
         <van-row >
           <van-col span="5" v-for="el in showArray" :key="el.user_token">
             <img :src="el.headimage" alt="" srcset=""  @click="click(el.user_token)">
+            <p v-if="!showBtn">{{el.user_name}}</p>
           </van-col>
         <div class="members-btn" v-if="showBtn" @click="btnClick">
         </div>
@@ -73,7 +74,7 @@ export default {
   },
   methods: {
     click(user_token) {
-      this.$emit("avatar_click", user_token);
+      this.$emit("aClick", user_token);
     },
     prev() {
       if (this.page > 1) {
@@ -135,6 +136,8 @@ export default {
         border-radius: 50%;
       }
       p {
+        -webkit-margin-before: 0.2em;
+        -webkit-margin-after: 0.5em;
         font-size: 10px;
         text-align: center;
         max-width: 100%;
