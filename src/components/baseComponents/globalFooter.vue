@@ -83,7 +83,9 @@ export default {
               this.$confirm_dlg(
                 res.data.msg,
                 () => {
-                  window.location.reload();
+                	//显示灸娃领取
+                	this.$sendEvent("showConfirm", "");
+                  //window.location.reload();
                 },
                 () => {}
               );
