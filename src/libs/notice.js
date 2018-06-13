@@ -20,7 +20,7 @@ const notice = {
   },
   $show_loading(msg, time) {
     let message = msg || "加载中";
-    let duration = time == undefined ? 99999 : time;
+    let duration = time == undefined ? 5000 : time;
     Toast.loading({ message, duration });
   },
   $hide_loading(msg) {
