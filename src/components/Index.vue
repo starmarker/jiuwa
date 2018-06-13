@@ -84,12 +84,7 @@ export default {
   // async created() {
   //   // await this.getWxConfig("index");
   // },
-  beforeRouteEnter(to, from, next) {
-    document.title = to.meta.title;
-    next(vm => {
-      vm.getWxConfig("index");
-    });
-  },
+
   mounted() {
     this.getIndex();
     this.getIndexData();

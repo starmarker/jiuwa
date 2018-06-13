@@ -136,13 +136,7 @@ export default {
       }
     }
   },
-  mounted() {
-    this.buildPageInfo();
-    wx.onMenuShareAppMessage({ ...this.page_info });
-    wx.onMenuShareTimeline({ ...this.page_info });
-    wx.onMenuShareQQ({ ...this.page_info });
-    wx.onMenuShareQZone({ ...this.page_info });
-  },
+  mounted() {},
   updated() {
     // this.$refs.tab1.handler(true);
     // this.$refs.tab2.handler(true);
@@ -159,33 +153,7 @@ export default {
     //     this.getJiuwaRank();
     //   }
     // },
-    buildPageInfo() {
-      const _this = this;
-      let obj = {
-        title: "第三届灸正堂杯明星灸疗师风采大赛开幕啦",
-        desc: "第三届灸正堂杯明星灸疗师风采大赛开幕啦",
-        link: location.href + "&inviter_code=" + _this.user.user_token,
-        imgUrl:
-          location.host +
-          "/web_app/jztwx/cj_accz/static/img/index_banner1.dd73ce2.jpg",
-        trigger: function(res) {
-          alert("用户点击分享");
-        },
-        complete: function(res) {
-          alert(JSON.stringify(res));
-        },
-        success: function(res) {
-          alert("已分享");
-        },
-        cancel: function(res) {
-          alert("已取消");
-        },
-        fail: function(res) {
-          alert(JSON.stringify(res));
-        }
-      };
-      this.page_info = obj;
-    },
+
     getShopRank() {
       let user_type = 2;
       let module_token = this.$api_urls["rank"];

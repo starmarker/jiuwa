@@ -98,21 +98,15 @@ export default {
   mounted() {
     //this.is_teacher = this.user.is_teacher == 1 ? true : false;
     // console.log(this.$login_info());
-    wx.onMenuShareAppMessage({
-      ...this.page_info
-    });
-    wx.onMenuShareTimeline({
-      ...this.page_info
-    });
-    wx.onMenuShareQQ({
-      ...this.page_info
-    });
-    wx.onMenuShareQZone({
-      ...this.page_info
-    });
   },
   updated() {
     // this.$hide_loading();
+  },
+  beforeRouteEnter(to, from, next) {
+    document.title = to.meta.title;
+    next(vm => {
+      vm.getWxConfig(to.name);
+    });
   },
   beforeRouteLeave(to, from, next) {
     // 导航离开该组件的对应路由时调用
@@ -120,6 +114,12 @@ export default {
   },
 
   methods: {
+    WxShare() {
+      wx.onMenuShareAppMessage({ ...this.page_info });
+      wx.onMenuShareTimeline({ ...this.page_info });
+      wx.onMenuShareQQ({ ...this.page_info });
+      wx.onMenuShareQZone({ ...this.page_info });
+    },
     getData(name, obj) {
       this.$show_loading("", 0);
       let activity_token = this.activity_token;
@@ -355,9 +355,9 @@ export default {
           wx.config({
             ...config
           });
-          //   if (res.data.page_info) {
-          //     this.page_info = res.data.page_info;
-          //   }
+          if (res.data.page_info) {
+            this.page_info = res.data.page_info;
+          }
           //   wx.ready(() => {
           //     this.wxLoading = false;
           //     this.wxLocation();
