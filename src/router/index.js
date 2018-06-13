@@ -22,7 +22,7 @@ const routes = [
   },
   {
     path: "/",
-    name: "index",
+    name: "home",
     meta: {
       title: "活动首页",
       keepAlive: false
@@ -32,7 +32,7 @@ const routes = [
     children: [
       {
         path: "index",
-        name: "home",
+        name: "index",
         meta: {
           title: "活动首页",
           ck_bind_phone: true,
@@ -50,7 +50,7 @@ const routes = [
       },
       {
         path: "my/:token",
-        name: "myinfo",
+        name: "my",
         meta: {
           title: "个人信息",
           ck_bind_phone: true
@@ -59,16 +59,11 @@ const routes = [
       },
       {
         path: "my",
-        name: "myinfo1",
-        meta: {
-          title: "个人信息",
-          ck_bind_phone: true
-        },
-        component: resolve => require(["@/components/moreInfo"], resolve)
+        redirect: { name: "my" }
       },
       {
         path: "sign/:token",
-        name: "updateSign",
+        name: "sign",
         meta: {
           title: "活动报名",
           ck_bind_phone: true
@@ -77,12 +72,7 @@ const routes = [
       },
       {
         path: "sign",
-        name: "sign",
-        meta: {
-          title: "活动报名",
-          ck_bind_phone: true
-        },
-        component: resolve => require(["@/components/sign"], resolve)
+        redirect: { name: "sign" }
       },
       {
         path: "pick/:token",
@@ -95,12 +85,7 @@ const routes = [
       },
       {
         path: "pick",
-        name: "mypick",
-        meta: {
-          title: "采摘页面",
-          ck_bind_phone: true
-        },
-        component: resolve => require(["@/components/myinfo"], resolve)
+        redirect: { name: "pick" }
       },
       {
         path: "jiuwa",

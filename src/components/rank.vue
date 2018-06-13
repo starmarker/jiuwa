@@ -122,7 +122,6 @@ export default {
     };
   },
   created() {
-    this.getWxConfig("rank");
     // this.getRank();
     // this.getJiuwaRank();
     // this.getShopRank();

@@ -173,31 +173,6 @@ export default {
     }
   },
   methods: {
-    buildPageInfo() {
-      const _this = this;
-      let obj = {
-        title: this.userInfo.user_name + "的艾草地",
-        desc: this.userInfo.user_name + "的艾草地",
-        link: location.href + "&inviter_code=" + _this.user.user_token,
-        imgUrl: _this.userInfo.headimage,
-        trigger: function(res) {
-          alert("用户点击分享");
-        },
-        complete: function(res) {
-          alert(JSON.stringify(res));
-        },
-        success: function(res) {
-          alert("已分享");
-        },
-        cancel: function(res) {
-          alert("已取消");
-        },
-        fail: function(res) {
-          alert(JSON.stringify(res));
-        }
-      };
-      this.page_info = obj;
-    },
     pick() {
       if (this.isPicking) {
         this.$err("不要频繁采集");
