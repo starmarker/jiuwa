@@ -131,10 +131,10 @@ export default {
     this.$nextTick(() => {
       this.buildPageInfo();
       console.log(this.page_info);
-      wx.onMenuShareAppMessage({ ...this.page_info });
-      wx.onMenuShareTimeline({ ...this.page_info });
-      wx.onMenuShareQQ({ ...this.page_info });
-      wx.onMenuShareQZone({ ...this.page_info });
+      // wx.onMenuShareAppMessage({ ...this.page_info });
+      // wx.onMenuShareTimeline({ ...this.page_info });
+      // wx.onMenuShareQQ({ ...this.page_info });
+      // wx.onMenuShareQZone({ ...this.page_info });
     });
   },
 

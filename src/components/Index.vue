@@ -87,7 +87,7 @@ export default {
   beforeRouteEnter(to, from, next) {
     document.title = to.meta.title;
     next(vm => {
-      vm.getWxConfig(to.name);
+      vm.getWxConfig("index");
     });
   },
   mounted() {
