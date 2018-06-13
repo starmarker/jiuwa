@@ -1,9 +1,10 @@
-.box-shadow(@width:3px,@color:#aaa) {
-  box-shadow: 0px @width @width @color;
+.box-shadow(@width: 3px, @color: #aaa) {
+    box-shadow: 0px @width @width @color;
 }
-.container(@width:3px,@color:#aaa) {
-  .box-shadow(@width:3px, @color:#aaa);
-  position: relative;
-  width: 100%;
-  margin: 2vh auto;
+
+.container(@width: 3px, @color: #aaa) {
+    .box-shadow(@width: 3px, @color: #aaa);
+    position: relative;
+    width: 100%;
+    margin: 2vh auto;
 }

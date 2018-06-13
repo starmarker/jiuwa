@@ -20,7 +20,7 @@ const routes = [
     path: "/",
     name: "home",
     meta: {
-      title: "活动首页",
+      title: "第三届灸正堂杯明星灸疗师风采大赛",
       keepAlive: false
     },
     redirect: "index",
@@ -30,7 +30,7 @@ const routes = [
         path: "index",
         name: "index",
         meta: {
-          title: "活动首页",
+          title: "第三届灸正堂杯明星灸疗师风采大赛",
           ck_bind_phone: true,
           keepAlive: true
         },
@@ -40,7 +40,7 @@ const routes = [
         path: "rank",
         name: "rank",
         meta: {
-          title: "排行榜"
+          title: "排行榜-第三届灸正堂杯明星灸疗师风采大赛"
         },
         component: resolve => require(["@/components/rank"], resolve)
       },
@@ -48,7 +48,7 @@ const routes = [
         path: "my/:token",
         name: "my",
         meta: {
-          title: "个人信息",
+          title: "个人信息-第三届灸正堂杯明星灸疗师风采大赛",
           ck_bind_phone: true
         },
         component: resolve => require(["@/components/moreInfo"], resolve)
@@ -61,7 +61,7 @@ const routes = [
         path: "sign/:token",
         name: "sign",
         meta: {
-          title: "活动报名",
+          title: "活动报名-第三届灸正堂杯明星灸疗师风采大赛",
           ck_bind_phone: true
         },
         component: resolve => require(["@/components/sign"], resolve)
@@ -74,7 +74,7 @@ const routes = [
         path: "pick/:token",
         name: "pick",
         meta: {
-          title: "采摘页面",
+          title: "采摘页面-第三届灸正堂杯明星灸疗师风采大赛",
           ck_bind_phone: true
         },
         component: resolve => require(["@/components/myinfo"], resolve)
@@ -87,7 +87,7 @@ const routes = [
         path: "jiuwa",
         name: "jiuwa",
         meta: {
-          title: "小灸灸信息",
+          title: "小灸灸信息-第三届灸正堂杯明星灸疗师风采大赛",
           ck_bind_phone: true
         },
         component: resolve => require(["@/components/jiuwa"], resolve)
@@ -96,7 +96,7 @@ const routes = [
         path: "detail",
         name: "detail",
         meta: {
-          title: "活动介绍"
+          title: "活动介绍-第三届灸正堂杯明星灸疗师风采大赛"
         },
         component: resolve => require(["@/components/detail"], resolve),
         props: true
