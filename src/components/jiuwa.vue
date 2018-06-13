@@ -127,16 +127,13 @@ export default {
       this.showTalk = true;
       this.showJiuwa = true;
     }, 1000);
-    this.$nextTick(() => {
-      this.buildPageInfo();
-      console.log(this.page_info);
-      // wx.onMenuShareAppMessage({ ...this.page_info });
-      // wx.onMenuShareTimeline({ ...this.page_info });
-      // wx.onMenuShareQQ({ ...this.page_info });
-      // wx.onMenuShareQZone({ ...this.page_info });
+  },
+  beforeRouteEnter(to, from, next) {
+    document.title = to.meta.title;
+    next(vm => {
+      vm.getWxConfig(to.name);
     });
   },
-
   methods: {
     getInfo() {
       let user_token = this.$login_info().user_token;
@@ -263,33 +260,7 @@ export default {
     gopick() {
       // if (this.is_hasJiuwa) {
       this.$go("/");
-      // } else {
-      //   this.$confirm_dlg(
-      //     "先领个小灸灸再采吧",
-      //     () => {
-      //       this.edit();
-      //     },
-      //     () => {
-      //       this.$go("/");
-      //     }
-      //   );
-      // }
     }
-    // scroll(e) {
-    //   let ele = e.target;
-    //   let et = ele.offsetHeight,
-    //     sh = ele.scrollHeight,
-    //     st = ele.scrollTop;
-    //   // console.log({ et, st, sh });
-    //   //resolve();
-    //   if (et + st > sh - 5) {
-    //     if (!this.loading && !this.finish) {
-    //       this.List();
-    //     } else {
-    //       return false;
-    //     }
-    //   }
-    // }
   }
 };
 </script>

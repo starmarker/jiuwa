@@ -23,6 +23,7 @@ export default {
   data() {
     return {};
   },
+
   watch: {
     $route: function(newvalue, oldvalue) {
       if (oldvalue.name == "sign") {

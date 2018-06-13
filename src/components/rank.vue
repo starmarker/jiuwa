@@ -136,6 +136,12 @@ export default {
     }
   },
   mounted() {},
+  beforeRouteEnter(to, from, next) {
+    document.title = to.meta.title;
+    next(vm => {
+      vm.getWxConfig(to.name);
+    });
+  },
   updated() {
     // this.$refs.tab1.handler(true);
     // this.$refs.tab2.handler(true);

@@ -161,6 +161,12 @@ export default {
   mounted() {
     this.calc();
   },
+  beforeRouteEnter(to, from, next) {
+    document.title = to.meta.title;
+    next(vm => {
+      vm.getWxConfig(to.name);
+    });
+  },
   beforeUpdate() {
     if (this.count == 0 && this.need_list.length > 0) {
       this.showneed = true;

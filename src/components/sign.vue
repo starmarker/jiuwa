@@ -111,6 +111,12 @@ export default {
     this.checkUser();
     this.getInfo();
   },
+  beforeRouteEnter(to, from, next) {
+    document.title = to.meta.title;
+    next(vm => {
+      vm.getWxConfig(to.name);
+    });
+  },
   methods: {
     beforeRead() {
       return true;

@@ -95,6 +95,12 @@ export default {
       this.scrollHeight = JSON.stringify(window.pageYOffset);
     });
   },
+  beforeRouteEnter(to, from, next) {
+    document.title = to.meta.title;
+    next(vm => {
+      vm.getWxConfig(to.name);
+    });
+  },
   beforeUpdate() {},
   deactivated() {
     this.showBullet = false;

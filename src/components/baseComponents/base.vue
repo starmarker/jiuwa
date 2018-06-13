@@ -23,9 +23,7 @@ export default {
         title: "第三届灸正堂杯明星灸疗师风采大赛开幕啦",
         desc: "第三届灸正堂杯明星灸疗师风采大赛开幕啦",
         link: "",
-        imgUrl:
-          location.host +
-          "/web_app/jztwx/cj_accz/static/img/index_banner1.dd73ce2.jpg",
+        imgUrl: "",
         success: function(res) {
           alert("分享成功");
         },
@@ -41,7 +39,6 @@ export default {
   async created() {
     this.$show_loading("正在进入活动");
     this.$cklogin(res => {
-      console.log("res :", res);
       if (res != null) {
         this.is_showPage = true;
       } else {
@@ -92,16 +89,12 @@ export default {
   mounted() {
     //this.is_teacher = this.user.is_teacher == 1 ? true : false;
     // console.log(this.$login_info());
+    // this.$nextTick(() => {
+    //   this.WxShare();
+    // });
   },
-  updated() {
-    this.WxShare();
-  },
-  beforeRouteEnter(to, from, next) {
-    document.title = to.meta.title;
-    next(vm => {
-      vm.getWxConfig(to.name);
-    });
-  },
+  updated() {},
+
   beforeRouteLeave(to, from, next) {
     // 导航离开该组件的对应路由时调用
     this.ckRoute(to, from, next);
@@ -343,7 +336,7 @@ export default {
         if (res.code == 1) {
           let config = res.data.jssdk;
           if (res.data.page_info) {
-            this.page_info.img_url = res.data.page_info.pic_src;
+            this.page_info.imgUrl = res.data.page_info.pic_src;
             this.page_info.title = res.data.page_info.title;
             this.page_info.desc = res.data.page_info.desc;
             this.page_info.link =
@@ -354,6 +347,9 @@ export default {
           }
           wx.config({
             ...config
+          });
+          wx.ready(() => {
+            this.WxShare();
           });
         }
       });
