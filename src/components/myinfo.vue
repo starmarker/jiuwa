@@ -157,15 +157,9 @@ export default {
     this.getPickList();
     this.getTeamWorker();
     // this.getRescuedList();
-    this.getWxConfig("pick"); //微信分享授权
   },
   mounted() {
     this.calc();
-    this.buildPageInfo();
-    wx.onMenuShareAppMessage({ ...this.page_info });
-    wx.onMenuShareTimeline({ ...this.page_info });
-    wx.onMenuShareQQ({ ...this.page_info });
-    wx.onMenuShareQZone({ ...this.page_info });
   },
   beforeUpdate() {
     if (this.count == 0 && this.need_list.length > 0) {

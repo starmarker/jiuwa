@@ -117,7 +117,6 @@ export default {
   },
   created() {
     this.getInfo();
-    this.getWxConfig("jiuwa");
   },
   mounted() {
     this.setJiuwa();
@@ -139,32 +138,6 @@ export default {
   },
 
   methods: {
-    buildPageInfo() {
-      const _this = this;
-      let obj = {
-        title: this.user.nick_name + "的小灸灸页面",
-        desc: "还没领取小灸灸的童鞋快来领一只小灸灸吧",
-        link: location.href + "&inviter_code=" + this.user.user_token,
-        imgUrl:
-          "http://test.z9168.com:3200/uploads/images/20180609/55c57456ae344ccd4b1563400fad4610.jpeg",
-        trigger: function(res) {
-          alert("用户点击分享");
-        },
-        complete: function(res) {
-          alert(JSON.stringify(res));
-        },
-        success: function(res) {
-          alert("已分享");
-        },
-        cancel: function(res) {
-          alert("已取消");
-        },
-        fail: function(res) {
-          alert(JSON.stringify(res));
-        }
-      };
-      this.page_info = obj;
-    },
     getInfo() {
       let user_token = this.$login_info().user_token;
       let module_token = this.$api_urls["myinfo"];

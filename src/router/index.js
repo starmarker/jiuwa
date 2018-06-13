@@ -14,11 +14,7 @@ const routes = [
   },
   {
     path: "/login",
-    name: "login2",
-    meta: {
-      title: "登录"
-    },
-    component: resolve => require(["@/components/login"], resolve)
+    redirect: { name: "login" }
   },
   {
     path: "/",
