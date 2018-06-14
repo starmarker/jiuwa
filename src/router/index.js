@@ -79,10 +79,7 @@ const routes = [
         },
         component: resolve => require(["@/components/myinfo"], resolve)
       },
-      {
-        path: "pick",
-        redirect: { name: "pick" }
-      },
+      
       {
         path: "jiuwa",
         name: "jiuwa",

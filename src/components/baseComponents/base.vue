@@ -119,11 +119,19 @@
 				} else {
 					//存会话
 					this.$session("inviter_code", result);
-					//判断是否包含了pick
-					let pick = this.getQueryString("pick");
+
+					//判断是否包含了页面
+					let pn = this.getQueryString("pn");
+					let pv = this.getQueryString("pv");
+
 					//去掉这个参数后跳转页面
-					if(pick != null) {
-						window.location.href = window.location.origin + window.location.pathname + "?token=" + this.activity_token + "#/pick/" + pick;
+					if(pn != null && pn != "") {
+						if(pv != null && pv != "") {
+							window.location.href = window.location.origin + window.location.pathname + "?token=" + this.activity_token + "#/" + pn + "/" + pv;
+						} else {
+
+							window.location.href = window.location.origin + window.location.pathname + "?token=" + this.activity_token + "#/" + pn;
+						}
 					} else {
 						window.location.href = window.location.origin + window.location.pathname + "?token=" + this.activity_token + window.location.hash;
 					}
@@ -381,7 +389,9 @@
 								"&inviter_code=" +
 								this.$login_info().user_token;
 							if(pick != "") {
-								end_url = end_url + "&pick=" + pick;
+								end_url = end_url + "&pn=pick&pv=" + pick;
+							} else {
+								end_url = end_url + "&pn=" + window.location.hash.replace("#/", "");
 							}
 
 							this.page_info.link = end_url;

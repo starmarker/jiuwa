@@ -42,7 +42,7 @@ export default {
       if (this.userInfo != null && this.userInfo.is_teacher == 1) {
         if (this.isact) {
           result = {
-            url: "/pick",
+            url: "/pick/"+this.userInfo.user_token,
             text: "我的"
           };
         } else {
